@@ -3,30 +3,37 @@ import {StyleSheet, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import ManageExpense from './screens/ManageExpenses';
-import RecentExpenses from './screens/RecentExpense';
-import AllExpenses from './screens/AllExpenses';
+import ManageResult from './screens/ManageResult';
+import RecentResults from './screens/RecentResults';
+import AllResults from './screens/AllResults';
 import {GlobalStyles} from './constants/styles';
 import {Ionicons} from '@expo/vector-icons'
+import IconButton from './components/UI/IconButton';
 
 const Stack = createNativeStackNavigator()
 const BottomTabs = createBottomTabNavigator()
 
-function ExpensesOverview() {
-  return <BottomTabs.Navigator screenOptions={{
-    headerStyle: {backgroundColor: GlobalStyles.colors.primary500},
-    headerTintColor: 'white',
-    tabBarStyle: {backgroundColor: GlobalStyles.colors.primary500},
-    tabBarActiveTintColor: GlobalStyles.colors.accent500
-  }} >
-    <BottomTabs.Screen name="RecentExpenses" component={RecentExpenses} options={{
-      title: 'Recent Expenses',
-      tabBarLabel: 'Recent',
+function ResultsOverview() {
+  return <BottomTabs.Navigator
+    screenOptions={({navigation}) => ({
+      headerStyle: {backgroundColor: GlobalStyles.colors.primary500},
+      headerTintColor: 'white',
+      tabBarStyle: {backgroundColor: GlobalStyles.colors.primary500},
+      tabBarActiveTintColor: GlobalStyles.colors.accent500,
+      headerRight: ({tintColor}) => (<IconButton icon="add" size={24} color={tintColor} onPress={() => {
+        navigation.navigate('ManageResult')
+      }} />
+      )
+    })}
+  >
+    <BottomTabs.Screen name="RecentResults" component={RecentResults} options={{
+      title: 'Recente resultaten',
+      tabBarLabel: 'Dit trimester',
       tabBarIcon: ({color, size}) => <Ionicons name='hourglass' size={size} color={color} />
     }} />
-    <BottomTabs.Screen name="AllExpenses" component={AllExpenses} options={{
-      title: 'All Expenses',
-      tabBarLabel: 'All',
+    <BottomTabs.Screen name="AllResults" component={AllResults} options={{
+      title: 'Alle resultaten',
+      tabBarLabel: 'Totaal',
       tabBarIcon: ({color, size}) => <Ionicons name='calendar' size={size} color={color} />
     }} />
   </BottomTabs.Navigator>
@@ -37,15 +44,20 @@ export default function App() {
     <>
       <StatusBar style="auto" />
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: {backgroundColor: GlobalStyles.colors.primary500},
+            headerTintColor: 'white'
+          }}>
           <Stack.Screen
-            name="ExpensesOverview"
-            component={ExpensesOverview}
-            options={{headerShown: false}}
+            name="ResultsOverview"
+            component={ResultsOverview}
+            options={{headerShown: false, title: 'Overview'}}
           />
           <Stack.Screen
-            name="ManageExpense"
-            component={ManageExpense}
+            name="ManageResult"
+            component={ManageResult}
+            options={{title: "manage result", presentation: 'modal'}}
           />
         </Stack.Navigator>
       </NavigationContainer>
