@@ -20,7 +20,7 @@ export default function ResultItem({id, major, course, result, date}) {
                 <Text style={styles.textBase}>{getFormattedDate(date)}</Text>
             </View>
             <View style={[styles.resultContainer, result < 5.5 ? styles.insufficient : styles.sufficient]}>
-                <Text style={styles.result}>{result.toFixed(1)}</Text>
+                <Text style={[styles.result, , result < 5.5 ? styles.insufficient : styles.sufficient]}>{result.toFixed(1)}</Text>
             </View>
         </View>
     </Pressable>
@@ -50,11 +50,19 @@ const styles = StyleSheet.create({
         backgroundColor: GlobalStyles.colors.minor,
     },
     sufficient: {
-        backgroundColor: GlobalStyles.colors.sufficient
+        backgroundColor: GlobalStyles.colors.primary500,
+        color: GlobalStyles.colors.sufficient,
+        // shadowColor: GlobalStyles.colors.gray500,
+        // shadowRadius: 4,
+        // shadowOffset: {width: -6, height: 1},
+        // shadowOpacity: .4,
     },
     insufficient: {
-        backgroundColor: GlobalStyles.colors.insufficient,
-        color: 'white',
+        backgroundColor: GlobalStyles.colors.primary500,
+        color: GlobalStyles.colors.insufficient,
+        // shadowColor: GlobalStyles.colors.gray500,
+
+        // color: 'white',
     },
     textBase: {
         color: GlobalStyles.colors.primary50,
@@ -76,6 +84,9 @@ const styles = StyleSheet.create({
     result: {
         // color: 'white',
         // color: GlobalStyles.colors.primary500,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        // shadowRadius: 4,
+        // shadowOffset: {width: -6, height: 1},
+        // shadowOpacity: .4,
     }
 })

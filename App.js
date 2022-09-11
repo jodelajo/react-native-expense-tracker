@@ -9,6 +9,7 @@ import AllResults from './screens/AllResults';
 import {GlobalStyles} from './constants/styles';
 import {Ionicons} from '@expo/vector-icons'
 import IconButton from './components/UI/IconButton';
+import ResultsContextProvider from './store/results-context';
 
 const Stack = createNativeStackNavigator()
 const BottomTabs = createBottomTabNavigator()
@@ -27,8 +28,8 @@ function ResultsOverview() {
     })}
   >
     <BottomTabs.Screen name="RecentResults" component={RecentResults} options={{
-      title: 'Recente resultaten',
-      tabBarLabel: 'Dit trimester',
+      title: 'Resultaten deze periode',
+      tabBarLabel: 'Deze periode',
       tabBarIcon: ({color, size}) => <Ionicons name='hourglass' size={size} color={color} />
     }} />
     <BottomTabs.Screen name="AllResults" component={AllResults} options={{
@@ -42,26 +43,27 @@ function ResultsOverview() {
 export default function App() {
   return (
     <>
-      <StatusBar style="auto" />
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerStyle: {backgroundColor: GlobalStyles.colors.primary500},
-            headerTintColor: 'white'
-          }}>
-          <Stack.Screen
-            name="ResultsOverview"
-            component={ResultsOverview}
-            options={{headerShown: false, title: 'Overview'}}
-          />
-          <Stack.Screen
-            name="ManageResult"
-            component={ManageResult}
-            options={{title: "manage result", presentation: 'modal'}}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-
+      <StatusBar style="light" />
+      <ResultsContextProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: {backgroundColor: GlobalStyles.colors.primary500},
+              headerTintColor: 'white'
+            }}>
+            <Stack.Screen
+              name="ResultsOverview"
+              component={ResultsOverview}
+              options={{headerShown: false, title: 'Overview'}}
+            />
+            <Stack.Screen
+              name="ManageResult"
+              component={ManageResult}
+              options={{title: "manage result", presentation: 'modal'}}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ResultsContextProvider>
     </>
 
 

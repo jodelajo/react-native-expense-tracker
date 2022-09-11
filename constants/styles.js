@@ -1,7 +1,7 @@
 export const GlobalStyles = {
     colors: {
-        minor: '#00a4ef',
-        major: '#B01455',
+        minor: '#008EEF',
+        major: '#7E00CB',
         gradeBox: '#ffb900',
         insufficient: '#e53238',
         sufficient: '#88b719',
