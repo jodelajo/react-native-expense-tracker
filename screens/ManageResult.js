@@ -4,6 +4,7 @@ import IconButton from "../components/UI/IconButton"
 import {GlobalStyles} from "../constants/styles"
 import Button from "../components/UI/Button"
 import {ResultsContext} from "../store/results-context"
+import ResultForm from "../components/manageResult/ResultForm"
 
 export default function ManageResult({route, navigation}) {
     const resultsCtx = useContext(ResultsContext)
@@ -24,32 +25,22 @@ export default function ManageResult({route, navigation}) {
     function cancelHandler() {
         navigation.goBack()
     }
-    function confirmHandler() {
+    function confirmHandler(resultData) {
         if (isEditing) {
             resultsCtx.updateResult(
-                editedResultId,
-                {
-                    course: 'test!!',
-                    major: true,
-                    result: 9.9,
-                    date: new Date('2022-09-11')
-                })
+                editedResultId, resultData)
         } else {
-            resultsCtx.addResult({
-                course: 'test',
-                major: true,
-                result: 9.9,
-                date: new Date('2022-09-11')
-            })
+            resultsCtx.addResult(resultData)
         }
         navigation.goBack()
     }
 
     return <View style={styles.container}>
-        <View style={styles.buttons}>
-            <Button mode='flat' onPress={cancelHandler} style={styles.button}>Cancel</Button>
-            <Button onPress={confirmHandler} style={styles.button}>{isEditing ? 'Update' : 'Add'}</Button>
-        </View>
+        <ResultForm
+            onCancel={cancelHandler}
+            onSubmit={confirmHandler}
+            submitButtonLabel={isEditing ? 'Update' : 'Add'} />
+
         {isEditing && (
             <View style={styles.deleteContainer}>
                 <IconButton
@@ -69,15 +60,8 @@ const styles = StyleSheet.create({
         padding: 24,
         backgroundColor: GlobalStyles.colors.primary700,
     },
-    buttons: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    button: {
-        minWidth: 120,
-        marginHorizontal: 8,
-    },
+
+
     deleteContainer: {
         marginTop: 16,
         paddingTop: 8,

@@ -9,7 +9,7 @@ export default function ResultsSummary({results, periodName}) {
 
     return <View style={styles.container}>
         <Text style={styles.period}>{periodName}</Text>
-        <Text style={styles.sum}>{resultsSum.toFixed(1)}</Text>
+        <Text style={styles.sum}>{resultsSum}</Text>
     </View>
 }
 
