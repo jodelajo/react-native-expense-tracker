@@ -20,7 +20,7 @@ export default function ResultItem({id, major, course, result, date}) {
                 <Text style={styles.textBase}>{getFormattedDate(date)}</Text>
             </View>
             <View style={[styles.resultContainer, result < 5.5 ? styles.insufficient : styles.sufficient]}>
-                <Text style={[styles.result, , result < 5.5 ? styles.insufficient : styles.sufficient]}>{result.toFixed(1)}</Text>
+                <Text style={[styles.result, , result < 5.5 ? styles.insufficient : styles.sufficient]}>{result}</Text>
             </View>
         </View>
     </Pressable>
