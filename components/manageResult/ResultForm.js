@@ -15,18 +15,21 @@ export default function ResultForm({onCancel, onSubmit, isEditing, submitButtonL
 
     function inputChangedHandler(inputIdentifier, enteredValue) {
         setInputValues((curInputValues) => {
+            // console.log('cur input value', curInputValues)
+            // console.log('enterdvalue', enteredValue)
             return {
                 ...curInputValues,
                 [inputIdentifier]: enteredValue
             }
         })
     }
-    console.log(inputValues)
+
     function submitHandler() {
+        console.log('input values', inputValues)
         const resultData = {
             course: inputValues.course,
             date: new Date(inputValues.date),
-            isMajor: inputValues.isMajor,
+            major: inputValues.isMajor,
             result: inputValues.result,
         }
         onSubmit(resultData)
@@ -133,6 +136,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 24,
         textAlign: 'left',
-        color: GlobalStyles.colors.primary200
+        color: GlobalStyles.colors.major
     }
 })

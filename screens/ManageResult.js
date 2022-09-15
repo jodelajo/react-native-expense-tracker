@@ -47,7 +47,7 @@ export default function ManageResult({route, navigation}) {
                     icon='trash'
                     color={GlobalStyles.colors.error500}
                     size={36}
-                    onPress={deleteResultHandler} />
+                    onPress={deleteResultHandler} />  
             </View>
         )
         }

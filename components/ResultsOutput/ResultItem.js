@@ -20,7 +20,7 @@ export default function ResultItem({id, major, course, result, date}) {
                 <Text style={styles.textBase}>{getFormattedDate(date)}</Text>
             </View>
             <View style={[styles.resultContainer, result < 5.5 ? styles.insufficient : styles.sufficient]}>
-                <Text style={[styles.result, , result < 5.5 ? styles.insufficient : styles.sufficient]}>{result}</Text>
+                <Text style={[styles.result, result < 5.5 ? styles.insufficient : styles.sufficient]}>{result}</Text>
             </View>
         </View>
     </Pressable>
@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
     resultItem: {
         padding: 12,
         marginVertical: 8,
-        // backgroundColor: GlobalStyles.colors.primary500,
         flexDirection: 'row',
         justifyContent: 'space-between',
         borderRadius: 6,
@@ -52,17 +51,10 @@ const styles = StyleSheet.create({
     sufficient: {
         backgroundColor: GlobalStyles.colors.primary500,
         color: GlobalStyles.colors.sufficient,
-        // shadowColor: GlobalStyles.colors.gray500,
-        // shadowRadius: 4,
-        // shadowOffset: {width: -6, height: 1},
-        // shadowOpacity: .4,
     },
     insufficient: {
         backgroundColor: GlobalStyles.colors.primary500,
         color: GlobalStyles.colors.insufficient,
-        // shadowColor: GlobalStyles.colors.gray500,
-
-        // color: 'white',
     },
     textBase: {
         color: GlobalStyles.colors.primary50,
@@ -82,11 +74,6 @@ const styles = StyleSheet.create({
         width: 60,
     },
     result: {
-        // color: 'white',
-        // color: GlobalStyles.colors.primary500,
         fontWeight: 'bold',
-        // shadowRadius: 4,
-        // shadowOffset: {width: -6, height: 1},
-        // shadowOpacity: .4,
     }
 })
