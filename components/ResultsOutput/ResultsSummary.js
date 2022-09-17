@@ -1,15 +1,17 @@
+import { useContext } from "react"
 import {View, Text, StyleSheet} from "react-native"
 import {GlobalStyles} from "../../constants/styles"
+import { ResultsContext } from "../../store/results-context"
 
 export default function ResultsSummary({results, periodName}) {
-
-    const resultsSum = results.reduce((sum, result) => {
-        return sum + result.result
-    }, 0)
+    const {saldo} = useContext(ResultsContext)
+    // const resultsSum = results.reduce((sum, result) => {
+    //     return sum + result.result
+    // }, 0)
 
     return <View style={styles.container}>
         <Text style={styles.period}>{periodName}</Text>
-        <Text style={styles.sum}>{resultsSum}</Text>
+        <Text style={styles.sum}>{saldo}</Text>
     </View>
 }
 

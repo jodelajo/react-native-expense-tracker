@@ -12,6 +12,10 @@ export default function ManageResult({route, navigation}) {
     const editedResultId = route.params?.resultId
     const isEditing = !!editedResultId
 
+      const selectedResult = resultsCtx.results.find(result => result.id === editedResultId)
+      console.log('selected result', selectedResult)
+      console.log('edited rsult id', editedResultId)
+  
     useLayoutEffect(() => {
         navigation.setOptions({
             title: isEditing ? 'Wijzig cijfer' : 'Voeg cijfer toe'
@@ -39,8 +43,9 @@ export default function ManageResult({route, navigation}) {
         <ResultForm
             onCancel={cancelHandler}
             onSubmit={confirmHandler}
-            submitButtonLabel={isEditing ? 'Update' : 'Add'} />
-
+            submitButtonLabel={isEditing ? 'Update' : 'Add'} 
+            defaultValues={selectedResult}
+            />
         {isEditing && (
             <View style={styles.deleteContainer}>
                 <IconButton

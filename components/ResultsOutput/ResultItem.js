@@ -1,7 +1,9 @@
+import { useContext, useEffect } from "react";
 import {Pressable, View, Text, StyleSheet} from "react-native";
 import {GlobalStyles} from "../../constants/styles";
 import {getFormattedDate} from "../../util/date";
 import {useNavigation} from "@react-navigation/native"
+import { ResultsContext } from "../../store/results-context";
 
 
 export default function ResultItem({id, major, course, result, date}) {
@@ -13,12 +15,50 @@ export default function ResultItem({id, major, course, result, date}) {
         })
     }
 
+
+    const {saldo, setSaldo} = useContext(ResultsContext)
+    // console.log('context', resultsCtx.saldo)
+    // console.log('result', result)
+    // console.log('mojar', major)
+  
+    
+  function saldoHandler() {
+    // const saldo = resultsCtx.saldo
+    // const result = result
+    // const isMultiplier = major
+    const isOk = 1.25
+    const isGood = 2.5
+  
+  
+    if(result >= 5.5) {
+      setSaldo(saldo + isOk)
+    }
+    if(result >= 5.5 && major) {
+      setSaldo(saldo + isGood)
+    }
+    if(result < 5.5) {
+      setSaldo(saldo - isOk)
+    }
+    if (result < 5.5 && major) {
+      setSaldo(saldo - isGood)
+    }
+  }
+  
+  useEffect(() => {
+    saldoHandler()
+  },[result, major])
+
+
+
     return <Pressable onPress={resultPressHandler} style={({pressed}) => pressed && styles.pressed}>
         <View style={[styles.resultItem, major ? styles.resultItemMajor : styles.resultItemMinor]}>
             <View>
                 <Text style={[styles.textBase, styles.description]}>{course}</Text>
                 <Text style={styles.textBase}>{getFormattedDate(date)}</Text>
             </View>
+            {/* <View style={[styles.resultContainer]}>
+                <Text style={[styles.result]}>{saldo}</Text>
+            </View> */}
             <View style={[styles.resultContainer, result < 5.5 ? styles.insufficient : styles.sufficient]}>
                 <Text style={[styles.result, result < 5.5 ? styles.insufficient : styles.sufficient]}>{result}</Text>
             </View>

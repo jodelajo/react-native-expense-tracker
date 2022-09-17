@@ -1,4 +1,4 @@
-import {createContext, useReducer} from "react";
+import {createContext, useReducer, useState} from "react";
 
 
 
@@ -8,56 +8,56 @@ const DUMMY_RESULTS = [
         course: 'Wiskunde',
         major: true,
         result: 7,
-        date: new Date('2022-04-01')
+        date: new Date('2022-04-01'),
     },
     {
         id: 'e2',
         course: 'Nederlands',
         major: false,
         result: 5,
-        date: new Date('2022-04-11')
+        date: new Date('2022-04-11'),
     }, {
         id: 'e3',
         course: 'Frans',
         major: true,
         result: 6.3,
-        date: new Date('2022-05-06')
+        date: new Date('2022-05-06'),
     }, {
         id: 'e4',
         course: 'Biologie',
         major: false,
         result: 7.7,
-        date: new Date('2022-05-21')
+        date: new Date('2022-05-21'),
     }, {
         id: 'e5',
         course: 'Gym',
         major: false,
         result: 4,
-        date: new Date('2022-05-29')
+        date: new Date('2022-05-29'),
     }, {
         id: 'e6',
         course: 'Fries',
         major: true,
         result: 7,
-        date: new Date('2022-06-03')
+        date: new Date('2022-06-03'),
     }, {
         id: 'e7',
         course: 'Biologie',
         major: false,
         result: 5.4,
-        date: new Date('2022-06-09')
+        date: new Date('2022-06-09'),
     }, {
         id: 'e8',
         course: 'Gym',
         major: true,
         result: 7.2,
-        date: new Date('2022-06-11')
+        date: new Date('2022-06-11'),
     }, {
         id: 'e9',
         course: 'Fries',
         major: true,
         result: 5,
-        date: new Date('2022-06-13')
+        date: new Date('2022-06-13'),
     },
 ]
 
@@ -92,6 +92,9 @@ function resultsReducer(state, action) {
 
 export default function ResultsContextProvider({children}) {
     const [resultsState, dispatch] = useReducer(resultsReducer, DUMMY_RESULTS)
+    const [ saldo, setSaldo ] = useState(0)
+    // const [resultData, setResultData] = useState({})
+    console.log('saldo', saldo)
 
     function addResult(resultData) {
         dispatch({type: 'ADD', payload: resultData})
@@ -106,10 +109,13 @@ export default function ResultsContextProvider({children}) {
     }
 
     const value = {
+        saldo: saldo,
+        setSaldo: setSaldo,
         results: resultsState,
         addResult: addResult,
         deleteResult: deleteResult,
-        updateResult: updateResult
+        updateResult: updateResult,
+
     }
 
     return <ResultsContext.Provider value={value}>
