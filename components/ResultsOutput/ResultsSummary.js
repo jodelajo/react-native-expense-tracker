@@ -1,17 +1,22 @@
-import { useContext } from "react"
+import { useContext , useEffect} from "react"
 import {View, Text, StyleSheet} from "react-native"
 import {GlobalStyles} from "../../constants/styles"
 import { ResultsContext } from "../../store/results-context"
 
 export default function ResultsSummary({results, periodName}) {
-    const {saldo} = useContext(ResultsContext)
-    // const resultsSum = results.reduce((sum, result) => {
-    //     return sum + result.result
-    // }, 0)
+    const { setSaldo } = useContext(ResultsContext)
+    const resultsSum = results.reduce((sum, result) => {
+        return sum + result.amount
+    }, 0)
+
+    useEffect(() => {
+        setSaldo(resultsSum)
+    },[resultsSum])
+
 
     return <View style={styles.container}>
         <Text style={styles.period}>{periodName}</Text>
-        <Text style={styles.sum}>{saldo}</Text>
+        <Text style={styles.sum}>€ {resultsSum.toFixed(2)}</Text>
     </View>
 }
 

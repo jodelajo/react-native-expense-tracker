@@ -13,8 +13,8 @@ export default function ManageResult({route, navigation}) {
     const isEditing = !!editedResultId
 
       const selectedResult = resultsCtx.results.find(result => result.id === editedResultId)
-      console.log('selected result', selectedResult)
-      console.log('edited rsult id', editedResultId)
+    //   console.log('selected result', selectedResult)
+    //   console.log('edited rsult id', editedResultId)
   
     useLayoutEffect(() => {
         navigation.setOptions({

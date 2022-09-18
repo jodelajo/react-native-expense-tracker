@@ -1,10 +1,10 @@
-import { useState, useEffect, useContext } from "react";
-import { View, Switch, Text, StyleSheet } from "react-native";
+import { useState, useEffect } from "react";
+import { View, Switch, Text, StyleSheet, TextInput } from "react-native";
 import { GlobalStyles } from "../../constants/styles";
 import Input from "./Input";
 import Button from "../UI/Button";
 import { getFormattedDate } from "../../util/date";
-import { ResultsContext } from "../../store/results-context";
+import SearchBarDropdown from "../SearchBarDropdown";
 
 export default function ResultForm({
   onCancel,
@@ -14,12 +14,114 @@ export default function ResultForm({
   defaultValues,
 }) {
   const [inputValues, setInputValues] = useState({
-    course: defaultValues ? defaultValues.course : " ",
-    date: defaultValues ? getFormattedDate(defaultValues.date) : "",
+    course: defaultValues ? defaultValues.course : (filtered ? filtered : ''),
+    date: defaultValues
+      ? getFormattedDate(defaultValues.date)
+      : dateInputHandler(),
     isMajor: defaultValues ? defaultValues.major : false,
-    result: defaultValues ? defaultValues.result.toString() : "",
+    result: defaultValues ? defaultValues.result.toString() : 0,
+    amount: defaultValues ? defaultValues.amount.toString() : 0,
   });
 
+  const [isSearching, setIsSearching] = useState(false);
+  const [selectedItem, setSelectedItem] = useState('')
+  const [dataSource] = useState([
+    "Wiskunde",
+    "Engels",
+    "Frans",
+    "Duits",
+    "Nederlands",
+    "Geschiedenis",
+    "Aardrijkskunde",
+    "Biologie",
+    "Natuurkunde",
+    "Muziek",
+    "Gym"
+  ]);
+  const [filtered, setFiltered] = useState(false);
+
+  const onSelect = (item) => {
+    setSelectedItem(item)
+  }
+
+  // const onSearch = (text) => {
+  //   if (text) {
+  //     setIsSearching(true);
+  //     const temp = text.toLowerCase();
+  //     console.log('temp', temp)
+  //     // console.log('data source in resultform', dataSource)
+  //     const tempList = dataSource.filter((item) => {
+  //       // console.log('item', item)
+  //       const courseItem = item.toLowerCase().includes(temp)
+  //       if (courseItem) {
+  //         return item;
+  //       }
+  //     });
+  //     setFiltered(tempList);
+  //     console.log('templist', tempList)
+  //   } else {
+  //     setIsSearching(false);
+  //     setFiltered(dataSource);
+  //   }
+  // };
+  // console.log('filterd', filtered)
+
+  // function searchInputHandler(text) {
+  //   if(filtered) {
+     
+  //    return text
+  //   }
+  // }
+
+  function dateInputHandler() {
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const monthOutput = month < 10 ? "0" + month : month;
+    const year = today.getFullYear();
+    return year + "-" + monthOutput + "-";
+  }
+
+  function amountHandler() {
+    const result = inputValues.result;
+
+    function setInputValuesHandler(amount) {
+      setInputValues((curInputValues) => {
+        return {
+          ...curInputValues,
+          amount: amount,
+        };
+      });
+    }
+
+    if (result < 5.5 && inputValues.isMajor) {
+      setInputValuesHandler(-2.5);
+    }
+    if (result < 4 && inputValues.isMajor) {
+      setInputValuesHandler(-5.0);
+    }
+    if (result < 5.5 && !inputValues.isMajor) {
+      setInputValuesHandler(-1.25);
+    }
+    if (result < 4 && !inputValues.isMajor) {
+      setInputValuesHandler(-2.5);
+    }
+    if (result >= 5.5 && inputValues.isMajor) {
+      setInputValuesHandler(2.5);
+    }
+    if (result >= 7.5 && inputValues.isMajor) {
+      setInputValuesHandler(5.0);
+    }
+    if (result >= 5.5 && !inputValues.isMajor) {
+      setInputValuesHandler(1.25);
+    }
+    if (result >= 7.5 && !inputValues.isMajor) {
+      setInputValuesHandler(2.5);
+    }
+  }
+
+  useEffect(() => {
+    amountHandler();
+  }, [inputValues.result, inputValues.isMajor]);
 
   function inputChangedHandler(inputIdentifier, enteredValue) {
     setInputValues((curInputValues) => {
@@ -29,33 +131,41 @@ export default function ResultForm({
       };
     });
   }
+  function courseHandler(course) {
+    setInputValues((curInputValues) => {
+      return {
+        ...curInputValues,
+        course: course
+      }
+    })
+  }
 
   function submitHandler() {
-    // console.log("input values", inputValues);
-
+    console.log("input values", inputValues);
+    amountHandler();
     const resultData = {
       course: inputValues.course,
       date: new Date(inputValues.date),
       major: inputValues.isMajor,
       result: inputValues.result,
-      // saldo: inputValues.saldo,
+      amount: inputValues.amount,
     };
     onSubmit(resultData);
   }
-  // console.log("input values", inputValues);
 
   return (
     <View style={styles.form}>
       <Text style={styles.titleStyle}>Jouw resultaat</Text>
-      <Input
-        label="Vak"
-        textInputConfig={{
-          autoCorrect: false,
-          autoCapitalize: "words",
-          onChangeText: inputChangedHandler.bind(this, "course"),
-          value: inputValues.course,
-        }}
+
+      <SearchBarDropdown 
+      dataSource={dataSource}  
+      onSelect={onSelect} 
+      // value={selectedItem} 
+      courseHandler={courseHandler} 
+      course={inputValues.course} 
+      style={styles.dropdown} 
       />
+
       <View style={styles.switchContainer}>
         <Text
           style={
@@ -98,6 +208,7 @@ export default function ResultForm({
           textInputConfig={{
             placeholder: "YYYY-MM-DD",
             maxLength: 10,
+            keyboardType: "number-pad",
             onChangeText: inputChangedHandler.bind(this, "date"),
             value: inputValues.date,
           }}
@@ -106,7 +217,7 @@ export default function ResultForm({
           style={styles.rowInput}
           label="Cijfer"
           textInputConfig={{
-            keyboardType: "decimal-pad",
+            keyboardType: "numbers-and-punctuation",
             onChangeText: inputChangedHandler.bind(this, "result"),
             value: inputValues.result,
           }}
@@ -133,6 +244,10 @@ const styles = StyleSheet.create({
     color: "white",
     marginBottom: 30,
     textAlign: "center",
+  },
+  dropdown: {
+    marginHorizontal: 4,
+    backgroundColor: 'red,'
   },
   inputContainer: {
     flexDirection: "row",
@@ -180,4 +295,9 @@ const styles = StyleSheet.create({
     textAlign: "left",
     color: GlobalStyles.colors.major,
   },
+  searchbar: {
+    backgroundColor: GlobalStyles.colors.error50,
+    height: 30,
+    borderRadius: 6,
+  }
 });
