@@ -13,18 +13,17 @@ export default function ResultForm({
   submitButtonLabel,
   defaultValues,
 }) {
-  const [inputValues, setInputValues] = useState({
-    course: defaultValues ? defaultValues.course : (filtered ? filtered : ''),
+  const [inputs, setInputs] = useState({
+    course: defaultValues ? defaultValues.course : "",
     date: defaultValues
       ? getFormattedDate(defaultValues.date)
       : dateInputHandler(),
-    isMajor: defaultValues ? defaultValues.major : false,
+    major: defaultValues ? defaultValues.major : false,
     result: defaultValues ? defaultValues.result.toString() : 0,
     amount: defaultValues ? defaultValues.amount.toString() : 0,
   });
 
-  const [isSearching, setIsSearching] = useState(false);
-  const [selectedItem, setSelectedItem] = useState('')
+  const [selectedItem, setSelectedItem] = useState("");
   const [dataSource] = useState([
     "Wiskunde",
     "Engels",
@@ -36,42 +35,12 @@ export default function ResultForm({
     "Biologie",
     "Natuurkunde",
     "Muziek",
-    "Gym"
+    "Gym",
   ]);
-  const [filtered, setFiltered] = useState(false);
 
   const onSelect = (item) => {
-    setSelectedItem(item)
-  }
-
-  // const onSearch = (text) => {
-  //   if (text) {
-  //     setIsSearching(true);
-  //     const temp = text.toLowerCase();
-  //     console.log('temp', temp)
-  //     // console.log('data source in resultform', dataSource)
-  //     const tempList = dataSource.filter((item) => {
-  //       // console.log('item', item)
-  //       const courseItem = item.toLowerCase().includes(temp)
-  //       if (courseItem) {
-  //         return item;
-  //       }
-  //     });
-  //     setFiltered(tempList);
-  //     console.log('templist', tempList)
-  //   } else {
-  //     setIsSearching(false);
-  //     setFiltered(dataSource);
-  //   }
-  // };
-  // console.log('filterd', filtered)
-
-  // function searchInputHandler(text) {
-  //   if(filtered) {
-     
-  //    return text
-  //   }
-  // }
+    setSelectedItem(item);
+  };
 
   function dateInputHandler() {
     const today = new Date();
@@ -82,74 +51,75 @@ export default function ResultForm({
   }
 
   function amountHandler() {
-    const result = inputValues.result;
+    const result = inputs.result;
 
-    function setInputValuesHandler(amount) {
-      setInputValues((curInputValues) => {
+    function setInputsHandler(amount) {
+      setInputs((curInputs) => {
         return {
-          ...curInputValues,
+          ...curInputs,
           amount: amount,
         };
       });
     }
 
-    if (result < 5.5 && inputValues.isMajor) {
-      setInputValuesHandler(-2.5);
+    if (result < 5.5 && inputs.major) {
+      setInputsHandler(-2.5);
     }
-    if (result < 4 && inputValues.isMajor) {
-      setInputValuesHandler(-5.0);
+    if (result < 4 && inputs.major) {
+      setInputsHandler(-5.0);
     }
-    if (result < 5.5 && !inputValues.isMajor) {
-      setInputValuesHandler(-1.25);
+    if (result < 5.5 && !inputs.major) {
+      setInputsHandler(-1.25);
     }
-    if (result < 4 && !inputValues.isMajor) {
-      setInputValuesHandler(-2.5);
+    if (result < 4 && !inputs.major) {
+      setInputsHandler(-2.5);
     }
-    if (result >= 5.5 && inputValues.isMajor) {
-      setInputValuesHandler(2.5);
+    if (result >= 5.5 && inputs.major) {
+      setInputsHandler(2.5);
     }
-    if (result >= 7.5 && inputValues.isMajor) {
-      setInputValuesHandler(5.0);
+    if (result >= 7.5 && inputs.major) {
+      setInputsHandler(5.0);
     }
-    if (result >= 5.5 && !inputValues.isMajor) {
-      setInputValuesHandler(1.25);
+    if (result >= 5.5 && !inputs.major) {
+      setInputsHandler(1.25);
     }
-    if (result >= 7.5 && !inputValues.isMajor) {
-      setInputValuesHandler(2.5);
+    if (result >= 7.5 && !inputs.major) {
+      setInputsHandler(2.5);
     }
   }
 
   useEffect(() => {
     amountHandler();
-  }, [inputValues.result, inputValues.isMajor]);
+  }, [inputs.result, inputs.major]);
 
   function inputChangedHandler(inputIdentifier, enteredValue) {
-    setInputValues((curInputValues) => {
+    setInputs((curInputs) => {
       return {
-        ...curInputValues,
+        ...curInputs,
         [inputIdentifier]: enteredValue,
       };
     });
   }
   function courseHandler(course) {
-    setInputValues((curInputValues) => {
+    setInputs((curInputs) => {
       return {
-        ...curInputValues,
-        course: course
-      }
-    })
+        ...curInputs,
+        course: course,
+      };
+    });
   }
 
   function submitHandler() {
-    console.log("input values", inputValues);
+    console.log("input values", inputs);
     amountHandler();
     const resultData = {
-      course: inputValues.course,
-      date: new Date(inputValues.date),
-      major: inputValues.isMajor,
-      result: inputValues.result,
-      amount: inputValues.amount,
+      course: inputs.course,
+      date: new Date(inputs.date),
+      major: inputs.major,
+      result: inputs.result,
+      amount: inputs.amount,
     };
+
     onSubmit(resultData);
   }
 
@@ -157,19 +127,18 @@ export default function ResultForm({
     <View style={styles.form}>
       <Text style={styles.titleStyle}>Jouw resultaat</Text>
 
-      <SearchBarDropdown 
-      dataSource={dataSource}  
-      onSelect={onSelect} 
-      // value={selectedItem} 
-      courseHandler={courseHandler} 
-      course={inputValues.course} 
-      style={styles.dropdown} 
+      <SearchBarDropdown
+        dataSource={dataSource}
+        onSelect={onSelect}
+        courseHandler={courseHandler}
+        course={inputs.course}
+        style={styles.dropdown}
       />
 
       <View style={styles.switchContainer}>
         <Text
           style={
-            !inputValues.isMajor
+            !inputs.major
               ? [styles.label, styles.activeMinor]
               : [styles.label, styles.left]
           }
@@ -182,20 +151,18 @@ export default function ResultForm({
             true: GlobalStyles.colors.major,
           }}
           thumbColor={
-            inputValues.isMajor
+            inputs.major
               ? GlobalStyles.colors.primary50
               : GlobalStyles.colors.primary50
           }
           ios_backgroundColor={GlobalStyles.colors.minor}
-          onValueChange={inputChangedHandler.bind(this, "isMajor")}
-          value={inputValues.isMajor}
+          onValueChange={inputChangedHandler.bind(this, "major")}
+          value={inputs.major}
           style={styles.switch}
         />
         <Text
           style={
-            inputValues.isMajor
-              ? [styles.label, styles.activeMajor]
-              : [styles.label]
+            inputs.major ? [styles.label, styles.activeMajor] : [styles.label]
           }
         >
           Proefwerk
@@ -210,7 +177,7 @@ export default function ResultForm({
             maxLength: 10,
             keyboardType: "number-pad",
             onChangeText: inputChangedHandler.bind(this, "date"),
-            value: inputValues.date,
+            value: inputs.date,
           }}
         />
         <Input
@@ -219,7 +186,7 @@ export default function ResultForm({
           textInputConfig={{
             keyboardType: "numbers-and-punctuation",
             onChangeText: inputChangedHandler.bind(this, "result"),
-            value: inputValues.result,
+            value: inputs.result,
           }}
         />
       </View>
@@ -247,7 +214,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     marginHorizontal: 4,
-    backgroundColor: 'red,'
+    backgroundColor: "red,",
   },
   inputContainer: {
     flexDirection: "row",
@@ -299,5 +266,5 @@ const styles = StyleSheet.create({
     backgroundColor: GlobalStyles.colors.error50,
     height: 30,
     borderRadius: 6,
-  }
+  },
 });
