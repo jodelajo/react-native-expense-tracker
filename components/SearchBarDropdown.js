@@ -8,12 +8,14 @@ import {
 import { GlobalStyles } from "../constants/styles";
 
 export default function SearchBarDropdown(props) {
-  const { dataSource = [], onSelect = () => {}, courseHandler = () => {}, course } = props;
+  const { dataSource = [], onSelect = () => {}, courseHandler = () => {}, course, invalid } = props;
   const [showOptions, setShowOptions] = useState(false);
 //   const [selectedCourse, setSelectedCourse] = useState(course)
 //   console.log("data source", dataSource);
 //   console.log("value in searchbar", value);
 //   console.log('course in searchbar', course)
+
+const inputStyles = [styles.input]
 
   const onSelectedItem = (item) => {
     setShowOptions(false)
@@ -24,7 +26,7 @@ export default function SearchBarDropdown(props) {
   return (
     <View style={styles.dropdownContainer}>
       <TouchableOpacity
-        style={styles.dropdownStyle}
+        style={[styles.dropdownStyle, invalid && styles.invalidInput ]}
         activeOpacity={0.8}
         onPress={() => setShowOptions(!showOptions)}
       >
@@ -95,5 +97,8 @@ const styles = StyleSheet.create({
   },
 item: {
     padding: 8,
+},
+invalidInput: {
+  backgroundColor: GlobalStyles.colors.error50
 }
 });

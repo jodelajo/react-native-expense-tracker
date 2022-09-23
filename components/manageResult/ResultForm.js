@@ -14,9 +14,9 @@ export default function ResultForm({
   defaultValues,
 }) {
   const [inputs, setInputs] = useState({
-    course: { 
-      value: defaultValues ? defaultValues.course : "", 
-      isValid: true 
+    course: {
+      value: defaultValues ? defaultValues.course : "",
+      isValid: true,
     },
     date: {
       value: defaultValues
@@ -72,7 +72,7 @@ export default function ResultForm({
       setInputs((curInputs) => {
         return {
           ...curInputs,
-          amount: {value: amount, isValid: true},
+          amount: { value: amount, isValid: true },
         };
       });
     }
@@ -111,7 +111,7 @@ export default function ResultForm({
     setInputs((curInputs) => {
       return {
         ...curInputs,
-        [inputIdentifier]: {value: enteredValue, isValid: true},
+        [inputIdentifier]: { value: enteredValue, isValid: true },
       };
     });
   }
@@ -119,7 +119,7 @@ export default function ResultForm({
     setInputs((curInputs) => {
       return {
         ...curInputs,
-        course: {value: course, isValid: true},
+        course: { value: course, isValid: true },
       };
     });
   }
@@ -151,12 +151,28 @@ export default function ResultForm({
       !resultIsValid ||
       !amountIsValid
     ) {
-      Alert.alert("ongeldige input", "je bent een troelalala");
+      // Alert.alert("ongeldige input", "je bent een troelalala");
+      setInputs((curInputs) => {
+        return {
+          course: { value: curInputs.course.value, isValid: courseIsValid },
+          date: { value: curInputs.date.value, isValid: dateIsValid },
+          major: { value: curInputs.major.value, isValid: majorIsValid },
+          result: { value: curInputs.result.value, isValid: resultIsValid },
+          amount: { value: curInputs.amount.value, isValid: amountIsValid },
+        };
+      });
       return;
     }
 
     onSubmit(resultData);
   }
+
+  const formIsInvalid =
+    !inputs.course.isValid ||
+    !inputs.date.isValid ||
+    !inputs.major.isValid ||
+    !inputs.result.isValid ||
+    !inputs.amount.isValid;
 
   return (
     <View style={styles.form}>
@@ -168,6 +184,7 @@ export default function ResultForm({
         courseHandler={courseHandler}
         course={inputs.course.value}
         style={styles.dropdown}
+        invalid={!inputs.course.isValid}
       />
 
       <View style={styles.switchContainer}>
@@ -194,10 +211,13 @@ export default function ResultForm({
           onValueChange={inputChangedHandler.bind(this, "major")}
           value={inputs.major.value}
           style={styles.switch}
+          invalid={!inputs.major.isValid}
         />
         <Text
           style={
-            inputs.major.value ? [styles.label, styles.activeMajor] : [styles.label]
+            inputs.major.value
+              ? [styles.label, styles.activeMajor]
+              : [styles.label]
           }
         >
           Proefwerk
@@ -207,6 +227,7 @@ export default function ResultForm({
         <Input
           style={styles.rowInput}
           label="Datum"
+          invalid={!inputs.date.isValid}
           textInputConfig={{
             placeholder: "YYYY-MM-DD",
             maxLength: 10,
@@ -218,6 +239,7 @@ export default function ResultForm({
         <Input
           style={styles.rowInput}
           label="Cijfer"
+          invalid={!inputs.result.isValid}
           textInputConfig={{
             keyboardType: "numbers-and-punctuation",
             onChangeText: inputChangedHandler.bind(this, "result"),
@@ -225,6 +247,7 @@ export default function ResultForm({
           }}
         />
       </View>
+      {formIsInvalid && <Text style={styles.errorText}>bla bla</Text>}
       <View style={styles.buttons}>
         <Button mode="flat" onPress={onCancel} style={styles.button}>
           Cancel
@@ -274,6 +297,11 @@ const styles = StyleSheet.create({
   },
   rowInput: {
     flex: 1,
+  },
+  errorText: {
+    textAlign: 'center',
+    color: GlobalStyles.colors.error500,
+    margin: 8,
   },
   buttons: {
     flexDirection: "row",
