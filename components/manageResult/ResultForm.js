@@ -14,13 +14,28 @@ export default function ResultForm({
   defaultValues,
 }) {
   const [inputs, setInputs] = useState({
-    course: {value: defaultValues ? defaultValues.course : "", isValid: true},
-    date: {value: defaultValues
-      ? getFormattedDate(defaultValues.date)
-      : dateInputHandler(), isValid: true},
-    major: {value: defaultValues ? defaultValues.major : false, isValid: true},
-    result: {value: defaultValues ? defaultValues.result.toString() : 0, isValid: true},
-    amount: {value: defaultValues ? defaultValues.amount.toString() : 0, isValid: true},
+    course: { 
+      value: defaultValues ? defaultValues.course : "", 
+      isValid: true 
+    },
+    date: {
+      value: defaultValues
+        ? getFormattedDate(defaultValues.date)
+        : dateInputHandler(),
+      isValid: true,
+    },
+    major: {
+      value: defaultValues ? defaultValues.major : false,
+      isValid: true,
+    },
+    result: {
+      value: defaultValues ? defaultValues.result.toString() : 0,
+      isValid: true,
+    },
+    amount: {
+      value: defaultValues ? defaultValues.amount.toString() : 0,
+      isValid: true,
+    },
   });
 
   const [selectedItem, setSelectedItem] = useState("");
@@ -51,39 +66,39 @@ export default function ResultForm({
   }
 
   function amountHandler() {
-    const result = inputs.result;
+    const result = inputs.result.value;
 
     function setInputsHandler(amount) {
       setInputs((curInputs) => {
         return {
           ...curInputs,
-          amount: amount,
+          amount: {value: amount, isValid: true},
         };
       });
     }
 
-    if (result < 5.5 && inputs.major) {
+    if (result < 5.5 && inputs.major.value) {
       setInputsHandler(-2.5);
     }
-    if (result < 4 && inputs.major) {
+    if (result < 4 && inputs.major.value) {
       setInputsHandler(-5.0);
     }
-    if (result < 5.5 && !inputs.major) {
+    if (result < 5.5 && !inputs.major.value) {
       setInputsHandler(-1.25);
     }
-    if (result < 4 && !inputs.major) {
+    if (result < 4 && !inputs.major.value) {
       setInputsHandler(-2.5);
     }
-    if (result >= 5.5 && inputs.major) {
+    if (result >= 5.5 && inputs.major.value) {
       setInputsHandler(2.5);
     }
-    if (result >= 7.5 && inputs.major) {
+    if (result >= 7.5 && inputs.major.value) {
       setInputsHandler(5.0);
     }
-    if (result >= 5.5 && !inputs.major) {
+    if (result >= 5.5 && !inputs.major.value) {
       setInputsHandler(1.25);
     }
-    if (result >= 7.5 && !inputs.major) {
+    if (result >= 7.5 && !inputs.major.value) {
       setInputsHandler(2.5);
     }
   }
@@ -96,7 +111,7 @@ export default function ResultForm({
     setInputs((curInputs) => {
       return {
         ...curInputs,
-        [inputIdentifier]: enteredValue,
+        [inputIdentifier]: {value: enteredValue, isValid: true},
       };
     });
   }
@@ -104,7 +119,7 @@ export default function ResultForm({
     setInputs((curInputs) => {
       return {
         ...curInputs,
-        course: course,
+        course: {value: course, isValid: true},
       };
     });
   }
@@ -113,22 +128,31 @@ export default function ResultForm({
     console.log("input values", inputs);
     amountHandler();
     const resultData = {
-      course: inputs.course,
-      date: new Date(inputs.date),
-      major: inputs.major,
-      result: inputs.result,
-      amount: inputs.amount,
+      course: inputs.course.value,
+      date: new Date(inputs.date.value),
+      major: inputs.major.value,
+      result: inputs.result.value,
+      amount: inputs.amount.value,
     };
 
-    const courseIsValid = resultData.course.length > 0
-    const dateIsValid = resultData.date.toString() !== 'Invalid Date'
-    const majorIsValid = typeof resultData.major == "boolean"
-    const resultIsValid = !isNaN(resultData.result) && resultData.result > 0 && resultData.result <= 10
-    const amountIsValid = !isNaN(resultData.amount)
+    const courseIsValid = resultData.course.length > 0;
+    const dateIsValid = resultData.date.toString() !== "Invalid Date";
+    const majorIsValid = typeof resultData.major == "boolean";
+    const resultIsValid =
+      !isNaN(resultData.result) &&
+      resultData.result > 0 &&
+      resultData.result <= 10;
+    const amountIsValid = !isNaN(resultData.amount);
 
-    if (!courseIsValid || !dateIsValid || !majorIsValid || !resultIsValid || !amountIsValid ) {
-      Alert.alert('ongeldige input', 'je bent een troelalala')
-      return
+    if (
+      !courseIsValid ||
+      !dateIsValid ||
+      !majorIsValid ||
+      !resultIsValid ||
+      !amountIsValid
+    ) {
+      Alert.alert("ongeldige input", "je bent een troelalala");
+      return;
     }
 
     onSubmit(resultData);
@@ -142,14 +166,14 @@ export default function ResultForm({
         dataSource={dataSource}
         onSelect={onSelect}
         courseHandler={courseHandler}
-        course={inputs.course}
+        course={inputs.course.value}
         style={styles.dropdown}
       />
 
       <View style={styles.switchContainer}>
         <Text
           style={
-            !inputs.major
+            !inputs.major.value
               ? [styles.label, styles.activeMinor]
               : [styles.label, styles.left]
           }
@@ -162,18 +186,18 @@ export default function ResultForm({
             true: GlobalStyles.colors.major,
           }}
           thumbColor={
-            inputs.major
+            inputs.major.value
               ? GlobalStyles.colors.primary50
               : GlobalStyles.colors.primary50
           }
           ios_backgroundColor={GlobalStyles.colors.minor}
           onValueChange={inputChangedHandler.bind(this, "major")}
-          value={inputs.major}
+          value={inputs.major.value}
           style={styles.switch}
         />
         <Text
           style={
-            inputs.major ? [styles.label, styles.activeMajor] : [styles.label]
+            inputs.major.value ? [styles.label, styles.activeMajor] : [styles.label]
           }
         >
           Proefwerk
@@ -188,7 +212,7 @@ export default function ResultForm({
             maxLength: 10,
             keyboardType: "number-pad",
             onChangeText: inputChangedHandler.bind(this, "date"),
-            value: inputs.date,
+            value: inputs.date.value,
           }}
         />
         <Input
@@ -197,7 +221,7 @@ export default function ResultForm({
           textInputConfig={{
             keyboardType: "numbers-and-punctuation",
             onChangeText: inputChangedHandler.bind(this, "result"),
-            value: inputs.result,
+            value: inputs.result.value,
           }}
         />
       </View>
