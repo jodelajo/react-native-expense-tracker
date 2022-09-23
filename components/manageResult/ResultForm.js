@@ -14,13 +14,13 @@ export default function ResultForm({
   defaultValues,
 }) {
   const [inputs, setInputs] = useState({
-    course: defaultValues ? defaultValues.course : "",
-    date: defaultValues
+    course: {value: defaultValues ? defaultValues.course : "", isValid: true},
+    date: {value: defaultValues
       ? getFormattedDate(defaultValues.date)
-      : dateInputHandler(),
-    major: defaultValues ? defaultValues.major : false,
-    result: defaultValues ? defaultValues.result.toString() : 0,
-    amount: defaultValues ? defaultValues.amount.toString() : 0,
+      : dateInputHandler(), isValid: true},
+    major: {value: defaultValues ? defaultValues.major : false, isValid: true},
+    result: {value: defaultValues ? defaultValues.result.toString() : 0, isValid: true},
+    amount: {value: defaultValues ? defaultValues.amount.toString() : 0, isValid: true},
   });
 
   const [selectedItem, setSelectedItem] = useState("");
