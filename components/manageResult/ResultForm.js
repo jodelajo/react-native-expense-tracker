@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Switch, Text, StyleSheet, TextInput } from "react-native";
+import { View, Switch, Text, StyleSheet, TextInput, Alert } from "react-native";
 import { GlobalStyles } from "../../constants/styles";
 import Input from "./Input";
 import Button from "../UI/Button";
@@ -119,6 +119,17 @@ export default function ResultForm({
       result: inputs.result,
       amount: inputs.amount,
     };
+
+    const courseIsValid = resultData.course.length > 0
+    const dateIsValid = resultData.date.toString() !== 'Invalid Date'
+    const majorIsValid = typeof resultData.major == "boolean"
+    const resultIsValid = !isNaN(resultData.result) && resultData.result > 0 && resultData.result <= 10
+    const amountIsValid = !isNaN(resultData.amount)
+
+    if (!courseIsValid || !dateIsValid || !majorIsValid || !resultIsValid || !amountIsValid ) {
+      Alert.alert('ongeldige input', 'je bent een troelalala')
+      return
+    }
 
     onSubmit(resultData);
   }
