@@ -250,7 +250,7 @@ export default function ResultForm({
       {formIsInvalid && <Text style={styles.errorText}>bla bla</Text>}
       <View style={styles.buttons}>
         <Button mode="flat" onPress={onCancel} style={styles.button}>
-          Cancel
+          Annuleren
         </Button>
         <Button onPress={submitHandler} style={styles.button}>
           {submitButtonLabel}
@@ -282,15 +282,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    width: '100%',
     marginTop: 8,
   },
   switch: {
-    marginHorizontal: 30,
+    marginHorizontal: 10,
   },
   label: {
     fontSize: 12,
     color: GlobalStyles.colors.primary100,
-    minWidth: 80,
+    width: 120,
+
   },
   left: {
     textAlign: "right",
@@ -315,15 +317,22 @@ const styles = StyleSheet.create({
   },
   activeMinor: {
     fontWeight: "bold",
-    fontSize: 24,
+    fontSize: 14,
     textAlign: "right",
+    // borderRadius: 48,
+    backgroundColor: GlobalStyles.colors.primary500,
     color: GlobalStyles.colors.minor,
+    padding: 8,
+    
   },
   activeMajor: {
     fontWeight: "bold",
-    fontSize: 24,
+    fontSize: 14,
     textAlign: "left",
-    color: GlobalStyles.colors.major,
+    // borderRadius: 24,
+    backgroundColor: GlobalStyles.colors.primary500,
+    color: GlobalStyles.colors.error50,
+    padding: 8,
   },
   searchbar: {
     backgroundColor: GlobalStyles.colors.error50,

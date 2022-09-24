@@ -5,24 +5,32 @@ const BACKEND_URL =
 
 export async function storeResult(resultData) {
   const response = await axios.post(BACKEND_URL + "/results.json", resultData);
-  const id = response.data.name
-  return id
+  const id = response.data.name;
+  return id;
 }
 export async function fetchResults() {
-    const response = await axios.get(BACKEND_URL + "/results.json");
+  const response = await axios.get(BACKEND_URL + "/results.json");
 
-    const results = []
-    
-    for (const key in response.data) {
-        const resultObj = {
-            id: key,
-            course: response.data[key].course,
-            date: new Date(response.data[key].date),
-            major: response.data[key].major,
-            result: response.data[key].result,
-            amount: response.data[key].amount
-        }
-        results.push(resultObj)
-    }
-    return results
+  const results = [];
+
+  for (const key in response.data) {
+    const resultObj = {
+      id: key,
+      course: response.data[key].course,
+      date: new Date(response.data[key].date),
+      major: response.data[key].major,
+      result: response.data[key].result,
+      amount: response.data[key].amount,
+    };
+    results.push(resultObj);
+  }
+  return results;
+}
+
+export function updateResult(id, resultData) {
+return axios.put(BACKEND_URL + `/results/${id}.json`, resultData)
+}
+
+export function deleteResult(id) {
+return axios.delete(BACKEND_URL + `/results/${id}.json`)
 }

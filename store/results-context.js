@@ -33,7 +33,6 @@ function resultsReducer(state, action) {
 export default function ResultsContextProvider({ children }) {
   const [resultsState, dispatch] = useReducer(resultsReducer, []);
   const [saldo, setSaldo] = useState();
-  console.log("saldo in context", saldo);
 
   function addResult(resultData) {
     dispatch({ type: "ADD", payload: resultData });
