@@ -5,6 +5,7 @@ import {GlobalStyles} from "../constants/styles"
 import Button from "../components/UI/Button"
 import {ResultsContext} from "../store/results-context"
 import ResultForm from "../components/manageResult/ResultForm"
+import { storeResult } from "../components/UI/http"
 
 export default function ManageResult({route, navigation}) {
     const resultsCtx = useContext(ResultsContext)
@@ -29,12 +30,13 @@ export default function ManageResult({route, navigation}) {
     function cancelHandler() {
         navigation.goBack()
     }
-    function confirmHandler(resultData) {
+    async function confirmHandler(resultData) {
         if (isEditing) {
             resultsCtx.updateResult(
                 editedResultId, resultData)
         } else {
-            resultsCtx.addResult(resultData)
+            const id = await storeResult(resultData)
+            resultsCtx.addResult({...resultData, id: id})
         }
         navigation.goBack()
     }
