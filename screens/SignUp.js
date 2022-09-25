@@ -7,7 +7,7 @@ import { useState } from "react";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
 
-export default function SigUp() {
+export default function SignUp() {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState()
 
@@ -17,8 +17,8 @@ async function signupHandler({email, password}) {
         setIsLoading(true)
         await CreateUser(email, password)
     } catch (error) {
-      Alert.alert('jajaja', 'sdiof soidfjoi sdfoijoi')
-        // setError(error.toString())
+      // Alert.alert('jajaja', 'sdiof soidfjoi sdfoijoi')
+        setError(error.toString())
         // setIsLoading(false)
     }
     setIsLoading(false)
