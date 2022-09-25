@@ -1,6 +1,15 @@
 import axios from "axios";
 
 const API_KEY = "AIzaSyCDubyiZeSPS4_8DSkhUIkYXACZPSxqGVY";
+const BACKEND_URL = "https://sasha-game-dev-default-rtdb.europe-west1.firebasedatabase.app";
+
+
+  export async function storeResult(resultData) {
+    const response = await axios.post(BACKEND_URL + "/id.json", resultData);
+    const id = response.data.name;
+    return id;
+  }
+
 
 export async function createUser(email, password) {
   const response = await axios.post(
@@ -12,4 +21,13 @@ export async function createUser(email, password) {
       returnSecureToken: true,
     }
   );
+  console.log('response', response.data)
+
+  await storeResult(response.data);
+  // const user = response.user
+  // await addDoc(collection(db, "users"), {
+  //   uid: response.data.localId,
+  //   // name: nameRef.current.value,
+  //   // email: response.data.email,
+  // });
 }
