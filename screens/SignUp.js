@@ -1,5 +1,5 @@
 import AuthContent from "../components/auth/AuthContent";
-import { StyleSheet } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import { GlobalStyles } from "../constants/styles";
 import { View } from "react-native";
 import { CreateUser } from "../components/auth/CreateUser";
@@ -17,8 +17,9 @@ async function signupHandler({email, password}) {
         setIsLoading(true)
         await CreateUser(email, password)
     } catch (error) {
-        setError(error.toString())
-        setIsLoading(false)
+      Alert.alert('jajaja', 'sdiof soidfjoi sdfoijoi')
+        // setError(error.toString())
+        // setIsLoading(false)
     }
     setIsLoading(false)
 }

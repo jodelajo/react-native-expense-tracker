@@ -1,8 +1,9 @@
 import { useState } from "react";
 import AuthContent from "../components/auth/AuthContent";
-import { StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import { GlobalStyles } from "../constants/styles";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 import { LoginUser } from "../components/auth/CreateUser";
 
 export default function Login() {
@@ -12,22 +13,23 @@ export default function Login() {
 
 async function loginHandler({email, password}) {
     console.log(email, password)
+    setIsLoading(true)
     try {
-        setIsLoading(true)
-        await LoginUser(email, password)
+      await LoginUser(email, password)
     } catch (error) {
-        setError(error.toString())
-        setIsLoading(false)
+        // setError(error.toString())
+        // setIsLoading(false)
+        Alert.alert("blabla", "sdoij soidfjsod isdoi sdofij")
     }
     setIsLoading(false)
 }
 if (isLoading) {
     return <LoadingOverlay  />
 }
-if (error && !isLoading) {
-    console.log(error)
-    return <ErrorOverlay message={error} />
-}
+// if (error && !isLoading) {
+//     console.log(error)
+//     return <ErrorOverlay message={error} />
+// }
     return (<View style={styles.container}>
  <AuthContent isLogin onAuthenticate={loginHandler} />
     </View>)
