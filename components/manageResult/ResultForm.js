@@ -125,7 +125,7 @@ export default function ResultForm({
   }
 
   function submitHandler() {
-    console.log("input values", inputs);
+    // console.log("input values", inputs);
     amountHandler();
     const resultData = {
       course: inputs.course.value,
@@ -220,7 +220,7 @@ export default function ResultForm({
               : [styles.label]
           }
         >
-          Proefwerk
+          PROEFWERK
         </Text>
       </View>
       <View style={styles.inputContainer}>
@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   switch: {
-    marginHorizontal: 10,
+    marginHorizontal: 14,
   },
   label: {
     fontSize: 12,
@@ -317,21 +317,21 @@ const styles = StyleSheet.create({
   },
   activeMinor: {
     fontWeight: "bold",
-    fontSize: 14,
+    fontSize: 12,
     textAlign: "right",
-    // borderRadius: 48,
-    backgroundColor: GlobalStyles.colors.primary500,
-    color: GlobalStyles.colors.minor,
+    borderRadius: 6,
+    backgroundColor: GlobalStyles.colors.minor,
+    color: "white",
     padding: 8,
     
   },
   activeMajor: {
     fontWeight: "bold",
-    fontSize: 14,
+    fontSize: 12,
     textAlign: "left",
-    // borderRadius: 24,
-    backgroundColor: GlobalStyles.colors.primary500,
-    color: GlobalStyles.colors.error50,
+    borderRadius: 6,
+    backgroundColor: GlobalStyles.colors.major,
+    color: 'white',
     padding: 8,
   },
   searchbar: {

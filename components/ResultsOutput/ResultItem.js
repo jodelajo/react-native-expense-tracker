@@ -7,8 +7,8 @@ import {useNavigation} from "@react-navigation/native"
 export default function ResultItem({id, major, course, result, date, amount}) {
     const navigation = useNavigation()
     const resultOutput = result
-    console.log('result output', resultOutput)
-    console.log('amount', amount)
+    // console.log('result output', resultOutput)
+    // console.log('amount', amount)
 
     function resultPressHandler() {
         navigation.navigate("ManageResult", {
