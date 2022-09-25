@@ -8,6 +8,8 @@ export const ResultsContext = createContext({
   updateResult: (id, { course, major, result, date, amount }) => {},
 });
 
+
+
 function resultsReducer(state, action) {
   switch (action.type) {
     case "ADD":
@@ -33,6 +35,7 @@ function resultsReducer(state, action) {
 export default function ResultsContextProvider({ children }) {
   const [resultsState, dispatch] = useReducer(resultsReducer, []);
   const [saldo, setSaldo] = useState();
+  const [userId, setUserId] = useState()
 
   function addResult(resultData) {
     dispatch({ type: "ADD", payload: resultData });
@@ -49,11 +52,15 @@ export default function ResultsContextProvider({ children }) {
   function updateResult(id, resultData) {
     dispatch({ type: "UPDATE", payload: { id: id, data: resultData } });
   }
+  function userHandler(response) {
+    setUserId(response);
+  }
 
   const value = {
+    userId,
+    userHandler: userHandler,
     saldo: saldo,
-    setSaldo,
-    setSaldo,
+    setSaldo: setSaldo,
     results: resultsState,
     setResults: setResults,
     addResult: addResult,

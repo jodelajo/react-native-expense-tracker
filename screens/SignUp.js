@@ -2,7 +2,7 @@ import AuthContent from "../components/auth/AuthContent";
 import { StyleSheet } from "react-native";
 import { GlobalStyles } from "../constants/styles";
 import { View } from "react-native";
-import { createUser } from "../util/auth";
+import { CreateUser } from "../components/auth/CreateUser";
 import { useState } from "react";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
@@ -15,7 +15,7 @@ async function signupHandler({email, password}) {
     console.log(email, password)
     try {
         setIsLoading(true)
-        await createUser(email, password)
+        await CreateUser(email, password)
     } catch (error) {
         setError(error.toString())
         setIsLoading(false)
