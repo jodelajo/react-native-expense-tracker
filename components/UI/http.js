@@ -1,15 +1,15 @@
 import axios from "axios";
+import {REACT_APP_BACKEND_URL} from '@env'
 
-const BACKEND_URL =
-  "https://sasha-game-dev-default-rtdb.europe-west1.firebasedatabase.app";
+const url = REACT_APP_BACKEND_URL
 
 export async function storeResult(resultData) {
-  const response = await axios.post(BACKEND_URL + "/results.json", resultData);
+  const response = await axios.post(url + "/results.json", resultData);
   const id = response.data.name;
   return id;
 }
 export async function fetchResults() {
-  const response = await axios.get(BACKEND_URL + "/results.json");
+  const response = await axios.get(url + "/results.json");
 
   const results = [];
 
@@ -28,9 +28,9 @@ export async function fetchResults() {
 }
 
 export function updateResult(id, resultData) {
-return axios.put(BACKEND_URL + `/results/${id}.json`, resultData)
+return axios.put(url + `/results/${id}.json`, resultData)
 }
 
 export function deleteResult(id) {
-return axios.delete(BACKEND_URL + `/results/${id}.json`)
+return axios.delete(url + `/results/${id}.json`)
 }

@@ -1,4 +1,5 @@
 import { StatusBar } from "expo-status-bar";
+import { useContext } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -10,7 +11,7 @@ import { GlobalStyles } from "./constants/styles";
 import { Ionicons } from "@expo/vector-icons";
 import IconButton from "./components/UI/IconButton";
 import ResultsContextProvider from "./store/results-context";
-import AuthContextProvider from "./store/auth-context";
+import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import Login from "./screens/Login";
 import SignUp from "./screens/SignUp";
 
@@ -18,6 +19,7 @@ const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
 
 function ResultsOverview() {
+
   return (
     <BottomTabs.Navigator
       screenOptions={({ navigation }) => ({
@@ -112,15 +114,23 @@ function AuthenticatedStack() {
   );
 }
 
+function Navigation() {
+  const authCtx = useContext(AuthContext)
+
+  return (
+    <NavigationContainer>
+     {!authCtx.isAuthenticated ? <AuthStack /> : <AuthenticatedStack />}
+    </NavigationContainer>
+  );
+}
+
 export default function App() {
   return (
     <>
       <StatusBar style="light" />
       <AuthContextProvider>
         <ResultsContextProvider>
-          <NavigationContainer>
-            <AuthStack />
-          </NavigationContainer>
+          <Navigation />
         </ResultsContextProvider>
       </AuthContextProvider>
     </>

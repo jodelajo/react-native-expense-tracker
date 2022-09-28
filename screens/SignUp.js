@@ -3,19 +3,23 @@ import { Alert, StyleSheet } from "react-native";
 import { GlobalStyles } from "../constants/styles";
 import { View } from "react-native";
 import { CreateUser } from "../components/auth/CreateUser";
-import { useState } from "react";
+import { useState , useContext} from "react";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
+import { AuthContext } from "../store/auth-context";
+
 
 export default function SignUp() {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState()
+    const authCtx = useContext(AuthContext)
 
 async function signupHandler({email, password}) {
     console.log(email, password)
     try {
         setIsLoading(true)
-        await CreateUser(email, password)
+        const token = await CreateUser(email, password)
+        authCtx.authenticate(token)
     } catch (error) {
       // Alert.alert('jajaja', 'sdiof soidfjoi sdfoijoi')
         setError(error.toString())
