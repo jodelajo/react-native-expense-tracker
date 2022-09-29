@@ -1,7 +1,6 @@
 import axios from "axios";
-import { StoreResult } from "../manageResult/StoreResult";
+import { StoreId } from "./StoreId";
 import {REACT_APP_API_KEY} from '@env'
-
 
 export async function Authenticate(mode, email, password) {
   const url = `https://identitytoolkit.googleapis.com/v1/accounts:${mode}?key=${REACT_APP_API_KEY}`;
@@ -12,7 +11,7 @@ export async function Authenticate(mode, email, password) {
   });
 
   if (mode === "signUp") {
-    await StoreResult(response.data);
+    await StoreId(response.data);
   }
   const token = response.data.idToken;
   return token;

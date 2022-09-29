@@ -1,6 +1,5 @@
 import { StatusBar } from "expo-status-bar";
 import { useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -19,7 +18,7 @@ const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
 
 function ResultsOverview() {
-const authCtx = useContext(AuthContext)
+  const authCtx = useContext(AuthContext);
   return (
     <BottomTabs.Navigator
       screenOptions={({ navigation }) => ({
@@ -27,6 +26,14 @@ const authCtx = useContext(AuthContext)
         headerTintColor: "white",
         tabBarStyle: { backgroundColor: GlobalStyles.colors.primary500 },
         tabBarActiveTintColor: GlobalStyles.colors.accent500,
+        headerLeft: ({ tintColor }) => (
+          <IconButton
+            icon="log-out-outline"
+            size={24}
+            color={tintColor}
+            onPress={authCtx.logout}
+          />
+        ),
         headerRight: ({ tintColor }) => (
           <IconButton
             icon="add"
@@ -35,14 +42,6 @@ const authCtx = useContext(AuthContext)
             onPress={() => {
               navigation.navigate("ManageResult");
             }}
-          />
-        ),
-        headerLeft: ({ tintColor }) => (
-          <IconButton
-            icon="log-out-outline"
-            size={24}
-            color={tintColor}
-            onPress={authCtx.logout}
           />
         ),
       })}
@@ -113,11 +112,11 @@ function AuthenticatedStack() {
 }
 
 function Navigation() {
-  const authCtx = useContext(AuthContext)
+  const authCtx = useContext(AuthContext);
 
   return (
     <NavigationContainer>
-     {!authCtx.isAuthenticated ? <AuthStack /> : <AuthenticatedStack />}
+      {!authCtx.isAuthenticated ? <AuthStack /> : <AuthenticatedStack />}
     </NavigationContainer>
   );
 }
