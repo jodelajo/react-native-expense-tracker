@@ -5,8 +5,8 @@ import { GlobalStyles } from "../constants/styles";
 import Button from "../components/UI/Button";
 import { ResultsContext } from "../store/results-context";
 import ResultForm from "../components/manageResult/ResultForm";
-import { StoreId } from "../components/auth/StoreId";
-import { deleteResult,  updateResult } from "../components/UI/http";
+import { StoreUserId } from "../components/auth/StoreUserId";
+import { deleteResult,  updateResult, storeResult } from "../components/UI/http";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
 
@@ -52,7 +52,7 @@ export default function ManageResult({ route, navigation }) {
         resultsCtx.updateResult(editedResultId, resultData);
         await updateResult(editedResultId, resultData)
       } else {
-        const id = await StoreId(resultData);
+        const id = await storeResult(resultData);
         resultsCtx.addResult({ ...resultData, id: id });
       }
       navigation.goBack();

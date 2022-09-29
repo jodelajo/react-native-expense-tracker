@@ -4,9 +4,9 @@ import {REACT_APP_BACKEND_URL} from '@env'
 const url = REACT_APP_BACKEND_URL
 
 
-  export async function StoreId(resultData) {
+  export async function StoreUserId(resultData) {
     console.log('result data', resultData.localId)
-    const response = await axios.post(url + "/id.json", resultData);
+    const response = await axios.post(url + "/userId.json", resultData);
 
     const id = response.data.name;
     console.log('id', id)

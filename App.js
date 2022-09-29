@@ -96,7 +96,12 @@ function AuthStack() {
 
 function AuthenticatedStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+    screenOptions={{
+      headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
+      headerTintColor: "white",
+    }}
+    >
       <Stack.Screen
         name="ResultsOverview"
         component={ResultsOverview}

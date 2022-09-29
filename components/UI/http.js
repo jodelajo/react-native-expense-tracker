@@ -34,3 +34,8 @@ return axios.put(url + `/results/${id}.json`, resultData)
 export function deleteResult(id) {
 return axios.delete(url + `/results/${id}.json`)
 }
+
+// export async function fetchUser() {
+//   const response = await axios.get(url + "/userId.json");
+
+// }
