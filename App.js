@@ -19,7 +19,7 @@ const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
 
 function ResultsOverview() {
-
+const authCtx = useContext(AuthContext)
   return (
     <BottomTabs.Navigator
       screenOptions={({ navigation }) => ({
@@ -39,12 +39,10 @@ function ResultsOverview() {
         ),
         headerLeft: ({ tintColor }) => (
           <IconButton
-            icon="settings"
+            icon="log-out-outline"
             size={24}
             color={tintColor}
-            onPress={() => {
-              navigation.navigate("Login");
-            }}
+            onPress={authCtx.logout}
           />
         ),
       })}
