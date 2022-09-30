@@ -6,10 +6,12 @@ import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
 import { LoginUser } from "../components/auth/CreateUser";
 import { AuthContext } from "../store/auth-context";
+import { fetchUser } from "../components/UI/http";
 
 export default function Login() {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState()
+    // const [user, setUser ] = useState()
 
     const authCtx = useContext(AuthContext)
 
@@ -19,13 +21,19 @@ async function loginHandler({email, password}) {
     try {
       const token = await LoginUser(email, password)
       authCtx.authenticate(token)
+    //   console.log('token in login', token)
+    //   const response = await fetchUser()
+    //   setUser(response)
+    //   console.log('response in login', response)
     } catch (error) {
         // setError(error.toString())
         // setIsLoading(false)
         Alert.alert("blabla", "sdoij soidfjsod isdoi sdofij")
     }
     setIsLoading(false)
+    // console.log('user', user)
 }
+
 if (isLoading) {
     return <LoadingOverlay  />
 }

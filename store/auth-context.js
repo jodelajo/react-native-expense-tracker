@@ -12,6 +12,8 @@ export default function AuthContextProvider({ children }) {
   function authenticate(token) {
     setAuthToken(token);
   }
+   
+   
 
   function logout() {
     setAuthToken(null)

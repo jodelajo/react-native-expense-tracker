@@ -4,8 +4,8 @@ import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../constants/styles";
 import Button from "../components/UI/Button";
 import { ResultsContext } from "../store/results-context";
+import { AuthContext } from "../store/auth-context";
 import ResultForm from "../components/manageResult/ResultForm";
-import { StoreUserId } from "../components/auth/StoreUserId";
 import { deleteResult,  updateResult, storeResult } from "../components/UI/http";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
@@ -14,6 +14,7 @@ export default function ManageResult({ route, navigation }) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState()
   const resultsCtx = useContext(ResultsContext);
+  const authCtx = useContext(AuthContext)
 
   const editedResultId = route.params?.resultId;
   const isEditing = !!editedResultId;
@@ -50,6 +51,7 @@ export default function ManageResult({ route, navigation }) {
     try {
       if (isEditing) {
         resultsCtx.updateResult(editedResultId, resultData);
+        console.log('manage result', authCtx.token)
         await updateResult(editedResultId, resultData)
       } else {
         const id = await storeResult(resultData);
