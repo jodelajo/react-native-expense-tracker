@@ -23,7 +23,7 @@ export default function ManageResult({ route, navigation }) {
     (result) => result.id === editedResultId
   );
   //   console.log('selected result', selectedResult)
-  //   console.log('edited rsult id', editedResultId)
+    // console.log('edited rsult id', editedResultId)
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -35,7 +35,7 @@ export default function ManageResult({ route, navigation }) {
     setIsLoading(true)
     try {
       resultsCtx.deleteResult(editedResultId);
-    await deleteResult(editedResultId)
+    await deleteResult(editedResultId, authCtx.userId)
     } catch (error) {
       setError('Kon resultaat niet verwijderen - Probeer later nog een keer!')
     }
@@ -52,7 +52,7 @@ export default function ManageResult({ route, navigation }) {
       if (isEditing) {
         resultsCtx.updateResult(editedResultId, resultData);
         console.log('manage result', authCtx.token)
-        await updateResult(editedResultId, resultData)
+        await updateResult(editedResultId, resultData, authCtx.userId)
       } else {
         const id = await storeResult(resultData, authCtx.userId);
         resultsCtx.addResult({ ...resultData, id: id });

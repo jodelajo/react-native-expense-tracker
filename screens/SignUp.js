@@ -3,45 +3,39 @@ import { Alert, StyleSheet } from "react-native";
 import { GlobalStyles } from "../constants/styles";
 import { View } from "react-native";
 import { CreateUser } from "../components/auth/CreateUser";
-import { useState , useContext, useEffect} from "react";
+import { useState, useContext } from "react";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
 import { AuthContext } from "../store/auth-context";
-import { fetchUser } from "../components/UI/http";
-
 
 export default function SignUp() {
-    const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState()
-    const authCtx = useContext(AuthContext)
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
+  const authCtx = useContext(AuthContext);
 
-async function signupHandler({email, password}) {
-    console.log(email, password)
+  async function signupHandler({ email, password }) {
+    console.log(email, password);
     try {
-        setIsLoading(true)
-        const token = await CreateUser(email, password)
-        authCtx.authenticate(token)
-        authCtx.logout()
-       
+      setIsLoading(true);
+      const token = await CreateUser(email, password);
+      authCtx.authenticate(token);
+      authCtx.logout();
     } catch (error) {
       // Alert.alert('jajaja', 'sdiof soidfjoi sdfoijoi')
-        setError(error.toString())
-        // setIsLoading(false)
+      setError(error.toString());
+      // setIsLoading(false)
     }
-    
-    setIsLoading(false)
-}
 
+    setIsLoading(false);
+  }
 
-
-
-if (isLoading) {
-    return <LoadingOverlay  />
-}
-if (error && !isLoading) {
-    console.log(error)
-    return <ErrorOverlay message={error} />
-}
+  if (isLoading) {
+    return <LoadingOverlay />;
+  }
+  if (error && !isLoading) {
+    console.log(error);
+    return <ErrorOverlay message={error} />;
+  }
 
   return (
     <View style={styles.container}>

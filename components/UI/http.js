@@ -1,20 +1,16 @@
 import axios from "axios";
 import { REACT_APP_BACKEND_URL } from "@env";
-import { AuthContext } from "../../store/auth-context";
-import { useContext } from "react";
 
-const url = REACT_APP_BACKEND_URL;
+const url = REACT_APP_BACKEND_URL + `/userId/`;
 
 export async function storeResult(resultData, userId) {
-  // const authCtx = useContext(AuthContext)
-  console.log('userid', userId)
-  const response = await axios.post(url + `/userId/${userId}/results.json`, resultData);
+  const response = await axios.post(url + `${userId}/results.json`, resultData);
   const id = response.data.name;
   return id;
 }
 export async function fetchResults(userId) {
   console.log('userid in http', userId)
-  const response = await axios.get(url + `/userId/${userId}/results.json`);
+  const response = await axios.get(url + `${userId}/results.json`);
   console.log('response', response.data)
   const results = [];
 
@@ -33,12 +29,13 @@ export async function fetchResults(userId) {
   return results;
 }
 
-export function updateResult(id, resultData) {
-  return axios.put(url + `/results/${id}.json`, resultData);
+export function updateResult(id, resultData, userId) {
+  console.log('resultdata in http')
+  return axios.put(url + `${userId}/results/${id}.json`, resultData);
 }
 
-export function deleteResult(id) {
-  return axios.delete(url + `/results/${id}.json`);
+export function deleteResult(id, userId) {
+  return axios.delete(url + `${userId}/results/${id}.json`);
 }
 
 export async function storeUserId(resultData) {
