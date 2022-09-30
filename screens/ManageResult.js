@@ -54,7 +54,7 @@ export default function ManageResult({ route, navigation }) {
         console.log('manage result', authCtx.token)
         await updateResult(editedResultId, resultData)
       } else {
-        const id = await storeResult(resultData);
+        const id = await storeResult(resultData, authCtx.userId);
         resultsCtx.addResult({ ...resultData, id: id });
       }
       navigation.goBack();

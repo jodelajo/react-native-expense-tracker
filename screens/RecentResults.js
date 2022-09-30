@@ -5,18 +5,24 @@ import {getDateMinusDays} from "../util/date"
 import { fetchResults } from "../components/UI/http"
 import LoadingOverlay from "../components/UI/LoadingOverlay"
 import ErrorOverlay from "../components/UI/ErrorOverlay"
+import { AuthContext } from "../store/auth-context"
+
 
 
 export default function RecentResults() {
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState()
     const resultsCtx = useContext(ResultsContext)
+    const authCtx = useContext(AuthContext)
 
+   
     useEffect(() => {
         async function getResults() {
+           
+        
             setIsLoading(true)
             try {
-                const results = await fetchResults()
+                const results = await fetchResults(authCtx?.userId)
                 resultsCtx.setResults(results)
             } catch (error) {
                 setError('Kan geen recente resultaten ophalen - Probeer later nog een keer!')
@@ -27,7 +33,7 @@ export default function RecentResults() {
           
         }
        getResults()
-    },[])
+    },[authCtx?.userId])
 
 
 

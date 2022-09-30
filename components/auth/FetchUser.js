@@ -15,13 +15,13 @@ export default async function FetchUser(userId) {
     const currentUser = [];
     users.map((user) => {
       const thisUser = Object.values(user);
-      thisUser.find((user) => user.email === userId.email);
+      thisUser.find((user) => user.email === userId);
     });
   
     users.find((user) => {
       // console.log("user", user);
       for (const [key, value] of Object.entries(user)) {
-        if (value.email === userId.email) {
+        if (value.email === userId) {
           currentUser.push(key);
         }
       }

@@ -6,6 +6,7 @@ import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
 import { LoginUser } from "../components/auth/CreateUser";
 import { AuthContext } from "../store/auth-context";
+import FetchUser from "../components/auth/FetchUser";
 import { fetchUser } from "../components/UI/http";
 
 export default function Login() {
@@ -22,8 +23,8 @@ async function loginHandler({email, password}) {
       const token = await LoginUser(email, password)
       authCtx.authenticate(token)
     //   console.log('token in login', token)
-    //   const response = await fetchUser()
-    //   setUser(response)
+      const result = await FetchUser(email)
+    authCtx.setUser(result)
     //   console.log('response in login', response)
     } catch (error) {
         // setError(error.toString())

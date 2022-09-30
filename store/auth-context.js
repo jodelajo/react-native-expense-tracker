@@ -2,12 +2,14 @@ import { createContext, useState } from "react";
 
 export const AuthContext = createContext({
   token: "",
+  userId: "",  
   isAuthenticated: false,
   authenticate: (token) => {},
   logout: () => {},
 });
 export default function AuthContextProvider({ children }) {
   const [authToken, setAuthToken] = useState();
+  const [user, setUser] = useState()
 
   function authenticate(token) {
     setAuthToken(token);
@@ -18,8 +20,11 @@ export default function AuthContextProvider({ children }) {
   function logout() {
     setAuthToken(null)
   }
+  
 
   const value = {
+    userId: user,
+    setUser: setUser,
     token: authToken,
     isAuthenticated: !!authToken,
     authenticate: authenticate,

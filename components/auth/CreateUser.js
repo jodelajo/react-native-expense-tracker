@@ -23,7 +23,7 @@ export async function Authenticate(mode, email, password) {
     // console.log('userId in CreateUser', userId)
   }
   if (mode === "signInWithPassword") {
-    await FetchUser(response.data);
+    // await FetchUser(response.data);
     // console.log('?', authCtx.token)
     // setUserId(fetchUser(response.data))
   }
