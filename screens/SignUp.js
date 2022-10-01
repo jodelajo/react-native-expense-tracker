@@ -19,6 +19,7 @@ export default function SignUp() {
       setIsLoading(true);
       const token = await CreateUser(email, password);
       authCtx.authenticate(token);
+      
       authCtx.logout();
     } catch (error) {
       // Alert.alert('jajaja', 'sdiof soidfjoi sdfoijoi')

@@ -22,10 +22,10 @@ export default function Login() {
     try {
       const token = await LoginUser(email, password);
       authCtx.authenticate(token);
-      const user = await FetchUser(email);
+      const user = await FetchUser(email, token);
       const userId = user[0]
       authCtx.userHandler(userId[0]);
-      const results = await fetchResults(userId[0])
+      const results = await fetchResults(userId[0], token)
       resultsCtx.setResults(results)
     } catch (error) {
       // setError(error.toString())

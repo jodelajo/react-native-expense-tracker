@@ -17,7 +17,7 @@ export default function RecentResults() {
     async function getResults() {
       setIsLoading(true);
       try {
-        const results = await fetchResults(authCtx.userId);
+        const results = await fetchResults(authCtx.userId, authCtx.token);
         resultsCtx.setResults(results);
       } catch (error) {
         setError(

@@ -33,7 +33,7 @@ export default function ManageResult({ route, navigation }) {
     setIsLoading(true);
     try {
       resultsCtx.deleteResult(editedResultId);
-      await deleteResult(editedResultId, authCtx.userId);
+      await deleteResult(editedResultId, authCtx.userId, authCtx.token);
     } catch (error) {
       setError("Kon resultaat niet verwijderen - Probeer later nog een keer!");
     }
@@ -46,13 +46,14 @@ export default function ManageResult({ route, navigation }) {
   }
   async function confirmHandler(resultData) {
     setIsLoading(true);
+
     try {
       if (isEditing) {
         resultsCtx.updateResult(editedResultId, resultData);
         console.log("manage result", authCtx.token);
-        await updateResult(editedResultId, resultData, authCtx.userId);
+        await updateResult(editedResultId, resultData, authCtx.userId, authCtx.token);
       } else {
-        const id = await storeResult(resultData, authCtx.userId);
+        const id = await storeResult(resultData, authCtx.userId, authCtx.token);
         resultsCtx.addResult({ ...resultData, id: id });
       }
       navigation.goBack();

@@ -22,9 +22,10 @@ export default function AuthContextProvider({ children }) {
   }
 
   function logout(setResults) {
-    setResults({});
-    setUser("");
     setAuthToken(null);
+    setResults(null);
+    setUser(null);
+    
   }
 
   const value = {

@@ -3,6 +3,7 @@ import { storeUserId } from "../UI/http";
 import { REACT_APP_API_KEY } from "@env";
 
 export async function Authenticate(mode, email, password) {
+  // const idToken = []
   const url = `https://identitytoolkit.googleapis.com/v1/accounts:${mode}?key=${REACT_APP_API_KEY}`;
   const response = await axios.post(url, {
     email: email,
@@ -11,12 +12,15 @@ export async function Authenticate(mode, email, password) {
   });
 
   if (mode === "signUp") {
-    await storeUserId(response.data);
+    await storeUserId(response.data, response.data.idToken);
   }
 
   const token = response.data.idToken;
+  // idToken.push(response.data.idToken)
+  // console.log('token', idToken)
   return token;
 }
+
 
 export function CreateUser(email, password) {
   return Authenticate("signUp", email, password);
