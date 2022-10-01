@@ -6,15 +6,15 @@ import Button from "../components/UI/Button";
 import { ResultsContext } from "../store/results-context";
 import { AuthContext } from "../store/auth-context";
 import ResultForm from "../components/manageResult/ResultForm";
-import { deleteResult,  updateResult, storeResult } from "../components/UI/http";
+import { deleteResult, updateResult, storeResult } from "../components/UI/http";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
 
 export default function ManageResult({ route, navigation }) {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState()
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
   const resultsCtx = useContext(ResultsContext);
-  const authCtx = useContext(AuthContext)
+  const authCtx = useContext(AuthContext);
 
   const editedResultId = route.params?.resultId;
   const isEditing = !!editedResultId;
@@ -22,8 +22,6 @@ export default function ManageResult({ route, navigation }) {
   const selectedResult = resultsCtx.results.find(
     (result) => result.id === editedResultId
   );
-  //   console.log('selected result', selectedResult)
-    // console.log('edited rsult id', editedResultId)
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -32,14 +30,14 @@ export default function ManageResult({ route, navigation }) {
   }, [navigation, isEditing]);
 
   async function deleteResultHandler() {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       resultsCtx.deleteResult(editedResultId);
-    await deleteResult(editedResultId, authCtx.userId)
+      await deleteResult(editedResultId, authCtx.userId);
     } catch (error) {
-      setError('Kon resultaat niet verwijderen - Probeer later nog een keer!')
+      setError("Kon resultaat niet verwijderen - Probeer later nog een keer!");
     }
-    
+
     navigation.goBack();
   }
 
@@ -47,30 +45,29 @@ export default function ManageResult({ route, navigation }) {
     navigation.goBack();
   }
   async function confirmHandler(resultData) {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       if (isEditing) {
         resultsCtx.updateResult(editedResultId, resultData);
-        console.log('manage result', authCtx.token)
-        await updateResult(editedResultId, resultData, authCtx.userId)
+        console.log("manage result", authCtx.token);
+        await updateResult(editedResultId, resultData, authCtx.userId);
       } else {
         const id = await storeResult(resultData, authCtx.userId);
         resultsCtx.addResult({ ...resultData, id: id });
       }
       navigation.goBack();
     } catch (error) {
-      setIsLoading(false)
-      setError('Kon resultaat niet opslaan - probeer later nog een keer!')
+      setIsLoading(false);
+      setError("Kon resultaat niet opslaan - probeer later nog een keer!");
     }
   }
 
-
-if(error && !isLoading) {
-  return <ErrorOverlay message={error.toString()} />
-}
+  if (error && !isLoading) {
+    return <ErrorOverlay message={error.toString()} />;
+  }
 
   if (isLoading) {
-    return <LoadingOverlay />
+    return <LoadingOverlay />;
   }
 
   return (

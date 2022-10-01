@@ -20,7 +20,7 @@ const BottomTabs = createBottomTabNavigator();
 function ResultsOverview() {
   const authCtx = useContext(AuthContext);
   const resultsCtx = useContext(ResultsContext)
-  console.log('app', resultsCtx)
+ 
   return (
     <BottomTabs.Navigator
       screenOptions={({ navigation }) => ({

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { storeUserId} from "../UI/http";
+import { storeUserId } from "../UI/http";
 import { REACT_APP_API_KEY } from "@env";
 
 export async function Authenticate(mode, email, password) {
@@ -12,10 +12,8 @@ export async function Authenticate(mode, email, password) {
 
   if (mode === "signUp") {
     await storeUserId(response.data);
-    console.log("response in creatuser", response.data);
   }
-  if (mode === "signInWithPassword") {
-  }
+
   const token = response.data.idToken;
   return token;
 }

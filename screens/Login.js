@@ -24,7 +24,7 @@ export default function Login() {
       authCtx.authenticate(token);
       const user = await FetchUser(email);
       const userId = user[0]
-      authCtx.setUser(userId[0]);
+      authCtx.userHandler(userId[0]);
       const results = await fetchResults(userId[0])
       resultsCtx.setResults(results)
     } catch (error) {
