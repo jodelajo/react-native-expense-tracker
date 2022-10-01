@@ -14,11 +14,10 @@ export default function AuthContextProvider({ children }) {
   function authenticate(token) {
     setAuthToken(token);
   }
-   
-   
 
-  function logout() {
+  function logout(setResults) {
     setAuthToken(null)
+    setResults({})
   }
   
 

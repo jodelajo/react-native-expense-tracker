@@ -9,7 +9,7 @@ import AllResults from "./screens/AllResults";
 import { GlobalStyles } from "./constants/styles";
 import { Ionicons } from "@expo/vector-icons";
 import IconButton from "./components/UI/IconButton";
-import ResultsContextProvider from "./store/results-context";
+import ResultsContextProvider, {ResultsContext} from "./store/results-context";
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import Login from "./screens/Login";
 import SignUp from "./screens/SignUp";
@@ -19,6 +19,8 @@ const BottomTabs = createBottomTabNavigator();
 
 function ResultsOverview() {
   const authCtx = useContext(AuthContext);
+  const resultsCtx = useContext(ResultsContext)
+  console.log('app', resultsCtx)
   return (
     <BottomTabs.Navigator
       screenOptions={({ navigation }) => ({
@@ -31,7 +33,7 @@ function ResultsOverview() {
             icon="log-out-outline"
             size={24}
             color={tintColor}
-            onPress={authCtx.logout}
+            onPress={()=> authCtx.logout(resultsCtx.setResults)}
           />
         ),
         headerRight: ({ tintColor }) => (
