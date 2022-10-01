@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
         color: GlobalStyles.colors.primary50,
     },
     description: {
-        fontSize: 16,
+        fontSize: 14,
         marginBottom: 4,
         fontWeight: 'bold',
     },

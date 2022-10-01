@@ -38,7 +38,10 @@ export default function ResultsContextProvider({ children }) {
   const [userId, setUserId] = useState()
 
   function addResult(resultData) {
-    dispatch({ type: "ADD", payload: resultData });
+    dispatch({ 
+      type: "ADD", payload: resultData 
+    });
+    console.log('data in context', resultData)
   }
 
   function setResults(results) {

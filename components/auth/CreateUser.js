@@ -1,5 +1,5 @@
 import axios from "axios";
-import { storeUserId } from "../UI/http";
+import { storeUserId} from "../UI/http";
 import { REACT_APP_API_KEY } from "@env";
 
 export async function Authenticate(mode, email, password) {

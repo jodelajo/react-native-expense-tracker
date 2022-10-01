@@ -7,11 +7,13 @@ import ErrorOverlay from "../components/UI/ErrorOverlay";
 import { LoginUser } from "../components/auth/CreateUser";
 import { AuthContext } from "../store/auth-context";
 import FetchUser from "../components/auth/FetchUser";
+import { fetchResults } from "../components/UI/http";
+import { ResultsContext } from "../store/results-context";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-
+  const resultsCtx = useContext(ResultsContext)
   const authCtx = useContext(AuthContext);
 
   async function loginHandler({ email, password }) {
@@ -20,8 +22,11 @@ export default function Login() {
     try {
       const token = await LoginUser(email, password);
       authCtx.authenticate(token);
-      const result = await FetchUser(email);
-      authCtx.setUser(result);
+      const user = await FetchUser(email);
+      const userId = user[0]
+      authCtx.setUser(userId[0]);
+      const results = await fetchResults(userId[0])
+      resultsCtx.setResults(results)
     } catch (error) {
       // setError(error.toString())
       // setIsLoading(false)
