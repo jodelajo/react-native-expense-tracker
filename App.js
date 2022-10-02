@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -9,18 +9,22 @@ import AllResults from "./screens/AllResults";
 import { GlobalStyles } from "./constants/styles";
 import { Ionicons } from "@expo/vector-icons";
 import IconButton from "./components/UI/IconButton";
-import ResultsContextProvider, {ResultsContext} from "./store/results-context";
+import ResultsContextProvider, {
+  ResultsContext,
+} from "./store/results-context";
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import Login from "./screens/Login";
 import SignUp from "./screens/SignUp";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+// import AppLoading from "expo-app-loading"
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
 
 function ResultsOverview() {
   const authCtx = useContext(AuthContext);
-  const resultsCtx = useContext(ResultsContext)
- 
+  const resultsCtx = useContext(ResultsContext);
+
   return (
     <BottomTabs.Navigator
       screenOptions={({ navigation }) => ({
@@ -33,7 +37,7 @@ function ResultsOverview() {
             icon="log-out-outline"
             size={24}
             color={tintColor}
-            onPress={()=> authCtx.logout(resultsCtx.setResults)}
+            onPress={() => authCtx.logout(resultsCtx.setResults)}
           />
         ),
         headerRight: ({ tintColor }) => (
@@ -127,6 +131,25 @@ function Navigation() {
     </NavigationContainer>
   );
 }
+function Root() {
+  const [isTryingLogin, setIsTryingLogin] = useState(true)
+  const authCtx = useContext(AuthContext);
+  
+  useEffect(() => {
+    async function fetchToken() {
+      const storedToken = await AsyncStorage.getItem("token");
+      if (storedToken) {
+        authCtx.authenticate(storedToken);
+      }
+      setIsTryingLogin(false)
+    }
+    fetchToken();
+  }, []);
+  // if (isTryingLogin) {
+  //   return <AppLoading />
+  // }
+  return <Navigation />;
+}
 
 export default function App() {
   return (
@@ -134,7 +157,7 @@ export default function App() {
       <StatusBar style="light" />
       <AuthContextProvider>
         <ResultsContextProvider>
-          <Navigation />
+          <Root />
         </ResultsContextProvider>
       </AuthContextProvider>
     </>
