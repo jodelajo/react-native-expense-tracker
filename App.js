@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -16,10 +16,13 @@ import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import Login from "./screens/Login";
 import SignUp from "./screens/SignUp";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-// import AppLoading from "expo-app-loading"
+import * as SplashScreen from "expo-splash-screen";
+import { View } from "react-native";
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
+
+SplashScreen.preventAutoHideAsync();
 
 function ResultsOverview() {
   const authCtx = useContext(AuthContext);
@@ -132,23 +135,36 @@ function Navigation() {
   );
 }
 function Root() {
-  const [isTryingLogin, setIsTryingLogin] = useState(true)
+  const [isTryingLogin, setIsTryingLogin] = useState(true);
   const authCtx = useContext(AuthContext);
-  
+
   useEffect(() => {
     async function fetchToken() {
       const storedToken = await AsyncStorage.getItem("token");
       if (storedToken) {
         authCtx.authenticate(storedToken);
       }
-      setIsTryingLogin(false)
+      setIsTryingLogin(false);
     }
     fetchToken();
   }, []);
-  // if (isTryingLogin) {
-  //   return <AppLoading />
-  // }
-  return <Navigation />;
+
+  const onLayoutRootView = useCallback(async () => {
+    if (!isTryingLogin) {
+      await SplashScreen.hideAsync();
+    }
+  }, [isTryingLogin]);
+
+  if (isTryingLogin) {
+    return null;
+  }
+
+ 
+  return (
+    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+      <Navigation />
+    </View>
+  );
 }
 
 export default function App() {
