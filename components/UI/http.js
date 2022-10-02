@@ -1,8 +1,14 @@
 import axios from "axios";
-import { REACT_APP_BACKEND_URL } from "@env";
+// import { REACT_APP_BACKEND_URL } from "@env";
+import envs from '../../config/env'
 
-const url = REACT_APP_BACKEND_URL;
 
+console.log('envs', envs)
+console.log('__DEV__', __DEV__)
+const { BACKEND_URL } = envs
+console.log('BACKEND', BACKEND_URL)
+const url = BACKEND_URL;
+console.log('url', url)
 
 export async function storeResult(resultData, userId, token) {
   const response = await axios.post(

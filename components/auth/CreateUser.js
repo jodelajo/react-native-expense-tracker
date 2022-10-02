@@ -1,10 +1,12 @@
 import axios from "axios";
 import { storeUserId } from "../UI/http";
-import { REACT_APP_API_KEY } from "@env";
+import envs from '../../config/env'
+
+const {API_KEY} = envs
 
 export async function Authenticate(mode, email, password) {
   // const idToken = []
-  const url = `https://identitytoolkit.googleapis.com/v1/accounts:${mode}?key=${REACT_APP_API_KEY}`;
+  const url = `https://identitytoolkit.googleapis.com/v1/accounts:${mode}?key=${API_KEY}`;
   const response = await axios.post(url, {
     email: email,
     password: password,

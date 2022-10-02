@@ -1,7 +1,11 @@
 import axios from "axios";
-import { REACT_APP_BACKEND_URL } from "@env";
+// import { REACT_APP_BACKEND_URL } from "@env";
+import envs from '../../config/env'
 
-const url = REACT_APP_BACKEND_URL;
+const { BACKEND_URL} = envs
+const url = BACKEND_URL;
+
+// console.log('bachend', url)
 
 export default async function FetchUser(userId, token) {
   console.log("userid in Fetchuser", userId);

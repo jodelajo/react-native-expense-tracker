@@ -23,6 +23,7 @@ export default function Login() {
       const token = await LoginUser(email, password);
       authCtx.authenticate(token);
       const user = await FetchUser(email, token);
+      console.log('user', user)
       const userId = user[0]
       authCtx.userHandler(userId[0]);
       const results = await fetchResults(userId[0], token)
