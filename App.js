@@ -161,7 +161,7 @@ function Root() {
 
  
   return (
-    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+    <View style={{ flex: 1}} onLayout={onLayoutRootView}>
       <Navigation />
     </View>
   );
