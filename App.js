@@ -17,7 +17,8 @@ import Login from "./screens/Login";
 import SignUp from "./screens/SignUp";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SplashScreen from "expo-splash-screen";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { useMediaQuery } from "react-responsive";
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -137,7 +138,8 @@ function Navigation() {
 function Root() {
   const [isTryingLogin, setIsTryingLogin] = useState(true);
   const authCtx = useContext(AuthContext);
-
+  const isBigScreen = useMediaQuery({ minDeviceWidth: 450 });
+  console.log("big screen", isBigScreen);
   useEffect(() => {
     async function fetchToken() {
       const storedToken = await AsyncStorage.getItem("token");
@@ -159,12 +161,21 @@ function Root() {
     return null;
   }
 
- 
-  return (
-    <View style={{ flex: 1}} onLayout={onLayoutRootView}>
-      <Navigation />
-    </View>
-  );
+  if (!isBigScreen) {
+    return (
+      <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+        <Navigation />
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.web}>
+        <View style={styles.container}>
+          <Navigation />
+        </View>
+      </View>
+    );
+  }
 }
 
 export default function App() {
@@ -179,3 +190,20 @@ export default function App() {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  web: {
+    backgroundColor: GlobalStyles.colors.primary800,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  container: {
+    marginTop: 40,
+    marginBottom: 40,
+    minWidth: 350,
+    maxWidth: 428,
+    maxHeight: 928,
+    flex: 1,
+  }
+});
