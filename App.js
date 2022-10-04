@@ -169,7 +169,7 @@ function Root() {
     );
   } else {
     return (
-      <View style={styles.web}>
+      <View style={styles.web} onLayout={onLayoutRootView}>
         <View style={styles.container}>
           <Navigation />
         </View>
@@ -196,10 +196,10 @@ const styles = StyleSheet.create({
     backgroundColor: GlobalStyles.colors.primary800,
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'flex-start'
   },
   container: {
-    marginTop: 40,
+    marginTop: 20,
     marginBottom: 40,
     minWidth: 350,
     maxWidth: 428,
