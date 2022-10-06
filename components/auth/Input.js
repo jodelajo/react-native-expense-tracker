@@ -17,8 +17,8 @@ function Input({
       </Text>
       <TextInput
         style={[styles.input, isInvalid && styles.inputInvalid]}
-        autoCapitalize={value.toString()}
-        // autoCapitalize="none"
+       // autoCapitalize={value.toString()}
+        autoCapitalize="none"
         keyboardType={keyboardType}
         secureTextEntry={secure}
         onChangeText={onUpdateValue}

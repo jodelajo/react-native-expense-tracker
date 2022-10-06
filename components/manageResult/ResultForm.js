@@ -5,6 +5,7 @@ import Input from "./Input";
 import Button from "../UI/Button";
 import { getFormattedDate } from "../../util/date";
 import SearchBarDropdown from "../SearchBarDropdown";
+import RadioButton from "../RadioButtons";
 
 export default function ResultForm({
   onCancel,
@@ -28,6 +29,10 @@ export default function ResultForm({
       value: defaultValues ? defaultValues.major : false,
       isValid: true,
     },
+    type: {
+      value: defaultValues ? defaultValues.type.toString() : 0,
+      isValid: true,
+    },
     result: {
       value: defaultValues ? defaultValues.result.toString() : 0,
       isValid: true,
@@ -39,22 +44,14 @@ export default function ResultForm({
   });
 
   const [selectedItem, setSelectedItem] = useState("");
-  const [dataSource] = useState([
-    "Wiskunde",
-    "Engels",
-    "Frans",
-    "Duits",
-    "Nederlands",
-    "Geschiedenis",
-    "Aardrijkskunde",
-    "Biologie",
-    "Natuurkunde",
-    "Muziek",
-    "Gym",
-  ]);
 
   const onSelect = (item) => {
     setSelectedItem(item);
+  };
+
+  const [userOption, setUserOption] = useState(null);
+  const selectType = (item) => {
+    setUserOption(item);
   };
 
   function dateInputHandler() {
@@ -109,6 +106,7 @@ export default function ResultForm({
 
   function inputChangedHandler(inputIdentifier, enteredValue) {
     setInputs((curInputs) => {
+      console.log('cur inpust', curInputs)
       return {
         ...curInputs,
         [inputIdentifier]: { value: enteredValue, isValid: true },
@@ -123,14 +121,23 @@ export default function ResultForm({
       };
     });
   }
+  function typeHandler(type) {
+    setInputs((curInputs) => {
+      return {
+        ...curInputs,
+        type: { value: type, isValid: true },
+      };
+    });
+  }
 
   function submitHandler() {
-    // console.log("input values", inputs);
+    console.log("input values", inputs);
     amountHandler();
     const resultData = {
       course: inputs.course.value,
       date: new Date(inputs.date.value),
       major: inputs.major.value,
+      type: inputs.type.value,
       result: inputs.result.value,
       amount: inputs.amount.value,
     };
@@ -138,6 +145,10 @@ export default function ResultForm({
     const courseIsValid = resultData.course.length > 0;
     const dateIsValid = resultData.date.toString() !== "Invalid Date";
     const majorIsValid = typeof resultData.major == "boolean";
+    const typeIsValid =
+      resultData.type === "PW" ||
+      resultData.type === "MO" ||
+      resultData.type === "SO";
     const resultIsValid =
       !isNaN(resultData.result) &&
       resultData.result > 0 &&
@@ -148,6 +159,7 @@ export default function ResultForm({
       !courseIsValid ||
       !dateIsValid ||
       !majorIsValid ||
+      !typeIsValid ||
       !resultIsValid ||
       !amountIsValid
     ) {
@@ -157,6 +169,7 @@ export default function ResultForm({
           course: { value: curInputs.course.value, isValid: courseIsValid },
           date: { value: curInputs.date.value, isValid: dateIsValid },
           major: { value: curInputs.major.value, isValid: majorIsValid },
+          type: { value: curInputs.type.value, isValid: typeIsValid },
           result: { value: curInputs.result.value, isValid: resultIsValid },
           amount: { value: curInputs.amount.value, isValid: amountIsValid },
         };
@@ -171,6 +184,7 @@ export default function ResultForm({
     !inputs.course.isValid ||
     !inputs.date.isValid ||
     !inputs.major.isValid ||
+    !inputs.type.isValid ||
     !inputs.result.isValid ||
     !inputs.amount.isValid;
 
@@ -179,7 +193,6 @@ export default function ResultForm({
       <Text style={styles.titleStyle}>Jouw resultaat</Text>
 
       <SearchBarDropdown
-        dataSource={dataSource}
         onSelect={onSelect}
         courseHandler={courseHandler}
         course={inputs.course.value}
@@ -223,6 +236,13 @@ export default function ResultForm({
           PROEFWERK
         </Text>
       </View>
+      <RadioButton 
+      onSelect={selectType} 
+      // option={userOption} 
+      typeHandler={typeHandler}
+      value={inputs.type.value}
+      invalid={!inputs.type.isValid}
+      />
       <View style={styles.inputContainer}>
         <Input
           style={styles.rowInput}
@@ -282,7 +302,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    width: '100%',
+    width: "100%",
     marginTop: 8,
   },
   switch: {
@@ -292,7 +312,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: GlobalStyles.colors.primary100,
     width: 120,
-
   },
   left: {
     textAlign: "right",
@@ -301,7 +320,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   errorText: {
-    textAlign: 'center',
+    textAlign: "center",
     color: GlobalStyles.colors.error500,
     margin: 8,
   },
@@ -323,7 +342,6 @@ const styles = StyleSheet.create({
     backgroundColor: GlobalStyles.colors.minor,
     color: "white",
     padding: 8,
-    
   },
   activeMajor: {
     fontWeight: "bold",
@@ -331,7 +349,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     borderRadius: 6,
     backgroundColor: GlobalStyles.colors.major,
-    color: 'white',
+    color: "white",
     padding: 8,
   },
   searchbar: {

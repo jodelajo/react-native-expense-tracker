@@ -8,14 +8,28 @@ import {
 import { GlobalStyles } from "../constants/styles";
 
 export default function SearchBarDropdown(props) {
-  const { dataSource = [], onSelect = () => {}, courseHandler = () => {}, course, invalid } = props;
+  const { onSelect = () => {}, courseHandler = () => {}, course, invalid } = props;
   const [showOptions, setShowOptions] = useState(false);
+  const [dataSource] = useState([
+    "Wiskunde",
+    "Engels",
+    "Frans",
+    "Duits",
+    "Nederlands",
+    "Geschiedenis",
+    "Aardrijkskunde",
+    "Biologie",
+    "Natuurkunde",
+    "Muziek",
+    "Gym",
+  ]);
+
 //   const [selectedCourse, setSelectedCourse] = useState(course)
 //   console.log("data source", dataSource);
 //   console.log("value in searchbar", value);
 //   console.log('course in searchbar', course)
 
-const inputStyles = [styles.input]
+// const inputStyles = [styles.input]
 
   const onSelectedItem = (item) => {
     setShowOptions(false)
