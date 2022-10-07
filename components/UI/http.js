@@ -29,7 +29,8 @@ export async function fetchResults(userId, token) {
       id: key,
       course: response.data[key].course,
       date: new Date(response.data[key].date),
-      major: response.data[key].major,
+      type: response.data[key].type,
+      confirmed: response.data[key].confirmed,
       result: response.data[key].result,
       amount: response.data[key].amount,
     };

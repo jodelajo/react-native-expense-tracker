@@ -2,10 +2,10 @@ import { createContext, useReducer, useState } from "react";
 
 export const ResultsContext = createContext({
   results: [],
-  addResult: ({ course, major, result, date, amount }) => {},
+  addResult: ({ course, confirmed, type, result, date, amount }) => {},
   setResults: (results) => {},
   deleteResult: (id) => {},
-  updateResult: (id, { course, major, result, date, amount }) => {},
+  updateResult: (id, { course, type, confirmed, result, date, amount }) => {},
 });
 
 function resultsReducer(state, action) {

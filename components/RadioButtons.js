@@ -1,12 +1,14 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { GlobalStyles } from "../constants/styles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function RadioButton({ onSelect, typeHandler }) {
+export default function RadioButton({ onSelect, typeHandler, value }) {
   const data = [{ value: "SO" }, { value: "PW" }, { value: "MO" }];
   const [typeStyles, setTypeStyles] = useState({});
   const [options, setOptions] = useState("");
 //   const [isActive, setIsActive] = useState();
+console.log('options in radiobutton', options)
+console.log('value in rDIOBUTTON', value)
   function onSelectedItem(item) {
     console.log("item value", item);
     onSelect(item.value);
@@ -34,6 +36,11 @@ export default function RadioButton({ onSelect, typeHandler }) {
         setOptions(option);
       }
   }
+
+useEffect(()=> {
+    styleHandler(value)
+},[])
+
   console.log("options", options);
   return (
     <View style={styles.container}>
@@ -41,8 +48,9 @@ export default function RadioButton({ onSelect, typeHandler }) {
         return (
           <Pressable
             onPress={() => onSelectedItem(item)}
-            style={[styles.button, item.value === options && typeStyles]}
+            style={[styles.button, item.value === value && typeStyles]}
             key={item.value}
+            value={item.value}
           >
             <Text style={styles.text}> {item.value}</Text>
           </Pressable>

@@ -2,13 +2,39 @@ import {Pressable, View, Text, StyleSheet} from "react-native";
 import {GlobalStyles} from "../../constants/styles";
 import {getFormattedDate} from "../../util/date";
 import {useNavigation} from "@react-navigation/native"
+import {  useState, useEffect } from "react"
 
-
-export default function ResultItem({id, major, course, result, date, amount}) {
+export default function ResultItem({id, major, type, course, result, date, amount}) {
     const navigation = useNavigation()
     const resultOutput = result
+  const [typeStyles, setTypeStyles] = useState({});
+
     // console.log('result output', resultOutput)
     // console.log('amount', amount)
+console.log('type in result item', type)
+
+function typeHandler() {
+    if (type === "MO") {
+        setTypeStyles({
+            backgroundColor: GlobalStyles.colors.oral,
+           color: 'black'
+          })
+    }
+    if(type == "SO") {
+        setTypeStyles({
+            backgroundColor: GlobalStyles.colors.minor,
+          })
+    }
+    if(type === "PW") {
+        setTypeStyles({
+            backgroundColor: GlobalStyles.colors.major,
+          })
+    }
+}
+useEffect(()=>{
+    typeHandler()
+},[type])
+
 
     function resultPressHandler() {
         navigation.navigate("ManageResult", {
@@ -17,11 +43,11 @@ export default function ResultItem({id, major, course, result, date, amount}) {
     }
 
     return <Pressable onPress={resultPressHandler} style={({pressed}) => pressed && styles.pressed}>
-        <View style={[styles.resultItem, major ? styles.resultItemMajor : styles.resultItemMinor]}>
+        <View style={[styles.resultItem, type && typeStyles]}>
             <View style={styles.leftContainer}>
                 <View>
-                    <Text style={[styles.textBase, styles.description]}>{course}</Text>
-                    <Text style={styles.textBase}>{getFormattedDate(date)}</Text>
+                    <Text style={[styles.textBase, styles.description, type && typeStyles]}>{course}</Text>
+                    <Text style={[styles.textBase, type && typeStyles]}>{getFormattedDate(date)}</Text>
                 </View>
                 <View style={[styles.resultContainer, result < 5.5 ? styles.insufficient : styles.sufficient]}>
                     <Text style={[styles.result, result < 5.5 ? styles.insufficient : styles.sufficient]}>{Number(result).toFixed(1)}</Text>

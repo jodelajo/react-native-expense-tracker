@@ -51,6 +51,7 @@ export default function ManageResult({ route, navigation }) {
       if (isEditing) {
         resultsCtx.updateResult(editedResultId, resultData);
         console.log("manage result", authCtx.token);
+        console.log('result data in manage result', resultData)
         await updateResult(editedResultId, resultData, authCtx.userId, authCtx.token);
       } else {
         const id = await storeResult(resultData, authCtx.userId, authCtx.token);

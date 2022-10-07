@@ -25,8 +25,8 @@ export default function ResultForm({
         : dateInputHandler(),
       isValid: true,
     },
-    major: {
-      value: defaultValues ? defaultValues.major : false,
+    confirmed: {
+      value: defaultValues ? defaultValues.confirmed : false,
       isValid: true,
     },
     type: {
@@ -73,36 +73,48 @@ export default function ResultForm({
         };
       });
     }
-
-    if (result < 5.5 && inputs.major.value) {
+    console.log('resultform inputs type', inputs.type.value)
+    if (result < 5.5 && inputs.type.value === "PW") {
       setInputsHandler(-2.5);
     }
-    if (result < 4 && inputs.major.value) {
+    if (result < 4 && inputs.type.value === "PW") {
       setInputsHandler(-5.0);
     }
-    if (result < 5.5 && !inputs.major.value) {
+    if (result < 5.5 && inputs.type.value === "SO") {
       setInputsHandler(-1.25);
     }
-    if (result < 4 && !inputs.major.value) {
+    if (result < 4 && inputs.type.value === "MO") {
+      setInputsHandler(-1.25);
+    }
+    if (result < 5.5 && inputs.type.value === "MO") {
+      setInputsHandler(-0.65);
+    }
+    if (result < 4 && inputs.type.value === "SO") {
       setInputsHandler(-2.5);
     }
-    if (result >= 5.5 && inputs.major.value) {
+    if (result >= 5.5 && inputs.type.value === "PW") {
       setInputsHandler(2.5);
     }
-    if (result >= 7.5 && inputs.major.value) {
+    if (result >= 7.5 && inputs.type.value === "PW") {
       setInputsHandler(5.0);
     }
-    if (result >= 5.5 && !inputs.major.value) {
+    if (result >= 5.5 && inputs.type.value === "SO") {
       setInputsHandler(1.25);
     }
-    if (result >= 7.5 && !inputs.major.value) {
+    if (result >= 7.5 && inputs.type.value === "SO") {
       setInputsHandler(2.5);
+    }
+    if (result >= 5.5 && inputs.type.value === "MO") {
+      setInputsHandler(0.65);
+    }
+    if (result >= 7.5 && inputs.type.value === "MO") {
+      setInputsHandler(1.25);
     }
   }
 
   useEffect(() => {
     amountHandler();
-  }, [inputs.result, inputs.major]);
+  }, [inputs.result, inputs.type]);
 
   function inputChangedHandler(inputIdentifier, enteredValue) {
     setInputs((curInputs) => {
@@ -136,7 +148,7 @@ export default function ResultForm({
     const resultData = {
       course: inputs.course.value,
       date: new Date(inputs.date.value),
-      major: inputs.major.value,
+      confirmed: inputs.confirmed.value,
       type: inputs.type.value,
       result: inputs.result.value,
       amount: inputs.amount.value,
@@ -144,7 +156,7 @@ export default function ResultForm({
 
     const courseIsValid = resultData.course.length > 0;
     const dateIsValid = resultData.date.toString() !== "Invalid Date";
-    const majorIsValid = typeof resultData.major == "boolean";
+    const confirmedIsValid = typeof resultData.confirmed == "boolean";
     const typeIsValid =
       resultData.type === "PW" ||
       resultData.type === "MO" ||
@@ -158,7 +170,7 @@ export default function ResultForm({
     if (
       !courseIsValid ||
       !dateIsValid ||
-      !majorIsValid ||
+      !confirmedIsValid ||
       !typeIsValid ||
       !resultIsValid ||
       !amountIsValid
@@ -168,7 +180,7 @@ export default function ResultForm({
         return {
           course: { value: curInputs.course.value, isValid: courseIsValid },
           date: { value: curInputs.date.value, isValid: dateIsValid },
-          major: { value: curInputs.major.value, isValid: majorIsValid },
+          confirmed: { value: curInputs.confirmed.value, isValid: confirmedIsValid },
           type: { value: curInputs.type.value, isValid: typeIsValid },
           result: { value: curInputs.result.value, isValid: resultIsValid },
           amount: { value: curInputs.amount.value, isValid: amountIsValid },
@@ -183,7 +195,7 @@ export default function ResultForm({
   const formIsInvalid =
     !inputs.course.isValid ||
     !inputs.date.isValid ||
-    !inputs.major.isValid ||
+    !inputs.confirmed.isValid ||
     !inputs.type.isValid ||
     !inputs.result.isValid ||
     !inputs.amount.isValid;
@@ -200,10 +212,10 @@ export default function ResultForm({
         invalid={!inputs.course.isValid}
       />
 
-      <View style={styles.switchContainer}>
+      {/* <View style={styles.switchContainer}>
         <Text
           style={
-            !inputs.major.value
+            !inputs.confirmed.value
               ? [styles.label, styles.activeMinor]
               : [styles.label, styles.left]
           }
@@ -216,9 +228,7 @@ export default function ResultForm({
             true: GlobalStyles.colors.major,
           }}
           thumbColor={
-            inputs.major.value
-              ? GlobalStyles.colors.primary50
-              : GlobalStyles.colors.primary50
+            GlobalStyles.colors.primary50
           }
           ios_backgroundColor={GlobalStyles.colors.minor}
           onValueChange={inputChangedHandler.bind(this, "major")}
@@ -235,7 +245,7 @@ export default function ResultForm({
         >
           PROEFWERK
         </Text>
-      </View>
+      </View> */}
       <RadioButton 
       onSelect={selectType} 
       // option={userOption} 
