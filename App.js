@@ -177,6 +177,7 @@ function Root() {
       'grant_type=refresh_token&refresh_token=' + refreshedToken,
     );
     console.log('response in refreshtoken in app.js', response.data)
+    console.log('refresh token in async storage', refreshedToken)
   }
 
   async function fetchToken() {
