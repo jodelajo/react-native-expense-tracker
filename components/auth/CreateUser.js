@@ -12,6 +12,7 @@ export async function Authenticate(mode, email, password) {
     password: password,
     returnSecureToken: true,
   });
+  
 
   if (mode === "signUp") {
     await storeUserId(response.data, response.data.idToken);

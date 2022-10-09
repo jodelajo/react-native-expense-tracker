@@ -4,6 +4,7 @@ import { createContext, useState } from "react";
 export const AuthContext = createContext({
   token: "",
   userId: "",
+  refreshToken: "",
   isAuthenticated: false,
   authenticate: (token) => {},
   userHandler: (userId) => {},
@@ -11,8 +12,8 @@ export const AuthContext = createContext({
 });
 export default function AuthContextProvider({ children }) {
   const [authToken, setAuthToken] = useState();
+  const [rToken, setRToken] = useState();
   const [user, setUser] = useState();
- 
 
   function authenticate(token) {
     AsyncStorage.setItem("token", token);
@@ -20,7 +21,6 @@ export default function AuthContextProvider({ children }) {
   }
 
   function userHandler(userId) {
-    console.log("userid in context", userId);
     setUser(userId);
   }
 
@@ -28,14 +28,17 @@ export default function AuthContextProvider({ children }) {
     setAuthToken(null);
     setResults(null);
     setUser(null);
-    AsyncStorage.removeItem('token')
+    AsyncStorage.removeItem("token");
+    AsyncStorage.removeItem("refreshToken");
   }
+
 
   const value = {
     userId: user,
-    userHandler,
-    userHandler,
+    userHandler: userHandler,
     setUser: setUser,
+    refreshToken: rToken,
+    setRToken: setRToken,
     token: authToken,
     isAuthenticated: !!authToken,
     authenticate: authenticate,

@@ -9,6 +9,7 @@ import { AuthContext } from "../store/auth-context";
 import FetchUser from "../components/auth/FetchUser";
 import { fetchResults } from "../components/UI/http";
 import { ResultsContext } from "../store/results-context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -23,11 +24,13 @@ export default function Login() {
       const token = await LoginUser(email, password);
       authCtx.authenticate(token);
       const user = await FetchUser(email, token);
-      console.log('user', user)
+      authCtx.setRToken(user[0][1].refreshToken)
+      AsyncStorage.setItem("refreshToken", user[0][1].refreshToken);
       const userId = user[0]
       authCtx.userHandler(userId[0]);
       const results = await fetchResults(userId[0], token)
       resultsCtx.setResults(results)
+      // console.log('results in login', results)
     } catch (error) {
       // setError(error.toString())
       // setIsLoading(false)

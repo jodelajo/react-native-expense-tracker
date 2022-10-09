@@ -73,7 +73,6 @@ export default function ResultForm({
         };
       });
     }
-    console.log('resultform inputs type', inputs.type.value)
     if (result < 5.5 && inputs.type.value === "PW") {
       setInputsHandler(-2.5);
     }
@@ -118,7 +117,6 @@ export default function ResultForm({
 
   function inputChangedHandler(inputIdentifier, enteredValue) {
     setInputs((curInputs) => {
-      console.log('cur inpust', curInputs)
       return {
         ...curInputs,
         [inputIdentifier]: { value: enteredValue, isValid: true },

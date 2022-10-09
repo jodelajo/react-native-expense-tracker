@@ -8,7 +8,6 @@ const url = BACKEND_URL;
 // console.log('bachend', url)
 
 export default async function FetchUser(userId, token) {
-  console.log("userid in Fetchuser", userId);
   const user = [];
   const response = await axios.get(url + `/userId.json?auth=` + token);
   const usersArray = Object.entries(response.data?.userId || response.data);

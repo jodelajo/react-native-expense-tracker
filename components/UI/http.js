@@ -3,12 +3,12 @@ import axios from "axios";
 import envs from '../../config/env'
 
 
-console.log('envs', envs)
-console.log('__DEV__', __DEV__)
+// console.log('envs', envs)
+// console.log('__DEV__', __DEV__)
 const { BACKEND_URL } = envs
-console.log('BACKEND', BACKEND_URL)
+// console.log('BACKEND', BACKEND_URL)
 const url = BACKEND_URL;
-console.log('url', url)
+// console.log('url', url)
 
 export async function storeResult(resultData, userId, token) {
   const response = await axios.post(
@@ -20,7 +20,7 @@ export async function storeResult(resultData, userId, token) {
 }
 
 export async function fetchResults(userId, token) {
-  console.log("userid in http", userId);
+  // console.log("userid in http", userId);
   const response = await axios.get(url + `/userId/${userId}/results.json?auth=` + token);
   const results = [];
 

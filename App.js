@@ -3,6 +3,7 @@ import { useContext, useEffect, useState, useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import ManageResult from "./screens/ManageResult";
 import RecentResults from "./screens/RecentResults";
 import AllResults from "./screens/AllResults";
@@ -15,19 +16,39 @@ import ResultsContextProvider, {
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import Login from "./screens/Login";
 import SignUp from "./screens/SignUp";
+import UserProfile from "./screens/UserProfile";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SplashScreen from "expo-splash-screen";
 import { View, StyleSheet } from "react-native";
 import { useMediaQuery } from "react-responsive";
+import envs from './config/env'
+import axios from "axios";
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
+const {API_KEY} = envs
 
 SplashScreen.preventAutoHideAsync();
 
 function ResultsOverview() {
   const authCtx = useContext(AuthContext);
   const resultsCtx = useContext(ResultsContext);
+  
+
+  const DrawerScreen = () => {
+    return (
+      <Drawer.Navigator 
+      screenOptions={{ drawerPosition: "left" }}
+      useLegacyImplementation
+      id="Drawer"
+      // initialRouteName=""
+      >
+        
+        <Drawer.Screen name="UserProfile" component={UserProfile} />
+      </Drawer.Navigator>
+    );
+  };
 
   return (
     <BottomTabs.Navigator
@@ -38,10 +59,11 @@ function ResultsOverview() {
         tabBarActiveTintColor: GlobalStyles.colors.accent500,
         headerLeft: ({ tintColor }) => (
           <IconButton
-            icon="log-out-outline"
+            icon="settings"
             size={24}
             color={tintColor}
-            onPress={() => authCtx.logout(resultsCtx.setResults)}
+            // onPress={() => authCtx.logout(resultsCtx.setResults)}
+            onPress={() => navigation.navigate("UserProfile")}
           />
         ),
         headerRight: ({ tintColor }) => (
@@ -122,6 +144,11 @@ function AuthenticatedStack() {
         component={ManageResult}
         options={{ title: "manage result", presentation: "modal" }}
       />
+       <Stack.Screen
+        name="UserProfile"
+        component={UserProfile}
+        options={{ title: "Userprofile", presentation: "modal" }}
+      />
     </Stack.Navigator>
   );
 }
@@ -139,17 +166,36 @@ function Root() {
   const [isTryingLogin, setIsTryingLogin] = useState(true);
   const authCtx = useContext(AuthContext);
   const isBigScreen = useMediaQuery({ minDeviceWidth: 450 });
-  console.log("big screen", isBigScreen);
-  useEffect(() => {
-    async function fetchToken() {
-      const storedToken = await AsyncStorage.getItem("token");
-      if (storedToken) {
-        authCtx.authenticate(storedToken);
-      }
-      setIsTryingLogin(false);
+  // console.log("big screen", isBigScreen);
+
+
+  async function refreshToken() {
+    const refreshedToken = await AsyncStorage.getItem("refreshToken")
+    console.log('refresh tokenin app.js', refreshedToken)
+    const url = `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`;
+    const response = await axios.post(url, 
+      'grant_type=refresh_token&refresh_token=' + refreshedToken,
+    );
+    console.log('response in refreshtoken in app.js', response.data)
+  }
+
+  async function fetchToken() {
+    const storedToken = await AsyncStorage.getItem("token");
+    console.log('storedToken', storedToken)
+    if (storedToken) {
+      authCtx.authenticate(storedToken);
+      refreshToken()
     }
+    setIsTryingLogin(false);
+  }
+  useEffect(() => {
     fetchToken();
   }, []);
+
+  // useEffect(()=> {
+   
+  //   refreshToken()
+  // },[authCtx.token])
 
   const onLayoutRootView = useCallback(async () => {
     if (!isTryingLogin) {
@@ -178,6 +224,7 @@ function Root() {
   }
 }
 
+
 export default function App() {
   return (
     <>
@@ -195,8 +242,8 @@ const styles = StyleSheet.create({
   web: {
     backgroundColor: GlobalStyles.colors.primary800,
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start'
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
   container: {
     marginTop: 20,
@@ -205,5 +252,5 @@ const styles = StyleSheet.create({
     maxWidth: 428,
     maxHeight: 928,
     flex: 1,
-  }
+  },
 });
