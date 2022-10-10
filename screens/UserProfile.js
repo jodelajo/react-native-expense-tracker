@@ -4,7 +4,6 @@ import { ResultsContext } from "../store/results-context"
 import React, {  useContext } from "react"
 import { GlobalStyles } from "../constants/styles"
 import UpdateProfileForm from "../components/auth/UpdateProfileForm"
-import Profile from "../components/auth/Profile"
 
 
 export default function UserProfile() {
@@ -14,10 +13,9 @@ export default function UserProfile() {
     
     return (
 <View style={styles.container}>
-    <Button title="Uitloggen" onPress={() => authCtx.logout(resultsCtx.setResults)}/>
+    {/* <Button title="Uitloggen" onPress={() => authCtx.logout(resultsCtx.setResults)}/> */}
 
-    {/* <Profile /> */}
-    {/* <UpdateProfileForm/> */}
+    <UpdateProfileForm/>
 </View>
     )
 }

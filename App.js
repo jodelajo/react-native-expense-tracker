@@ -1,27 +1,13 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useContext, useEffect, useState, useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-// import {
-//   createDrawerNavigator,
-//   DrawerContentScrollView,
-//   DrawerItemList,
-//   DrawerItem,
-// } from "@react-navigation/drawer";
 import ManageResult from "./screens/ManageResult";
-import RecentResults from "./screens/RecentResults";
-import AllResults from "./screens/AllResults";
 import { GlobalStyles } from "./constants/styles";
-import { Ionicons } from "@expo/vector-icons";
-import IconButton from "./components/UI/IconButton";
-import ResultsContextProvider, {
-  ResultsContext,
-} from "./store/results-context";
+import ResultsContextProvider from "./store/results-context";
 import AuthContextProvider, { AuthContext } from "./store/auth-context";
 import Login from "./screens/Login";
 import SignUp from "./screens/SignUp";
-import UserProfile from "./screens/UserProfile";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SplashScreen from "expo-splash-screen";
 import { View, StyleSheet } from "react-native";
@@ -34,8 +20,6 @@ const Stack = createNativeStackNavigator();
 const { API_KEY } = envs;
 
 SplashScreen.preventAutoHideAsync();
-
-
 
 function AuthStack() {
   return (

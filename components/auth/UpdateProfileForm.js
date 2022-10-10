@@ -6,10 +6,10 @@ import { Button, Image, View } from "react-native";
 import { AuthContext } from "../../store/auth-context";
 import * as ImagePicker from "expo-image-picker";
 const { API_KEY } = envs;
-// const authCtx = useContext(AuthContext);
+
 
 export default function UpdateProfileForm() {
- 
+  const authCtx = useContext(AuthContext);
   const [profile, setProfile] = useState();
   const [username, setUsername] = useState("");
   const [image, setImage] = useState(localFile);
@@ -56,10 +56,10 @@ export default function UpdateProfileForm() {
             //   value: inputs.result.value,
           }}
         />
-        {/* <Button title="Pick an image from camera roll" onPress={pickImage} />
+        <Button title="Pick an image from camera roll" onPress={pickImage} />
         {image && (
           <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
-        )} */}
+        )}
       </View>
       <Button title="Profiel bijwerken" onPress={updateHandler} />
     </>

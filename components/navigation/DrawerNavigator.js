@@ -12,6 +12,8 @@ import IconButton from "../UI/IconButton";
 import { GlobalStyles } from "../../constants/styles";
 import BottomTabsNavigator from "./BottomTabsNavigator";
 import UserProfile from "../../screens/UserProfile";
+import Courses from "../../screens/Courses";
+import Statistics from "../../screens/Statistics";
 
 const Drawer = createDrawerNavigator();
 
@@ -21,16 +23,20 @@ function AppDrawerContent(props) {
   
     return (
       <DrawerContentScrollView {...props} contentContainerStyle={{ flex: 1 }}>
-        {/*all of the drawer items*/}
         <View style={styles.logoutButton}>
-          {/* here's where you put your logout drawer item*/}
           <DrawerItem
             label="Log out"
             onPress={() => authCtx.logout(resultsCtx.setResults)}
-            labelStyle={{ color: "white" }}
+            labelStyle={{ color: "white", fontSize: 18, fontWeight: 'bold', textAlign: 'center'}}
           />
         </View>
-        <DrawerItemList {...props} style={{ borderWidth: 1 }} />
+        {/* <View>
+            <DrawerItem 
+            label="Overzicht resultaten"
+            onPress={()=>}
+            />
+        </View> */}
+        <DrawerItemList {...props} style={{ borderWidth: 1,  }}  />
       </DrawerContentScrollView>
     );
   }
@@ -43,8 +49,10 @@ function AppDrawerContent(props) {
           headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
           headerTintColor: "white",
           drawerStyle: {
-            backgroundColor: GlobalStyles.colors.major,
+            backgroundColor: GlobalStyles.colors.primary500,
             color: "white",
+           
+           
           },
           drawerType: "slide",
           headerRight: ({ tintColor }) => (
@@ -63,13 +71,30 @@ function AppDrawerContent(props) {
           name="ResultsOverview"
           component={BottomTabsNavigator}
           options={{
+            title: "Overzicht resultaten",
             drawerLabel: "Overzicht",
-            drawerLabelStyle: { color: "white" },
+            drawerLabelStyle: { color: "white", fontWeight: 'bold',  },
+            drawerActiveBackgroundColor: GlobalStyles.colors.minor,
+            drawerInactiveBackgroundColor: GlobalStyles.colors.primary700,
           }}
         />
         <Drawer.Screen name="UserProfile" component={UserProfile}  options={{
             drawerLabel: "Jouw profiel",
-            drawerLabelStyle: { color: "white" },
+            drawerLabelStyle: { color: "white", fontWeight: 'bold' },
+            drawerActiveBackgroundColor: GlobalStyles.colors.minor,
+            drawerInactiveBackgroundColor: GlobalStyles.colors.primary700
+          }}/>
+           <Drawer.Screen name="Courses" component={Courses}  options={{
+            drawerLabel: "Jouw vakken",
+            drawerLabelStyle: { color: "white", fontWeight: 'bold' },
+            drawerActiveBackgroundColor: GlobalStyles.colors.minor,
+            drawerInactiveBackgroundColor: GlobalStyles.colors.primary700
+          }}/>
+          <Drawer.Screen name="Statistics" component={Statistics}  options={{
+            drawerLabel: "Statistieken",
+            drawerLabelStyle: { color: "white", fontWeight: 'bold' },
+            drawerActiveBackgroundColor: GlobalStyles.colors.minor,
+            drawerInactiveBackgroundColor: GlobalStyles.colors.primary700
           }}/>
       </Drawer.Navigator>
     );
@@ -77,10 +102,14 @@ function AppDrawerContent(props) {
 
   const styles = StyleSheet.create({
     logoutButton: {
-        height: 50,
-        backgroundColor: GlobalStyles.colors.insufficient,
-        margin: 16,
-        borderRadius: 16,
+        // height: 50,
+        backgroundColor: GlobalStyles.colors.major,
+        marginVertical: 6,
+        marginHorizontal: 40,
+        borderRadius: 36,
+        justifyContent: 'center',
+        // alignItems: 'center'
+        // textAlign: 'center'
       },
       buttonText: {
         color: "white",
