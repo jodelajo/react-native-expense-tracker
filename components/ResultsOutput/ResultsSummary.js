@@ -1,4 +1,4 @@
-import { useContext , useEffect} from "react"
+import React, { useContext , useEffect} from "react"
 import {View, Text, StyleSheet} from "react-native"
 import {GlobalStyles} from "../../constants/styles"
 import { ResultsContext } from "../../store/results-context"

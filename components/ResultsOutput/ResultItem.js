@@ -2,7 +2,7 @@ import { Pressable, View, Text, StyleSheet } from "react-native";
 import { GlobalStyles } from "../../constants/styles";
 import { getFormattedDate } from "../../util/date";
 import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function ResultItem({
   id,

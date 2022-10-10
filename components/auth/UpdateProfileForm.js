@@ -1,7 +1,7 @@
 import Input from "../manageResult/Input";
 import envs from "../../config/env";
 import axios from "axios";
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Button, Image, View } from "react-native";
 import { AuthContext } from "../../store/auth-context";
 import * as ImagePicker from "expo-image-picker";

@@ -3,7 +3,7 @@ import { Alert, StyleSheet } from "react-native";
 import { GlobalStyles } from "../constants/styles";
 import { View } from "react-native";
 import { CreateUser } from "../components/auth/CreateUser";
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
 import { AuthContext } from "../store/auth-context";

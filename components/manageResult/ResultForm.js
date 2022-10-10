@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Switch, Text, StyleSheet, TextInput, Alert } from "react-native";
 import { GlobalStyles } from "../../constants/styles";
 import Input from "./Input";

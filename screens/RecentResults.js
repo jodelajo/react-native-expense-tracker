@@ -1,5 +1,5 @@
 import ResultsOutput from "../components/ResultsOutput/ResultsOutput";
-import { useContext, useEffect, useState } from "react";
+import React,{ useContext, useEffect, useState } from "react";
 import { ResultsContext } from "../store/results-context";
 import { getDateMinusDays } from "../util/date";
 import { fetchResults } from "../components/UI/http";

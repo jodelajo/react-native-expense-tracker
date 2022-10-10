@@ -1,9 +1,14 @@
 import { StatusBar } from "expo-status-bar";
-import { useContext, useEffect, useState, useCallback } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+// import {
+//   createDrawerNavigator,
+//   DrawerContentScrollView,
+//   DrawerItemList,
+//   DrawerItem,
+// } from "@react-navigation/drawer";
 import ManageResult from "./screens/ManageResult";
 import RecentResults from "./screens/RecentResults";
 import AllResults from "./screens/AllResults";
@@ -21,89 +26,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SplashScreen from "expo-splash-screen";
 import { View, StyleSheet } from "react-native";
 import { useMediaQuery } from "react-responsive";
-import { createCookieInHour } from "./util/date";
-import envs from './config/env'
+import envs from "./config/env";
 import axios from "axios";
+import DrawerNavigator from "./components/navigation/DrawerNavigator";
 
 const Stack = createNativeStackNavigator();
-const BottomTabs = createBottomTabNavigator();
-const Drawer = createDrawerNavigator();
-const {API_KEY} = envs
+const { API_KEY } = envs;
 
 SplashScreen.preventAutoHideAsync();
 
-function ResultsOverview() {
-  const authCtx = useContext(AuthContext);
-  const resultsCtx = useContext(ResultsContext);
-  
 
-  const DrawerScreen = () => {
-    return (
-      <Drawer.Navigator 
-      screenOptions={{ drawerPosition: "left" }}
-      useLegacyImplementation
-      id="Drawer"
-      // initialRouteName=""
-      >
-        
-        <Drawer.Screen name="UserProfile" component={UserProfile} />
-      </Drawer.Navigator>
-    );
-  };
-
-  return (
-    <BottomTabs.Navigator
-      screenOptions={({ navigation }) => ({
-        headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
-        headerTintColor: "white",
-        tabBarStyle: { backgroundColor: GlobalStyles.colors.primary500 },
-        tabBarActiveTintColor: GlobalStyles.colors.accent500,
-        headerLeft: ({ tintColor }) => (
-          <IconButton
-            icon="settings"
-            size={24}
-            color={tintColor}
-            // onPress={() => authCtx.logout(resultsCtx.setResults)}
-            onPress={() => navigation.navigate("UserProfile")}
-          />
-        ),
-        headerRight: ({ tintColor }) => (
-          <IconButton
-            icon="add"
-            size={24}
-            color={tintColor}
-            onPress={() => {
-              navigation.navigate("ManageResult");
-            }}
-          />
-        ),
-      })}
-    >
-      <BottomTabs.Screen
-        name="RecentResults"
-        component={RecentResults}
-        options={{
-          title: "Resultaten deze periode",
-          tabBarLabel: "Deze periode",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="hourglass" size={size} color={color} />
-          ),
-        }}
-      />
-      <BottomTabs.Screen
-        name="AllResults"
-        component={AllResults}
-        options={{
-          title: "Alle resultaten",
-          tabBarLabel: "Totaal",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar" size={size} color={color} />
-          ),
-        }}
-      />
-    </BottomTabs.Navigator>
-  );
-}
 
 function AuthStack() {
   return (
@@ -136,19 +68,14 @@ function AuthenticatedStack() {
       }}
     >
       <Stack.Screen
-        name="ResultsOverview"
-        component={ResultsOverview}
-        options={{ headerShown: false, title: "Overview" }}
+        name="Drawer"
+        component={DrawerNavigator}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="ManageResult"
         component={ManageResult}
         options={{ title: "manage result", presentation: "modal" }}
-      />
-       <Stack.Screen
-        name="UserProfile"
-        component={UserProfile}
-        options={{ title: "Userprofile", presentation: "modal" }}
       />
     </Stack.Navigator>
   );
@@ -163,34 +90,34 @@ function Navigation() {
     </NavigationContainer>
   );
 }
+
+
 function Root() {
   const [isTryingLogin, setIsTryingLogin] = useState(true);
   const authCtx = useContext(AuthContext);
   const isBigScreen = useMediaQuery({ minDeviceWidth: 450 });
   // console.log("big screen", isBigScreen);
 
-
   async function refreshToken() {
-    const refreshedToken = await AsyncStorage.getItem("refreshToken")
-    console.log('refresh tokenin app.js', refreshedToken)
+    const refreshedToken = await AsyncStorage.getItem("refreshToken");
+    console.log("refresh tokenin app.js", refreshedToken);
     const url = `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`;
-    const response = await axios.post(url, 
-      'grant_type=refresh_token&refresh_token=' + refreshedToken,
+    const response = await axios.post(
+      url,
+      "grant_type=refresh_token&refresh_token=" + refreshedToken
     );
-    console.log('response in refreshtoken in app.js', response.data)
-    console.log('refresh token in async storage', refreshedToken)
+    console.log("response in refreshtoken in app.js", response.data);
+    console.log("refresh token in async storage", refreshedToken);
   }
 
-
-
-setInterval(()=> {
-    refreshToken()
-  console.log("refreshhhh!")
-}, 1000 * 60 * 55)
+  setInterval(() => {
+    refreshToken();
+    console.log("refreshhhh!");
+  }, 1000 * 60 * 55);
 
   async function fetchToken() {
     const storedToken = await AsyncStorage.getItem("token");
-    console.log('storedToken', storedToken)
+    console.log("storedToken", storedToken);
     if (storedToken) {
       authCtx.authenticate(storedToken);
     }
@@ -198,10 +125,7 @@ setInterval(()=> {
   }
   useEffect(() => {
     fetchToken();
-   
   }, []);
-
-
 
   const onLayoutRootView = useCallback(async () => {
     if (!isTryingLogin) {
@@ -229,7 +153,6 @@ setInterval(()=> {
     );
   }
 }
-
 
 export default function App() {
   return (

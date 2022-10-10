@@ -1,4 +1,4 @@
-import { createContext, useReducer, useState } from "react";
+import React, { createContext, useReducer, useState } from "react";
 
 export const ResultsContext = createContext({
   results: [],

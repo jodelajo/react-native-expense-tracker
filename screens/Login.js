@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import AuthContent from "../components/auth/AuthContent";
 import { Alert, StyleSheet, View } from "react-native";
 import { GlobalStyles } from "../constants/styles";
@@ -19,14 +19,14 @@ export default function Login() {
   const authCtx = useContext(AuthContext);
 
   async function loginHandler({ email, password }) {
-    console.log(email, password);
+    // console.log(email, password);
     setIsLoading(true);
     try {
       const token = await LoginUser(email, password);
       authCtx.authenticate(token);
       const user = await FetchUser(email, token);
-      console.log('user in Login', user[0][1].expiresIn)
-      setTimer( user[0][1].expiresIn)
+      // console.log('user in Login', user[0][1].expiresIn)
+      // setTimer( user[0][1].expiresIn)
       authCtx.setRToken(user[0][1].refreshToken)
       AsyncStorage.setItem("refreshToken", user[0][1].refreshToken);
       const userId = user[0]
