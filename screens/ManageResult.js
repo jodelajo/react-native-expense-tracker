@@ -23,6 +23,7 @@ export default function ManageResult({ route, navigation }) {
     (result) => result.id === editedResultId
   );
 
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: isEditing ? "Wijzig cijfer" : "Voeg cijfer toe",

@@ -20,7 +20,7 @@ export async function Authenticate(mode, email, password) {
 
   const token = response.data.idToken;
   // idToken.push(response.data.idToken)
-  console.log('token', token)
+  // console.log('token', token)
   return token;
 }
 

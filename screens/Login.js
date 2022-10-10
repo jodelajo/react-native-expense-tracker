@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+  const [timer, setTimer] = useState()
   const resultsCtx = useContext(ResultsContext)
   const authCtx = useContext(AuthContext);
 
@@ -24,6 +25,8 @@ export default function Login() {
       const token = await LoginUser(email, password);
       authCtx.authenticate(token);
       const user = await FetchUser(email, token);
+      console.log('user in Login', user[0][1].expiresIn)
+      setTimer( user[0][1].expiresIn)
       authCtx.setRToken(user[0][1].refreshToken)
       AsyncStorage.setItem("refreshToken", user[0][1].refreshToken);
       const userId = user[0]
@@ -38,6 +41,7 @@ export default function Login() {
     }
     setIsLoading(false);
   }
+ 
 
   if (isLoading) {
     return <LoadingOverlay />;

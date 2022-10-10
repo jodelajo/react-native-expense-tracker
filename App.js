@@ -21,6 +21,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SplashScreen from "expo-splash-screen";
 import { View, StyleSheet } from "react-native";
 import { useMediaQuery } from "react-responsive";
+import { createCookieInHour } from "./util/date";
 import envs from './config/env'
 import axios from "axios";
 
@@ -180,23 +181,27 @@ function Root() {
     console.log('refresh token in async storage', refreshedToken)
   }
 
+
+
+setInterval(()=> {
+    refreshToken()
+  console.log("refreshhhh!")
+}, 1000 * 60 * 55)
+
   async function fetchToken() {
     const storedToken = await AsyncStorage.getItem("token");
     console.log('storedToken', storedToken)
     if (storedToken) {
       authCtx.authenticate(storedToken);
-      refreshToken()
     }
     setIsTryingLogin(false);
   }
   useEffect(() => {
     fetchToken();
+   
   }, []);
 
-  // useEffect(()=> {
-   
-  //   refreshToken()
-  // },[authCtx.token])
+
 
   const onLayoutRootView = useCallback(async () => {
     if (!isTryingLogin) {
