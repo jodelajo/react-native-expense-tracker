@@ -141,7 +141,7 @@ export default function ResultForm({
   }
 
   function submitHandler() {
-    console.log("input values", inputs);
+    // console.log("input values", inputs);
     amountHandler();
     const resultData = {
       course: inputs.course.value,

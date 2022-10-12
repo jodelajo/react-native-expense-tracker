@@ -1,5 +1,5 @@
 import axios from "axios";
-import { storeUserId } from "../UI/http";
+import { storeUserId, getUser } from "../UI/http";
 import envs from '../../config/env'
 
 const {API_KEY} = envs
@@ -13,9 +13,12 @@ export async function Authenticate(mode, email, password) {
     returnSecureToken: true,
   });
 
-
+  // console.log('create user response', response.data)
   if (mode === "signUp") {
     await storeUserId(response.data, response.data.idToken);
+  }
+  if (mode === "signInWithPassword") {
+  //  await getUser(response.data.idToken)
   }
 
   const token = response.data.idToken;

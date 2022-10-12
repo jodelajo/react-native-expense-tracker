@@ -84,7 +84,7 @@ function Root() {
 
   async function refreshToken() {
     const refreshedToken = await AsyncStorage.getItem("refreshToken");
-    console.log("refresh tokenin app.js", refreshedToken);
+    // console.log("refresh tokenin app.js", refreshedToken);
     const url = `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`;
     const response = await axios.post(
       url,
@@ -101,7 +101,7 @@ function Root() {
 
   async function fetchToken() {
     const storedToken = await AsyncStorage.getItem("token");
-    console.log("storedToken", storedToken);
+    // console.log("storedToken", storedToken);
     if (storedToken) {
       authCtx.authenticate(storedToken);
     }

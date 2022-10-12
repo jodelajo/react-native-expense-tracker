@@ -3,10 +3,12 @@ import { AuthContext } from "../store/auth-context"
 import { ResultsContext } from "../store/results-context"
 import React, {  useContext } from "react"
 import { GlobalStyles } from "../constants/styles"
-import UpdateProfileForm from "../components/auth/UpdateProfileForm"
+// import UpdateProfileForm from "../components/auth/UpdateProfileForm"
+import Profile from "../components/auth/Profile"
 
 
 export default function UserProfile() {
+    // console.log('props in userprofile', props)
     const authCtx = useContext(AuthContext)
     const resultsCtx = useContext(ResultsContext)
 
@@ -14,8 +16,8 @@ export default function UserProfile() {
     return (
 <View style={styles.container}>
     {/* <Button title="Uitloggen" onPress={() => authCtx.logout(resultsCtx.setResults)}/> */}
-
-    <UpdateProfileForm/>
+        <Profile />
+    {/* <UpdateProfileForm/> */}
 </View>
     )
 }

@@ -5,6 +5,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export const AuthContext = createContext({
   token: "",
   userId: "",
+  displayName: "",
+  avatar: "",
   refreshToken: "",
   isAuthenticated: false,
   authenticate: (token) => {},
@@ -15,6 +17,8 @@ export default function AuthContextProvider({ children }) {
   const [authToken, setAuthToken] = useState();
   const [rToken, setRToken] = useState();
   const [user, setUser] = useState();
+  const [name, setName] = useState()
+  const [photoUrl, setPhotoUrl] = useState("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQx9tjaExsY-srL4VsHNE_OKGVCJ-eIFNBktw&usqp=CAU")
 
   function authenticate(token) {
     AsyncStorage.setItem("token", token);
@@ -29,12 +33,18 @@ export default function AuthContextProvider({ children }) {
     setAuthToken(null);
     setResults(null);
     setUser(null);
+    setName(null)
+    // setPhotoUrl()
     AsyncStorage.removeItem("token");
     AsyncStorage.removeItem("refreshToken");
   }
 
 
   const value = {
+    avatar: photoUrl,
+    setPhotoUrl: setPhotoUrl,
+    displayName: name,
+    setName, setName,
     userId: user,
     userHandler: userHandler,
     setUser: setUser,

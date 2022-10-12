@@ -39,8 +39,10 @@ export default function UpdateProfileForm() {
     });
     console.log(
       "response in updatehandler in updateprofileform",
-      response.data.providerUserInfo
+      response.data.displayName
     );
+    authCtx.setName(response.data.displayName)
+    authCtx.setPhotoUrl(response.data.photoUrl)
   }
 
   return (

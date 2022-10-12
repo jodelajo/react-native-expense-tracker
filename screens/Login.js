@@ -7,7 +7,7 @@ import ErrorOverlay from "../components/UI/ErrorOverlay";
 import { LoginUser } from "../components/auth/CreateUser";
 import { AuthContext } from "../store/auth-context";
 import FetchUser from "../components/auth/FetchUser";
-import { fetchResults } from "../components/UI/http";
+import { fetchResults, getUser } from "../components/UI/http";
 import { ResultsContext } from "../store/results-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -25,7 +25,11 @@ export default function Login() {
       const token = await LoginUser(email, password);
       authCtx.authenticate(token);
       const user = await FetchUser(email, token);
-      // console.log('user in Login', user[0][1].expiresIn)
+      const userProfile = await getUser(token)
+      console.log('userprofile', userProfile[0].displayName)
+      authCtx.setName(userProfile[0].displayName)
+      authCtx.setPhotoUrl(userProfile[0].photoUrl)
+      // console.log('user in Login', user[0][1])
       // setTimer( user[0][1].expiresIn)
       authCtx.setRToken(user[0][1].refreshToken)
       AsyncStorage.setItem("refreshToken", user[0][1].refreshToken);

@@ -40,7 +40,7 @@ export default function ResultsContextProvider({ children }) {
       type: "ADD",
       payload: resultData,
     });
-    console.log("data in context", resultData);
+    // console.log("data in context", resultData);
   }
 
   function setResults(results) {
