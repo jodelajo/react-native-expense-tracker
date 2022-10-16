@@ -18,7 +18,7 @@ export default function AuthContextProvider({ children }) {
   const [rToken, setRToken] = useState();
   const [user, setUser] = useState();
   const [name, setName] = useState()
-  const [photoUrl, setPhotoUrl] = useState("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQx9tjaExsY-srL4VsHNE_OKGVCJ-eIFNBktw&usqp=CAU")
+  const [photoUrl, setPhotoUrl] = useState()
 
   function authenticate(token) {
     AsyncStorage.setItem("token", token);

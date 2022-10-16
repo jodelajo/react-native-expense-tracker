@@ -92,7 +92,6 @@ export default function DrawerNavigator({ navigation }) {
           drawerLabelStyle: { color: "white", fontWeight: "bold" },
           drawerActiveBackgroundColor: GlobalStyles.colors.minor,
           drawerInactiveBackgroundColor: GlobalStyles.colors.primary700,
-          // drawerStyle: {display: 'none'}
         }}
       />
        <Drawer.Screen

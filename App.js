@@ -15,6 +15,8 @@ import { useMediaQuery } from "react-responsive";
 import envs from "./config/env";
 import axios from "axios";
 import DrawerNavigator from "./components/navigation/DrawerNavigator";
+import {getApps, initializeApp} from "firebase/app"
+import { firebaseConfig } from "./config/firebase";
 
 const Stack = createNativeStackNavigator();
 const { API_KEY } = envs;
@@ -90,8 +92,8 @@ function Root() {
       url,
       "grant_type=refresh_token&refresh_token=" + refreshedToken
     );
-    console.log("response in refreshtoken in app.js", response.data);
-    console.log("refresh token in async storage", refreshedToken);
+    // console.log("response in refreshtoken in app.js", response.data);
+    // console.log("refresh token in async storage", refreshedToken);
   }
 
   setInterval(() => {
@@ -139,6 +141,11 @@ function Root() {
 }
 
 export default function App() {
+  if (!getApps().length) {
+    initializeApp(firebaseConfig);
+  }
+  
+
   return (
     <>
       <StatusBar style="light" />

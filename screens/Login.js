@@ -26,7 +26,7 @@ export default function Login() {
       authCtx.authenticate(token);
       const user = await FetchUser(email, token);
       const userProfile = await getUser(token)
-      console.log('userprofile', userProfile[0].displayName)
+      console.log('userprofile', userProfile[0])
       authCtx.setName(userProfile[0].displayName)
       authCtx.setPhotoUrl(userProfile[0].photoUrl)
       // console.log('user in Login', user[0][1])
