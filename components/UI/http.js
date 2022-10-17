@@ -1,15 +1,10 @@
 import axios from "axios";
-// import { REACT_APP_BACKEND_URL } from "@env";
-import envs from '../../config/env'
+import envs from "../../config/env";
 
-
-// console.log('envs', envs)
-// console.log('__DEV__', __DEV__)
-const { BACKEND_URL } = envs
-// console.log('BACKEND', BACKEND_URL)
+const { BACKEND_URL } = envs;
 const url = BACKEND_URL;
-// console.log('url', url)
 const { API_KEY } = envs;
+
 export async function storeResult(resultData, userId, token) {
   const response = await axios.post(
     url + `/userId/${userId}/results.json?auth=` + token,
@@ -20,8 +15,9 @@ export async function storeResult(resultData, userId, token) {
 }
 
 export async function fetchResults(userId, token) {
-  // console.log("userid in http", userId);
-  const response = await axios.get(url + `/userId/${userId}/results.json?auth=` + token);
+  const response = await axios.get(
+    url + `/userId/${userId}/results.json?auth=` + token
+  );
   const results = [];
 
   for (const key in response.data) {
@@ -39,34 +35,35 @@ export async function fetchResults(userId, token) {
   return results;
 }
 
-export function updateResult(id, resultData, userId, token ) {
-  return axios.put(url + `/userId/${userId}/results/${id}.json?auth=` + token, resultData);
+export function updateResult(id, resultData, userId, token) {
+  return axios.put(
+    url + `/userId/${userId}/results/${id}.json?auth=` + token,
+    resultData
+  );
 }
 
-export function deleteResult(id, userId, token ) {
-  return axios.delete(url + `/userId/${userId}/results/${id}.json?auth=` + token );
+export function deleteResult(id, userId, token) {
+  return axios.delete(
+    url + `/userId/${userId}/results/${id}.json?auth=` + token
+  );
 }
 
 export async function storeUserId(resultData, token) {
   console.log("result data", resultData);
-  const response = await axios.post(url + "/userId.json?auth=" + token, resultData);
+  const response = await axios.post(
+    url + "/userId.json?auth=" + token,
+    resultData
+  );
 
   const id = response.data.name;
   return id;
 }
 
 export async function getUser(token) {
-  const response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`,{idToken: token})
-  console.log('response getUser', response.data.users)
-  return response.data.users
-  }
- 
-// export async function addCloudStorage(){
-//   const response = await axios.post('https://firebasestorage.googleapis.com/v0/b/[APP_ID]/o/[FOLDER_NAME]%[FOLDER_NAME]%2F[FILENAME]?alt=media', {
-//     headers: { "Content-Type":"text/html" },
-//     mode: "cors",
-//     cache: "default"
-//   })
-// }
-
-
+  const response = await axios.post(
+    `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`,
+    { idToken: token }
+  );
+  console.log("response getUser", response.data.users);
+  return response.data.users;
+}

@@ -138,15 +138,12 @@ export default function UpdateProfileForm() {
       <View style={styles.container}>
         <View style={styles.formContainer}>
         <Input
-          // defaultValue="hoi"
           // style={styles.rowInput}
           label="Username"
           // invalid={!inputs.result.isValid}
           textInputConfig={{
-            //   keyboardType: "numbers-and-punctuation",
             onChangeText: (newName) => setUsername(newName),
-            // value: authCtx.displayName
-            placeholder: authCtx.displayName,
+            defaultValue: authCtx.displayName,
           }}
         />
 

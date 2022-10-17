@@ -1,7 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
 import envs from "../config/env";
-import {  getAnalytics } from 'firebase/analytics'
 
 const {
   API_KEY,
@@ -26,5 +25,4 @@ export const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
 export const storage = getStorage(app);
