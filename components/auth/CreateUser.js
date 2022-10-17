@@ -18,7 +18,7 @@ export async function Authenticate(mode, email, password) {
     await storeUserId(response.data, response.data.idToken);
   }
   if (mode === "signInWithPassword") {
-  //  await getUser(response.data.idToken)
+   await getUser(response.data.idToken)
   }
 
   const token = response.data.idToken;

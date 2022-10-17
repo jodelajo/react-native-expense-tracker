@@ -57,7 +57,7 @@ export async function storeUserId(resultData, token) {
 
 export async function getUser(token) {
   const response = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`,{idToken: token})
-  // console.log('response getUser', response.data.users)
+  console.log('response getUser', response.data.users)
   return response.data.users
   }
  
@@ -68,4 +68,5 @@ export async function getUser(token) {
 //     cache: "default"
 //   })
 // }
+
 

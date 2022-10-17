@@ -29,6 +29,7 @@ export default function Login() {
       console.log('userprofile', userProfile[0])
       authCtx.setName(userProfile[0].displayName)
       authCtx.setPhotoUrl(userProfile[0].photoUrl)
+      console.log('photourl in login', userProfile[0].photoUrl)
       // console.log('user in Login', user[0][1])
       // setTimer( user[0][1].expiresIn)
       authCtx.setRToken(user[0][1].refreshToken)

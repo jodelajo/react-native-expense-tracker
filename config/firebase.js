@@ -1,18 +1,30 @@
-import {REACT_APP_API_KEY_DEV, REACT_APP_BACKEND_DEV_URL, AUTH_DOMAIN_DEV, PROJECT_ID_DEV, STORAGE_BUCKET_DEV, MESSAGING_SENDER_ID_DEV, APP_ID_DEV, MEASUREMENT_ID_DEV} from '@env'
 import { initializeApp } from "firebase/app";
-import { getStorage} from 'firebase/storage'
+import { getStorage } from "firebase/storage";
+import envs from "../config/env";
+import {  getAnalytics } from 'firebase/analytics'
+
+const {
+  API_KEY,
+  AUTH_DOMAIN,
+  BACKEND_URL,
+  PROJECT_ID,
+  STORAGE_BUCKET,
+  MESSAGING_SENDER_ID,
+  APP_ID,
+  MEASUREMENT_ID
+} = envs;
 
 export const firebaseConfig = {
-  apiKey: REACT_APP_API_KEY_DEV,
-  authDomain: AUTH_DOMAIN_DEV,
-  databaseURL: REACT_APP_BACKEND_DEV_URL,
-  projectId: PROJECT_ID_DEV,
-  storageBucket: STORAGE_BUCKET_DEV,
-  messagingSenderId: MESSAGING_SENDER_ID_DEV,
-  appId: APP_ID_DEV,
-  measurementId: MEASUREMENT_ID_DEV
+  apiKey: API_KEY,
+  authDomain: AUTH_DOMAIN,
+  databaseURL: BACKEND_URL,
+  projectId: PROJECT_ID,
+  storageBucket: STORAGE_BUCKET,
+  messagingSenderId: MESSAGING_SENDER_ID,
+  appId: APP_ID,
+  measurementId: MEASUREMENT_ID,
 };
 
-
 const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
 export const storage = getStorage(app);

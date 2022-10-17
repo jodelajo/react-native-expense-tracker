@@ -34,9 +34,10 @@ export default function AuthContextProvider({ children }) {
     setResults(null);
     setUser(null);
     setName(null)
-    // setPhotoUrl()
+    setPhotoUrl(null)
     AsyncStorage.removeItem("token");
     AsyncStorage.removeItem("refreshToken");
+    AsyncStorage.removeItem("avatar");
   }
 
 
