@@ -117,8 +117,8 @@ export default function UpdateProfileForm() {
     try {
       const response = await axios.post(url, {
         idToken: authCtx.token,
-        displayName: username,
-        photoUrl: downloadURL,
+        displayName: username? username : authCtx.displayName,
+        photoUrl: downloadURL ? downloadURL : authCtx.avatar,
         returnSecureToken: true,
       });
       console.log(
