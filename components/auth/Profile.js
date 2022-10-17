@@ -23,7 +23,7 @@ export default function Profile() {
       />
       <Button
         title="Profiel wijzigen"
-        onPress={() => navigation.navigate(UpdateProfileForm)}
+        onPress={() => navigation.navigate('UpdateProfileForm')}
       />
     </View>
   );
