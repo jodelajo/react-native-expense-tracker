@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import RecentResults from "../../screens/RecentResults";
 import AllResults from "../../screens/AllResults";
 import { GlobalStyles } from "../../constants/styles";
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 
 const BottomTabs = createBottomTabNavigator();
