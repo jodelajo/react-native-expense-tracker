@@ -65,6 +65,7 @@ export default function UpdateProfileForm() {
 
   const uploadImage = async () => {
     console.log("localId", authCtx.userId);
+    const userId = authCtx.userId
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function () {
@@ -79,7 +80,7 @@ export default function UpdateProfileForm() {
       xhr.send(null);
     });
 
-    const fileRef = ref(storage, `${authCtx.userId}/avatar`);
+    const fileRef = userId && ref(storage, `${userId}/avatar`);
     try {
       setUploading(true);
       const result = await uploadBytes(fileRef, blob);
@@ -97,12 +98,14 @@ export default function UpdateProfileForm() {
   };
 
   const getUrl = async (fileRef) => {
+    console.log('fileRef', fileRef)
     try {
       setUploading(true);
-      const response = await getDownloadURL(fileRef).then((downloadURL) => {
+      await getDownloadURL(fileRef).then((downloadURL) => {
         authCtx.setPhotoUrl(downloadURL);
         AsyncStorage.setItem("photoUrl", downloadURL);
         updateHandler(downloadURL);
+        // console.log('response in getUrl', downloadURL)
       });
     } catch (error) {
       console.log("error", error);

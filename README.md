@@ -5,7 +5,7 @@
 
 ## Issues
 - fix update profile
-- fix icons!!!
+- ✅ fix icons!!! 
 - firebase rules setup
 - stay loggedin with refresh token
 - open login screen after reload/reopen app in stead of recent results
@@ -27,4 +27,6 @@
 - statistics
 - amount inputs
 
+## Dependencies issues
+- react-native-reanimated": "^2.5.0" <= important for happy 'web' and 'ios' versions
 
