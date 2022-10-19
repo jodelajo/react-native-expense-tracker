@@ -96,7 +96,7 @@ export default function DrawerNavigator({ navigation }) {
       />
        <Drawer.Screen
         name="UpdateProfileForm"
-        // navigation={navigation}
+        navigation={navigation}
         component={UpdateProfileForm}
         options={{
           drawerLabel: "Profiel wijzigen",

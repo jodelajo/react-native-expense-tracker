@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Button } from "react-native";
 import { AuthContext } from "../../store/auth-context";
 import { useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
-import UpdateProfileForm from "./UpdateProfileForm";
+// import UpdateProfileForm from "./UpdateProfileForm";
 import Avatar from "../UI/Avatar";
 
 export default function Profile() {
@@ -23,7 +23,7 @@ export default function Profile() {
       />
       <Button
         title="Profiel wijzigen"
-        onPress={() => navigation.navigate(UpdateProfileForm)}
+        onPress={() => navigation.navigate("UpdateProfileForm")}
       />
     </View>
   );
