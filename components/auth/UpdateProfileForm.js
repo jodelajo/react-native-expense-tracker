@@ -98,7 +98,7 @@ export default function UpdateProfileForm() {
   };
 
   const getUrl = async (fileRef) => {
-    console.log('fileRef', fileRef)
+    // console.log('fileRef', fileRef)
     try {
       setUploading(true);
       await getDownloadURL(fileRef).then((downloadURL) => {

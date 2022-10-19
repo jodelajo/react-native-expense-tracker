@@ -1,10 +1,12 @@
 ### REACT NATIVE APP
-![applicatie_example](assets/qrCode.png)
+![applicatie_example](assets/screenshot.png)
+## Continuous deployment
 
-![applicatie_example](assets/screenshotApp.png)
+App lives [here](https://sashas-results-tracker.netlify.app/).
+
 
 ## Issues
-- fix update profile
+- ✅ fix update profile
 - ✅ fix icons!!! 
 - firebase rules setup
 - stay loggedin with refresh token
