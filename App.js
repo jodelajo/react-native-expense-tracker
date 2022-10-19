@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import { StatusBar } from "expo-status-bar";
 import React, { useContext, useEffect, useState, useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -146,9 +147,9 @@ function Root() {
 }
 
 export default function App() {
-  // if (!getApps().length) {
-  //   initializeApp(firebaseConfig);
-  // }
+  if (!getApps().length) {
+    initializeApp(firebaseConfig);
+  }
   
 
   return (
