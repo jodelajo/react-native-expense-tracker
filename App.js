@@ -17,6 +17,7 @@ import axios from "axios";
 import DrawerNavigator from "./components/navigation/DrawerNavigator";
 import {getApps, initializeApp} from "firebase/app"
 import { firebaseConfig } from "./config/firebase";
+import { useResources } from "./util/useFonts";
 
 const Stack = createNativeStackNavigator();
 const { API_KEY } = envs;
@@ -82,6 +83,7 @@ function Root() {
   const [isTryingLogin, setIsTryingLogin] = useState(true);
   const authCtx = useContext(AuthContext);
   const isBigScreen = useMediaQuery({ minDeviceWidth: 450 });
+  const {isFontReady} = useResources()
   // console.log("big screen", isBigScreen);
 
   // async function refreshToken() {
@@ -114,12 +116,12 @@ function Root() {
   }, []);
 
   const onLayoutRootView = useCallback(async () => {
-    if (!isTryingLogin) {
+    if (!isTryingLogin && isFontReady) {
       await SplashScreen.hideAsync();
     }
-  }, [isTryingLogin]);
+  }, [isTryingLogin, isFontReady]);
 
-  if (isTryingLogin) {
+  if (isTryingLogin || !isFontReady) {
     return null;
   }
 
@@ -141,9 +143,9 @@ function Root() {
 }
 
 export default function App() {
-  if (!getApps().length) {
-    initializeApp(firebaseConfig);
-  }
+  // if (!getApps().length) {
+  //   initializeApp(firebaseConfig);
+  // }
   
 
   return (
