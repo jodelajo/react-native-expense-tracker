@@ -8,7 +8,6 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "build": ""
   },
   "dependencies": {
     "@expo/webpack-config": "^0.17.0",
