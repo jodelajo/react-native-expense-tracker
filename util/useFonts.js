@@ -1,7 +1,7 @@
 import * as Font from 'expo-font';
 import { useEffect, useState } from 'react';
 
-import Ionicons from '../assets/fonts/ionicons.ttf';
+import Ionicons from '../dist/assets/fonts/ionicons.ttf';
 // import Ionicons from "@expo/vector-icons/Ionicons"
 
 export const useResources = () => {

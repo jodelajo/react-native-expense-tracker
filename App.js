@@ -24,6 +24,9 @@ const { API_KEY } = envs;
 
 SplashScreen.preventAutoHideAsync();
 
+// const [isFontReady, setIsFontReady] = useState(false);
+
+
 function AuthStack() {
   return (
     <Stack.Navigator
