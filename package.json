@@ -37,7 +37,8 @@
     "react-responsive": "^9.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "webpack-cli": "^4.10.0"
   },
   "private": true
 }
