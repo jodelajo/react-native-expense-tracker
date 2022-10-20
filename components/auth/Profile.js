@@ -1,9 +1,11 @@
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { AuthContext } from "../../store/auth-context";
 import { useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 // import UpdateProfileForm from "./UpdateProfileForm";
 import Avatar from "../UI/Avatar";
+import Button from "../UI/Button";
+import { GlobalStyles } from "../../constants/styles";
 
 export default function Profile() {
   const navigation = useNavigation();
@@ -12,6 +14,7 @@ export default function Profile() {
   console.log("name in profile", name);
   return (
     <View style={styles.container}>
+       <View style={styles.formContainer}>
       <Text style={styles.text}>Hoi {name}</Text>
       <Avatar
         source={{
@@ -19,12 +22,13 @@ export default function Profile() {
             ? authCtx.avatar
             : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8vw6lSyyJyi4M87YNItzmpm9mMUni0dOJu1bJg-w5wRApCc60oOPwT4ZC2oFkQAl2qq8&usqp=CAU",
         }}
-        size={100}
+        size={200}
       />
       <Button
-        title="Profiel wijzigen"
         onPress={() => navigation.navigate("UpdateProfileForm")}
-      />
+        style={styles.buttonUpload}
+      >Profiel wijzigen</Button>
+      </View>
     </View>
   );
 }
@@ -33,7 +37,23 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
-    padding: 20,
+    // padding: 20,
+  },
+  formContainer: {
+    marginTop: 64,
+    marginHorizontal: 16,
+    minWidth: '94%',
+    paddingHorizontal: 8,
+    paddingVertical: 40,
+    borderRadius: 8,
+    backgroundColor: GlobalStyles.colors.primary500,
+    elevation: 2,
+    shadowColor: 'black',
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.35,
+    shadowRadius: 4,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   text: {
     color: "white",
@@ -41,4 +61,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
   },
+  buttonUpload: {
+    marginTop: 10,
+    backgroundColor: GlobalStyles.colors.major,
+    borderRadius: 8,
+    minWidth: '90%'
+  }
 });
