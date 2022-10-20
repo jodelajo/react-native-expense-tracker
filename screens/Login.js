@@ -14,31 +14,30 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const [timer, setTimer] = useState()
-  const resultsCtx = useContext(ResultsContext)
+  const [timer, setTimer] = useState();
+  const resultsCtx = useContext(ResultsContext);
   const authCtx = useContext(AuthContext);
 
   async function loginHandler({ email, password }) {
-    // console.log(email, password);
     setIsLoading(true);
     try {
       const token = await LoginUser(email, password);
       authCtx.authenticate(token);
       const user = await FetchUser(email, token);
-      const userProfile = await getUser(token)
-      console.log('userprofile', userProfile[0])
-      authCtx.setName(userProfile[0].displayName)
-      authCtx.setPhotoUrl(userProfile[0].photoUrl)
-      console.log('photourl in login', userProfile[0].photoUrl)
-      // console.log('user in Login', user[0][1])
-      // setTimer( user[0][1].expiresIn)
-      authCtx.setRToken(user[0][1].refreshToken)
+      const userProfile = await getUser(token);
+      
       AsyncStorage.setItem("refreshToken", user[0][1].refreshToken);
-      const userId = user[0]
-      authCtx.userHandler(userId[0]);
-      const results = await fetchResults(userId[0], token)
-      resultsCtx.setResults(results)
-      // console.log('results in login', results)
+      const userId = user[0];
+      authCtx.userHandler({
+        userId: userId[0],
+        displayName: userProfile[0].displayName,
+        photoUrl: userProfile[0].photoUrl,
+        refreshToken: user[0][1].refreshToken,
+        email: userProfile[0].email,
+      });
+      const results = await fetchResults(userId[0], token);
+      resultsCtx.setResults(results);
+      console.log("results in login", results);
     } catch (error) {
       // setError(error.toString())
       // setIsLoading(false)
@@ -46,7 +45,6 @@ export default function Login() {
     }
     setIsLoading(false);
   }
- 
 
   if (isLoading) {
     return <LoadingOverlay />;

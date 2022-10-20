@@ -12,13 +12,12 @@ export default function RecentResults() {
   const [error, setError] = useState();
   const resultsCtx = useContext(ResultsContext);
   const authCtx = useContext(AuthContext);
-  // console.log('refresh token in recent results', authCtx.refreshToken)
 
   useEffect(() => {
     async function getResults() {
       setIsLoading(true);
       try {
-        const results = await fetchResults(authCtx.userId, authCtx.token);
+        const results = await fetchResults(authCtx.currentUser.userId, authCtx.token);
         resultsCtx.setResults(results);
       } catch (error) {
         setError(
@@ -27,8 +26,11 @@ export default function RecentResults() {
       }
       setIsLoading(false);
     }
-    getResults();
-  }, [authCtx.userId]);
+    if (!!authCtx.currentUser){
+      getResults();
+    }
+  
+  }, [authCtx.currentUser, authCtx.token]);
 
   if (error && !isLoading) {
     return <ErrorOverlay message={error.toString()} />;

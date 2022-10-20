@@ -2,7 +2,6 @@ import React, { useLayoutEffect, useContext, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../constants/styles";
-import Button from "../components/UI/Button";
 import { ResultsContext } from "../store/results-context";
 import { AuthContext } from "../store/auth-context";
 import ResultForm from "../components/manageResult/ResultForm";
@@ -23,7 +22,6 @@ export default function ManageResult({ route, navigation }) {
     (result) => result.id === editedResultId
   );
 
-
   useLayoutEffect(() => {
     navigation.setOptions({
       title: isEditing ? "Wijzig cijfer" : "Voeg cijfer toe",
@@ -34,11 +32,14 @@ export default function ManageResult({ route, navigation }) {
     setIsLoading(true);
     try {
       resultsCtx.deleteResult(editedResultId);
-      await deleteResult(editedResultId, authCtx.userId, authCtx.token);
+      await deleteResult(
+        editedResultId,
+        authCtx.currentUser.userId,
+        authCtx.token
+      );
     } catch (error) {
       setError("Kon resultaat niet verwijderen - Probeer later nog een keer!");
     }
-
     navigation.goBack();
   }
 
@@ -51,11 +52,19 @@ export default function ManageResult({ route, navigation }) {
     try {
       if (isEditing) {
         resultsCtx.updateResult(editedResultId, resultData);
-        console.log("manage result", authCtx.token);
-        console.log('result data in manage result', resultData)
-        await updateResult(editedResultId, resultData, authCtx.userId, authCtx.token);
+        console.log("result data in manage result", resultData);
+        await updateResult(
+          editedResultId,
+          resultData,
+          authCtx.currentUser.userId,
+          authCtx.token
+        );
       } else {
-        const id = await storeResult(resultData, authCtx.userId, authCtx.token);
+        const id = await storeResult(
+          resultData,
+          authCtx.currentUser.userId,
+          authCtx.token
+        );
         resultsCtx.addResult({ ...resultData, id: id });
       }
       navigation.goBack();
@@ -101,7 +110,6 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: GlobalStyles.colors.primary700,
   },
-
   deleteContainer: {
     marginTop: 16,
     paddingTop: 8,

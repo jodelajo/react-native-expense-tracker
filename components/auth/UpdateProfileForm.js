@@ -27,16 +27,15 @@ export default function UpdateProfileForm() {
 
   const authCtx = useContext(AuthContext);
   const [username, setUsername] = useState("");
-  const [image, setImage] = useState(
-    authCtx.avatar
-      ? authCtx.avatar
-      : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8vw6lSyyJyi4M87YNItzmpm9mMUni0dOJu1bJg-w5wRApCc60oOPwT4ZC2oFkQAl2qq8&usqp=CAU"
-  );
+  const [image, setImage] = useState(authCtx.currentUser.photoUrl);
   const [uploading, setUploading] = useState(false);
+
+  console.log('auth user', authCtx?.currentUser)
+
 
   useEffect(() => {
     console.log("image", image);
-    console.log("avatar", authCtx.avatar);
+    console.log("avatar", authCtx.currentUser.photoUrl);
     // console.log('photoUrl', photoUrl)
     async () => {
       if (Platform.OS !== "web") {
@@ -64,8 +63,8 @@ export default function UpdateProfileForm() {
   };
 
   const uploadImage = async () => {
-    console.log("localId", authCtx.userId);
-    const userId = authCtx.userId
+    console.log("localId", authCtx.currentUser.userId);
+    const userId = authCtx.currentUser.userId
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function () {
@@ -102,7 +101,7 @@ export default function UpdateProfileForm() {
     try {
       setUploading(true);
       await getDownloadURL(fileRef).then((downloadURL) => {
-        authCtx.setPhotoUrl(downloadURL);
+        authCtx.setUser({...authCtx.currentUser, photoUrl: downloadURL});
         AsyncStorage.setItem("photoUrl", downloadURL);
         updateHandler(downloadURL);
         // console.log('response in getUrl', downloadURL)
@@ -120,16 +119,17 @@ export default function UpdateProfileForm() {
     try {
       const response = await axios.post(url, {
         idToken: authCtx.token,
-        displayName: username? username : authCtx.displayName,
-        photoUrl: downloadURL ? downloadURL : authCtx.avatar,
+        displayName: username,
+        photoUrl: downloadURL,
         returnSecureToken: true,
       });
       console.log(
         "response in updatehandler in updwateprofileform",
         response.data
       );
-      authCtx.setName(response.data.displayName);
+      authCtx.setUser({...authCtx.currentUser, displayName: response.data.displayName, photoUrl: response.data.photoUrl});
       AsyncStorage.setItem("displayName", response.data.displayName);
+      AsyncStorage.setItem("photoUrl", response.data.photoUrl)
       // authCtx.setPhotoUrl(response.data.photoUrl)
     } catch (error) {
       console.log("error", error);
@@ -146,12 +146,12 @@ export default function UpdateProfileForm() {
           // invalid={!inputs.result.isValid}
           textInputConfig={{
             onChangeText: (newName) => setUsername(newName),
-            defaultValue: authCtx.displayName,
+            defaultValue: authCtx.currentUser.displayName,
           }}
         />
 
         <View style={styles.avatarContainer}>
-          {image && <Avatar source={{ uri: image }} size={200} />}
+          <Avatar source={{ uri: image }} size={200} />
         </View>
         <Button onPress={pickImage} style={styles.button}>
           Selecteer een foto uit je bibliotheek

@@ -3,7 +3,7 @@ import { storeUserId, getUser } from "../UI/http";
 import envs from '../../config/env'
 
 const {API_KEY} = envs
-
+ 
 export async function Authenticate(mode, email, password) {
   // const idToken = []
   const url = `https://identitytoolkit.googleapis.com/v1/accounts:${mode}?key=${API_KEY}`;
@@ -19,11 +19,11 @@ export async function Authenticate(mode, email, password) {
   }
   if (mode === "signInWithPassword") {
    await getUser(response.data.idToken)
+   console.log('response in login', response)
   }
 
   const token = response.data.idToken;
-  // idToken.push(response.data.idToken)
-  // console.log('token', token)
+  console.log('token', token)
   return token;
 }
 

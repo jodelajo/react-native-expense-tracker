@@ -10,7 +10,7 @@ import { GlobalStyles } from "../../constants/styles";
 export default function Profile() {
   const navigation = useNavigation();
   const authCtx = useContext(AuthContext);
-  const name = authCtx.displayName;
+  const name = authCtx.currentUser.displayName;
   console.log("name in profile", name);
   return (
     <View style={styles.container}>
@@ -18,8 +18,8 @@ export default function Profile() {
       <Text style={styles.text}>Hoi {name}</Text>
       <Avatar
         source={{
-          uri: authCtx.avatar
-            ? authCtx.avatar
+          uri: authCtx.currentUser.photoUrl
+            ? authCtx.currentUser.photoUrl
             : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8vw6lSyyJyi4M87YNItzmpm9mMUni0dOJu1bJg-w5wRApCc60oOPwT4ZC2oFkQAl2qq8&usqp=CAU",
         }}
         size={200}

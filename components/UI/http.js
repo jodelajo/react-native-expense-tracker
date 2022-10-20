@@ -15,6 +15,9 @@ export async function storeResult(resultData, userId, token) {
 }
 
 export async function fetchResults(userId, token) {
+  console.log('userId in http', userId)
+  console.log('token', token)
+  // const userId = user.userId
   const response = await axios.get(
     url + `/userId/${userId}/results.json?auth=` + token
   );
