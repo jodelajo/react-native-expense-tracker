@@ -1,88 +1,120 @@
-import {useLayoutEffect, useContext} from "react"
-import {View, StyleSheet} from "react-native"
-import IconButton from "../components/UI/IconButton"
-import {GlobalStyles} from "../constants/styles"
-import Button from "../components/UI/Button"
-import {ResultsContext} from "../store/results-context"
+import React, { useLayoutEffect, useContext, useState } from "react";
+import { View, StyleSheet } from "react-native";
+import IconButton from "../components/UI/IconButton";
+import { GlobalStyles } from "../constants/styles";
+import { ResultsContext } from "../store/results-context";
+import { AuthContext } from "../store/auth-context";
+import ResultForm from "../components/manageResult/ResultForm";
+import { deleteResult, updateResult, storeResult } from "../components/UI/http";
+import LoadingOverlay from "../components/UI/LoadingOverlay";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 
-export default function ManageResult({route, navigation}) {
-    const resultsCtx = useContext(ResultsContext)
+export default function ManageResult({ route, navigation }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
+  const resultsCtx = useContext(ResultsContext);
+  const authCtx = useContext(AuthContext);
 
-    const editedResultId = route.params?.resultId
-    const isEditing = !!editedResultId
+  const editedResultId = route.params?.resultId;
+  const isEditing = !!editedResultId;
 
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            title: isEditing ? 'Wijzig cijfer' : 'Voeg cijfer toe'
-        })
-    }, [navigation, isEditing])
+  const selectedResult = resultsCtx.results.find(
+    (result) => result.id === editedResultId
+  );
 
-    function deleteResultHandler() {
-        resultsCtx.deleteResult(editedResultId)
-        navigation.goBack()
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: isEditing ? "Wijzig cijfer" : "Voeg cijfer toe",
+    });
+  }, [navigation, isEditing]);
+
+  async function deleteResultHandler() {
+    setIsLoading(true);
+    try {
+      resultsCtx.deleteResult(editedResultId);
+      await deleteResult(
+        editedResultId,
+        authCtx.currentUser.userId,
+        authCtx.token
+      );
+    } catch (error) {
+      setError("Kon resultaat niet verwijderen - Probeer later nog een keer!");
     }
-    function cancelHandler() {
-        navigation.goBack()
-    }
-    function confirmHandler() {
-        if (isEditing) {
-            resultsCtx.updateResult(
-                editedResultId,
-                {
-                    course: 'test!!',
-                    major: true,
-                    result: 9.9,
-                    date: new Date('2022-09-11')
-                })
-        } else {
-            resultsCtx.addResult({
-                course: 'test',
-                major: true,
-                result: 9.9,
-                date: new Date('2022-09-11')
-            })
-        }
-        navigation.goBack()
-    }
+    navigation.goBack();
+  }
 
-    return <View style={styles.container}>
-        <View style={styles.buttons}>
-            <Button mode='flat' onPress={cancelHandler} style={styles.button}>Cancel</Button>
-            <Button onPress={confirmHandler} style={styles.button}>{isEditing ? 'Update' : 'Add'}</Button>
+  function cancelHandler() {
+    navigation.goBack();
+  }
+  async function confirmHandler(resultData) {
+    setIsLoading(true);
+
+    try {
+      if (isEditing) {
+        resultsCtx.updateResult(editedResultId, resultData);
+        console.log("result data in manage result", resultData);
+        await updateResult(
+          editedResultId,
+          resultData,
+          authCtx.currentUser.userId,
+          authCtx.token
+        );
+      } else {
+        const id = await storeResult(
+          resultData,
+          authCtx.currentUser.userId,
+          authCtx.token
+        );
+        resultsCtx.addResult({ ...resultData, id: id });
+      }
+      navigation.goBack();
+    } catch (error) {
+      setIsLoading(false);
+      setError("Kon resultaat niet opslaan - probeer later nog een keer!");
+    }
+  }
+
+  if (error && !isLoading) {
+    return <ErrorOverlay message={error.toString()} />;
+  }
+
+  if (isLoading) {
+    return <LoadingOverlay />;
+  }
+
+  return (
+    <View style={styles.container}>
+      <ResultForm
+        onCancel={cancelHandler}
+        onSubmit={confirmHandler}
+        submitButtonLabel={isEditing ? "Wijzig" : "Voeg toe"}
+        defaultValues={selectedResult}
+      />
+      {isEditing && (
+        <View style={styles.deleteContainer}>
+          <IconButton
+            icon="trash"
+            color={GlobalStyles.colors.error500}
+            size={36}
+            onPress={deleteResultHandler}
+          />
         </View>
-        {isEditing && (
-            <View style={styles.deleteContainer}>
-                <IconButton
-                    icon='trash'
-                    color={GlobalStyles.colors.error500}
-                    size={36}
-                    onPress={deleteResultHandler} />
-            </View>
-        )
-        }
+      )}
     </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 24,
-        backgroundColor: GlobalStyles.colors.primary700,
-    },
-    buttons: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    button: {
-        minWidth: 120,
-        marginHorizontal: 8,
-    },
-    deleteContainer: {
-        marginTop: 16,
-        paddingTop: 8,
-        borderTopWidth: 2,
-        borderTopColor: GlobalStyles.colors.primary200,
-        alignItems: 'center',
-    }
-})
+  container: {
+    flex: 1,
+    padding: 24,
+    backgroundColor: GlobalStyles.colors.primary700,
+  },
+  deleteContainer: {
+    marginTop: 16,
+    paddingTop: 8,
+    borderTopWidth: 2,
+    borderTopColor: GlobalStyles.colors.primary200,
+    alignItems: "center",
+  },
+});
