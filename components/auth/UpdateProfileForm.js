@@ -124,6 +124,7 @@ export default function UpdateProfileForm() {
       console.log("error", error);
       setUploading(false);
     }
+    setUploading(false)
   };
 
   async function updateHandler(downloadURL) {
