@@ -14,11 +14,11 @@ export default function SignUp() {
   const authCtx = useContext(AuthContext);
 
   async function signupHandler({ email, password }) {
-    console.log(email, password);
     try {
       setIsLoading(true);
       const token = await CreateUser(email, password);
       authCtx.authenticate(token);
+      console.log('token in signup', token)
       
       authCtx.logout();
     } catch (error) {

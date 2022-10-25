@@ -1,5 +1,6 @@
 ### REACT NATIVE APP
-![applicatie_example](assets/screenshot.png)
+<img src="assets/screenshot.png"  width="300px"/>
+
 ## Continuous deployment
 
 App lives [here](https://sashas-results-tracker.netlify.app/).

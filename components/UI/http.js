@@ -70,3 +70,13 @@ export async function getUser(token) {
   console.log("response getUser", response.data.users);
   return response.data.users;
 }
+
+// export async function tryCatch() {
+//   try {
+//     const data = await promise
+//     return [data, null]
+//   } catch (error) {
+//     console.error(error)
+//     return [null, error]
+//   }
+// }

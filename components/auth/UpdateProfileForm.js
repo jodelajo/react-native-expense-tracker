@@ -19,6 +19,8 @@ import { ref, uploadBytes, getDownloadURL, getStorage } from "firebase/storage";
 import { GlobalStyles } from "../../constants/styles";
 import Avatar from "../UI/Avatar";
 import Button from "../UI/Button";
+import LoadingOverlay from "../UI/LoadingOverlay";
+import ErrorOverlay from "../UI/ErrorOverlay";
 
 const { API_KEY } = envs;
 
@@ -30,6 +32,7 @@ export default function UpdateProfileForm() {
   const [username, setUsername] = useState(authCtx.currentUser.displayName);
   const [image, setImage] = useState(authCtx.currentUser.photoUrl);
   const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState()
 
   // console.log('auth user', authCtx?.currentUser)
 
@@ -75,7 +78,9 @@ export default function UpdateProfileForm() {
         };
         xhr.onerror = function (e) {
           console.log(e);
+          setError(e.toString());
           reject(new TypeError("Network request failed"));
+          
         };
         xhr.responseType = "blob";
         xhr.open("GET", image, true);
@@ -89,6 +94,7 @@ export default function UpdateProfileForm() {
         console.log("result", result);
       } catch (error) {
         console.log("error", error);
+        setError(error.toString());
         setUploading(false);
       }
       setUploading(false);
@@ -99,12 +105,12 @@ export default function UpdateProfileForm() {
       getUrl(fileRef);
     } else {
       console.log("geen blob");
-      updateHandler(authCtx.currentUser.photoUrl)
+      updateHandler(authCtx.currentUser.photoUrl);
     }
   };
 
   const getUrl = async (fileRef) => {
-    console.log('fileRef', fileRef)
+    console.log("fileRef", fileRef);
     try {
       setUploading(true);
       await getDownloadURL(fileRef).then((downloadURL) => {
@@ -114,11 +120,10 @@ export default function UpdateProfileForm() {
         // console.log('response in getUrl', downloadURL)
       });
     } catch (error) {
+      setError(error.toString());
       console.log("error", error);
       setUploading(false);
     }
-   
-    
   };
 
   async function updateHandler(downloadURL) {
@@ -144,40 +149,48 @@ export default function UpdateProfileForm() {
       // authCtx.setPhotoUrl(response.data.photoUrl)
     } catch (error) {
       console.log("error", error);
+      setError(error.toString());
+      setUploading(false);
     }
-    setUploading(false);
-    navigation.navigate("UserProfile");
+   
+    {error && !error && navigation.navigate("UserProfile");}
+  }
+
+  if (error && !uploading) {
+    console.log(error);
+    return <ErrorOverlay message={error} />;
   }
 
   return (
     <>
-      <View style={styles.container}>
-        <View style={styles.formContainer}>
-          <Input
-            // style={styles.rowInput}
-            label="Username"
-            // invalid={!inputs.result.isValid}
-            textInputConfig={{
-              onChangeText: (newName) => setUsername(newName),
-              defaultValue: authCtx.currentUser.displayName,
-            }}
-          />
+      {!uploading ? (
+        <View style={styles.container}>
+          <View style={styles.formContainer}>
+            <Input
+              // style={styles.rowInput}
+              label="Username"
+              // invalid={!inputs.result.isValid}
+              textInputConfig={{
+                onChangeText: (newName) => setUsername(newName),
+                defaultValue: authCtx.currentUser.displayName,
+              }}
+            />
 
-          <View style={styles.avatarContainer}>
-            <Avatar source={{ uri: image }} size={200} />
-          </View>
-          <Button onPress={pickImage} style={styles.button}>
-            Selecteer een foto uit je bibliotheek
-          </Button>
-          {!uploading ? (
+            <View style={styles.avatarContainer}>
+              <Avatar source={{ uri: image }} size={200} />
+            </View>
+            <Button onPress={pickImage} style={styles.button}>
+              Selecteer een foto uit je bibliotheek
+            </Button>
+
             <Button style={styles.buttonUpload} onPress={uploadImage}>
               Profiel bijwerken{" "}
             </Button>
-          ) : (
-            <ActivityIndicator size="large" color="black" />
-          )}
+          </View>
         </View>
-      </View>
+      ) : (
+        <LoadingOverlay />
+      )}
     </>
   );
 }

@@ -41,7 +41,7 @@ export default function Login() {
     } catch (error) {
       // setError(error.toString())
       // setIsLoading(false)
-      Alert.alert("blabla", "sdoij soidfjsod isdoi sdofij");
+      // Alert.alert("blabla", "sdoij soidfjsod isdoi sdofij");
     }
     setIsLoading(false);
   }
