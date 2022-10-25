@@ -19,11 +19,11 @@ export async function Authenticate(mode, email, password) {
   }
   if (mode === "signInWithPassword") {
    await getUser(response.data.idToken)
-   console.log('response in login', response)
+  //  console.log('response in login', response)
   }
 
   const token = response.data.idToken;
-  console.log('token', token)
+  // console.log('token', token)
   return token;
 }
 

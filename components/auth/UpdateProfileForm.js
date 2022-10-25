@@ -9,6 +9,7 @@ import {
   View,
   ActivityIndicator,
   StyleSheet,
+  Alert,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../../store/auth-context";
@@ -30,8 +31,7 @@ export default function UpdateProfileForm() {
   const [image, setImage] = useState(authCtx.currentUser.photoUrl);
   const [uploading, setUploading] = useState(false);
 
-  console.log('auth user', authCtx?.currentUser)
-
+  // console.log('auth user', authCtx?.currentUser)
 
   useEffect(() => {
     console.log("image", image);
@@ -55,7 +55,7 @@ export default function UpdateProfileForm() {
       aspect: [4, 3],
       quality: 1,
     });
-    console.log(result);
+    console.log("result in pickImage", result.uri);
 
     if (!result.cancelled) {
       setImage(result.uri);
@@ -64,36 +64,42 @@ export default function UpdateProfileForm() {
 
   const uploadImage = async () => {
     console.log("localId", authCtx.currentUser.userId);
-    const userId = authCtx.currentUser.userId
-    const blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function (e) {
-        console.log(e);
-        reject(new TypeError("Network request failed"));
-      };
-      xhr.responseType = "blob";
-      xhr.open("GET", image, true);
-      xhr.send(null);
-    });
+    const userId = authCtx.currentUser.userId;
+    console.log("image", image);
+    if (image !== authCtx.currentUser.photoUrl) {
+      const blob = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        console.log("xhr", xhr);
+        xhr.onload = function () {
+          resolve(xhr.response);
+        };
+        xhr.onerror = function (e) {
+          console.log(e);
+          reject(new TypeError("Network request failed"));
+        };
+        xhr.responseType = "blob";
+        xhr.open("GET", image, true);
+        xhr.send(null);
+      });
+      const fileRef = userId && ref(storage, `${userId}/avatar`);
 
-    const fileRef = userId && ref(storage, `${userId}/avatar`);
-    try {
-      setUploading(true);
-      const result = await uploadBytes(fileRef, blob);
-      console.log("result", result);
-    } catch (error) {
-      console.log("error", error);
+      try {
+        setUploading(true);
+        const result = await uploadBytes(fileRef, blob);
+        console.log("result", result);
+      } catch (error) {
+        console.log("error", error);
+        setUploading(false);
+      }
       setUploading(false);
-    }
-    setUploading(false);
-    if (Platform.OS !== "web") {
-      blob.close();
-    }
+      if (Platform.OS !== "web") {
+        blob.close();
+      }
 
-    getUrl(fileRef);
+      getUrl(fileRef);
+    } else {
+      console.log("geen blob");
+    }
   };
 
   const getUrl = async (fileRef) => {
@@ -101,7 +107,7 @@ export default function UpdateProfileForm() {
     try {
       setUploading(true);
       await getDownloadURL(fileRef).then((downloadURL) => {
-        authCtx.setUser({...authCtx.currentUser, photoUrl: downloadURL});
+        authCtx.setUser({ ...authCtx.currentUser, photoUrl: downloadURL });
         AsyncStorage.setItem("photoUrl", downloadURL);
         updateHandler(downloadURL);
         // console.log('response in getUrl', downloadURL)
@@ -127,9 +133,13 @@ export default function UpdateProfileForm() {
         "response in updatehandler in updwateprofileform",
         response.data
       );
-      authCtx.setUser({...authCtx.currentUser, displayName: response.data.displayName, photoUrl: response.data.photoUrl});
+      authCtx.setUser({
+        ...authCtx.currentUser,
+        displayName: response.data.displayName,
+        photoUrl: response.data.photoUrl,
+      });
       AsyncStorage.setItem("displayName", response.data.displayName);
-      AsyncStorage.setItem("photoUrl", response.data.photoUrl)
+      AsyncStorage.setItem("photoUrl", response.data.photoUrl);
       // authCtx.setPhotoUrl(response.data.photoUrl)
     } catch (error) {
       console.log("error", error);
@@ -140,29 +150,30 @@ export default function UpdateProfileForm() {
     <>
       <View style={styles.container}>
         <View style={styles.formContainer}>
-        <Input
-          // style={styles.rowInput}
-          label="Username"
-          // invalid={!inputs.result.isValid}
-          textInputConfig={{
-            onChangeText: (newName) => setUsername(newName),
-            defaultValue: authCtx.currentUser.displayName,
-          }}
-        />
+          <Input
+            // style={styles.rowInput}
+            label="Username"
+            // invalid={!inputs.result.isValid}
+            textInputConfig={{
+              onChangeText: (newName) => setUsername(newName),
+              defaultValue: authCtx.currentUser.displayName,
+            }}
+          />
 
-        <View style={styles.avatarContainer}>
-          <Avatar source={{ uri: image }} size={200} />
+          <View style={styles.avatarContainer}>
+            <Avatar source={{ uri: image }} size={200} />
+          </View>
+          <Button onPress={pickImage} style={styles.button}>
+            Selecteer een foto uit je bibliotheek
+          </Button>
+          {!uploading ? (
+            <Button style={styles.buttonUpload} onPress={uploadImage}>
+              Profiel bijwerken{" "}
+            </Button>
+          ) : (
+            <ActivityIndicator size="large" color="black" />
+          )}
         </View>
-        <Button onPress={pickImage} style={styles.button}>
-          Selecteer een foto uit je bibliotheek
-        </Button>
-        {!uploading ? (
-          <Button style={styles.buttonUpload} onPress={uploadImage}>Profiel bijwerken </Button>
-        ) : (
-          <ActivityIndicator size="large" color="black" />
-        )}
-        </View>
-       
       </View>
     </>
   );
@@ -182,7 +193,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: GlobalStyles.colors.primary500,
     elevation: 2,
-    shadowColor: 'black',
+    shadowColor: "black",
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.35,
     shadowRadius: 4,
@@ -201,7 +212,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     backgroundColor: GlobalStyles.colors.major,
     borderRadius: 8,
-  }
+  },
   // avatar: {
   //   borderRadius: 100,
   //   borderWidth: 2,

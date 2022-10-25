@@ -4,7 +4,7 @@ import { useContext } from "react";
 
 export default function Avatar({source, size}) {
     // const authCtx = useContext(AuthContext)
-    console.log(source)
+    // console.log(source)
     const sizeStyle = {
         width: size,
         height: size
