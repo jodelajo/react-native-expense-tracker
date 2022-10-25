@@ -20,7 +20,6 @@ import { GlobalStyles } from "../../constants/styles";
 import Avatar from "../UI/Avatar";
 import Button from "../UI/Button";
 import LoadingOverlay from "../UI/LoadingOverlay";
-import ErrorOverlay from "../UI/ErrorOverlay";
 
 const { API_KEY } = envs;
 
@@ -29,10 +28,9 @@ export default function UpdateProfileForm() {
   const storage = getStorage();
 
   const authCtx = useContext(AuthContext);
-  const [username, setUsername] = useState(authCtx.currentUser.displayName);
-  const [image, setImage] = useState(authCtx.currentUser.photoUrl);
+  const [username, setUsername] = useState(authCtx.currentUser?.displayName || '');
+  const [image, setImage] = useState(authCtx.currentUser?.photoUrl || '');
   const [uploading, setUploading] = useState(false);
-  const [error, setError] = useState()
 
   // console.log('auth user', authCtx?.currentUser)
 
@@ -78,9 +76,7 @@ export default function UpdateProfileForm() {
         };
         xhr.onerror = function (e) {
           console.log(e);
-          setError(e.toString());
           reject(new TypeError("Network request failed"));
-          
         };
         xhr.responseType = "blob";
         xhr.open("GET", image, true);
@@ -94,7 +90,6 @@ export default function UpdateProfileForm() {
         console.log("result", result);
       } catch (error) {
         console.log("error", error);
-        setError(error.toString());
         setUploading(false);
       }
       setUploading(false);
@@ -105,12 +100,12 @@ export default function UpdateProfileForm() {
       getUrl(fileRef);
     } else {
       console.log("geen blob");
-      updateHandler(authCtx.currentUser.photoUrl);
+      updateHandler(authCtx.currentUser.photoUrl)
     }
   };
 
   const getUrl = async (fileRef) => {
-    console.log("fileRef", fileRef);
+    console.log('fileRef', fileRef)
     try {
       setUploading(true);
       await getDownloadURL(fileRef).then((downloadURL) => {
@@ -120,11 +115,11 @@ export default function UpdateProfileForm() {
         // console.log('response in getUrl', downloadURL)
       });
     } catch (error) {
-      setError(error.toString());
       console.log("error", error);
       setUploading(false);
     }
-    setUploading(false)
+    // setUploading(false);
+    
   };
 
   async function updateHandler(downloadURL) {
@@ -150,16 +145,9 @@ export default function UpdateProfileForm() {
       // authCtx.setPhotoUrl(response.data.photoUrl)
     } catch (error) {
       console.log("error", error);
-      setError(error.toString());
-      setUploading(false);
     }
-   
-    {error && !error && navigation.navigate("UserProfile");}
-  }
-
-  if (error && !uploading) {
-    console.log(error);
-    return <ErrorOverlay message={error} />;
+    setUploading(false);
+    navigation.navigate("UserProfile");
   }
 
   return (
