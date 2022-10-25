@@ -27,7 +27,7 @@ export default function UpdateProfileForm() {
   const storage = getStorage();
 
   const authCtx = useContext(AuthContext);
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(authCtx.currentUser.displayName);
   const [image, setImage] = useState(authCtx.currentUser.photoUrl);
   const [uploading, setUploading] = useState(false);
 
@@ -99,11 +99,12 @@ export default function UpdateProfileForm() {
       getUrl(fileRef);
     } else {
       console.log("geen blob");
+      updateHandler(authCtx.currentUser.photoUrl)
     }
   };
 
   const getUrl = async (fileRef) => {
-    // console.log('fileRef', fileRef)
+    console.log('fileRef', fileRef)
     try {
       setUploading(true);
       await getDownloadURL(fileRef).then((downloadURL) => {
@@ -116,8 +117,8 @@ export default function UpdateProfileForm() {
       console.log("error", error);
       setUploading(false);
     }
-    setUploading(false);
-    navigation.navigate("UserProfile");
+   
+    
   };
 
   async function updateHandler(downloadURL) {
@@ -144,6 +145,8 @@ export default function UpdateProfileForm() {
     } catch (error) {
       console.log("error", error);
     }
+    setUploading(false);
+    navigation.navigate("UserProfile");
   }
 
   return (
