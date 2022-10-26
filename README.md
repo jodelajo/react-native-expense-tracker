@@ -14,7 +14,7 @@ App lives [here](https://sashas-results-tracker.netlify.app/).
 - open login screen after reload/reopen app in stead of recent results
 
 ## To-do list
-- try catch, alert error everywhere
+- ✅ try catch, alert error everywhere
 - ✅ refactor getUser and local storage
 - maximize pic upload size
 - maximize device with css

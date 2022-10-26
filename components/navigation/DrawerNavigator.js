@@ -4,7 +4,7 @@ import {
   DrawerItemList,
   DrawerItem,
 } from "@react-navigation/drawer";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../store/auth-context";
 import { ResultsContext } from "../../store/results-context";
 import { View, StyleSheet } from "react-native";
@@ -18,50 +18,58 @@ import UpdateProfileForm from "../auth/UpdateProfileForm";
 
 const Drawer = createDrawerNavigator();
 
-function AppDrawerContent(props) {
-  // console.log("props", props);
-  const authCtx = useContext(AuthContext);
-  const resultsCtx = useContext(ResultsContext);
-
-  return (
-    <DrawerContentScrollView {...props} contentContainerStyle={{ flex: 1 }}>
-      <View style={styles.logoutButton}>
-        <DrawerItem
-          label="Log out"
-          onPress={() => authCtx.logout(resultsCtx.setResults)}
-          labelStyle={{
-            color: "white",
-            fontSize: 18,
-            fontWeight: "bold",
-            textAlign: "center",
-          }}
-        />
-      </View>
-      {/* <View>
-            <DrawerItem 
-            label="Overzicht resultaten"
-            onPress={()=>}
-            />
-        </View> */}
-      <DrawerItemList {...props} style={{ borderWidth: 1 }} />
-    </DrawerContentScrollView>
-  );
-}
-
 export default function DrawerNavigator({ navigation }) {
+  const [resultStack, setResultStack] = useState()
+  function AppDrawerContent(props) {
+    console.log("props", props.state.index);
+
+    useEffect(()=> {
+      setResultStack(props.state.index === 0)
+    },[])
+   
+   // resultStack = props.state.index === 1
+    const authCtx = useContext(AuthContext);
+    const resultsCtx = useContext(ResultsContext);
+  
+    return (
+      <DrawerContentScrollView {...props} contentContainerStyle={{ flex: 1 }}>
+        <View style={styles.logoutButton}>
+          <DrawerItem
+            label="Uitloggen"
+            onPress={() => authCtx.logout(resultsCtx.setResults)}
+            labelStyle={{
+              color: "white",
+              fontSize: 18,
+              fontWeight: "bold",
+              textAlign: "center",
+            }}
+          />
+        </View>
+        {/* <View>
+              <DrawerItem 
+              label="Overzicht resultaten"
+              onPress={()=>}
+              />
+          </View> */}
+        <DrawerItemList {...props} style={{ borderWidth: 1 }} />
+      </DrawerContentScrollView>
+    );
+  }
+
   return (
     <Drawer.Navigator
       drawerContent={(props) => <AppDrawerContent {...props} />}
       screenOptions={{
         headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
         headerTintColor: "white",
+        title: "Jouw profiel",
         drawerStyle: {
           backgroundColor: GlobalStyles.colors.primary500,
           color: "white",
         },
         drawerType: "slide",
         headerRight: ({ tintColor }) => (
-          <IconButton
+          resultStack && <IconButton
             icon="add"
             size={24}
             color={tintColor}
