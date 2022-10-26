@@ -32,7 +32,7 @@ export default function UpdateProfileForm() {
   const [image, setImage] = useState(authCtx.currentUser?.photoUrl || '');
   const [uploading, setUploading] = useState(false);
 
-  // console.log('auth user', authCtx?.currentUser)
+  console.log('auth user', authCtx?.currentUser)
 
   useEffect(() => {
     console.log("image", image);

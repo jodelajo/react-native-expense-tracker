@@ -1,6 +1,7 @@
 import axios from "axios";
 import envs from "../../config/env";
-
+// import { AuthContext } from "../../store/auth-context";
+// import { useContext } from "react";
 const { BACKEND_URL } = envs;
 const url = BACKEND_URL;
 const { API_KEY } = envs;

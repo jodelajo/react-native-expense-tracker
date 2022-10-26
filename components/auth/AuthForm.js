@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { GlobalStyles } from '../../constants/styles';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../UI/Button';
 import Input from './Input';
 
@@ -53,6 +53,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
           value={enteredEmail}
           keyboardType="email-address"
           isInvalid={emailIsInvalid}
+          // defaultValue={AsyncStorage.getItem('email') ? AsyncStorage.getItem('email') : ''}
         />
         {!isLogin && (
           <Input
