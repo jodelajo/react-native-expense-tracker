@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     // padding: 20,
   },
   formContainer: {
-    marginTop: 64,
+    marginTop: 40,
     marginHorizontal: 16,
     minWidth: '94%',
     paddingHorizontal: 8,

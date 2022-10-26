@@ -178,5 +178,6 @@ const styles = StyleSheet.create({
     maxWidth: 428,
     maxHeight: 928,
     flex: 1,
+    overflow: 'hidden'
   },
 });

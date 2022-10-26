@@ -59,7 +59,7 @@ export default function ResultForm({
     const month = today.getMonth() + 1;
     const monthOutput = month < 10 ? "0" + month : month;
     const year = today.getFullYear();
-    return year + "-" + monthOutput + "-";
+    return year + "-" + monthOutput + "-" + "01";
   }
 
   function amountHandler() {
@@ -151,9 +151,10 @@ export default function ResultForm({
       result: inputs.result.value,
       amount: inputs.amount.value,
     };
+    console.log('date', resultData.date.toString())
 
     const courseIsValid = resultData.course.length > 0;
-    const dateIsValid = resultData.date.toString() !== "Invalid Date";
+    const dateIsValid = (resultData.date.toString() !== "Invalid Date");
     const confirmedIsValid = typeof resultData.confirmed == "boolean";
     const typeIsValid =
       resultData.type === "PW" ||
@@ -275,7 +276,7 @@ export default function ResultForm({
           }}
         />
       </View>
-      {formIsInvalid && <Text style={styles.errorText}>bla bla</Text>}
+      {formIsInvalid && <Text style={styles.errorText}>Je hebt niet alles correct ingevuld. Check je input.</Text>}
       <View style={styles.buttons}>
         <Button mode="flat" onPress={onCancel} style={styles.button}>
           Annuleren
@@ -329,7 +330,9 @@ const styles = StyleSheet.create({
   },
   errorText: {
     textAlign: "center",
-    color: GlobalStyles.colors.error500,
+    color: GlobalStyles.colors.oral,
+    fontSize: 14,
+    fontWeight: 'bold',
     margin: 8,
   },
   buttons: {
