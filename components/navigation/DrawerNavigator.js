@@ -153,14 +153,11 @@ export default function DrawerNavigator({ navigation }) {
 
 const styles = StyleSheet.create({
   logoutButton: {
-    // height: 50,
     backgroundColor: GlobalStyles.colors.major,
     marginVertical: 6,
     marginHorizontal: 40,
     borderRadius: 36,
     justifyContent: "center",
-    // alignItems: 'center'
-    // textAlign: 'center'
   },
   buttonText: {
     color: "white",
