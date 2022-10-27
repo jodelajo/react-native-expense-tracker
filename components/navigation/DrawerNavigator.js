@@ -4,10 +4,11 @@ import {
   DrawerItemList,
   DrawerItem,
 } from "@react-navigation/drawer";
+import { DrawerActions } from "@react-navigation/native";
 import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../../store/auth-context";
 import { ResultsContext } from "../../store/results-context";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Pressable } from "react-native";
 import IconButton from "../UI/IconButton";
 import { GlobalStyles } from "../../constants/styles";
 import BottomTabsNavigator from "./BottomTabsNavigator";
@@ -15,21 +16,25 @@ import UserProfile from "../../screens/UserProfile";
 import Courses from "../../screens/Courses";
 import Statistics from "../../screens/Statistics";
 import UpdateProfileForm from "../auth/UpdateProfileForm";
+import Avatar from "../UI/Avatar";
 
 const Drawer = createDrawerNavigator();
 
 export default function DrawerNavigator({ navigation }) {
-  const [resultStack, setResultStack] = useState()
+  const [resultStack, setResultStack] = useState();
+  const [photoUrl, setPhotoUrl] = useState()
   function AppDrawerContent(props) {
     console.log("props", props);
-
-    useEffect(()=> {
-      setResultStack(props.state.index === 0)
-    },[])
-   
     const authCtx = useContext(AuthContext);
     const resultsCtx = useContext(ResultsContext);
-  
+
+    useEffect(() => {
+      setResultStack(props.state.index === 0);
+      setPhotoUrl(authCtx.currentUser?.photoUrl)
+    }, [authCtx]);
+
+    
+
     return (
       <DrawerContentScrollView {...props} contentContainerStyle={{ flex: 1 }}>
         <View style={styles.logoutButton}>
@@ -61,16 +66,31 @@ export default function DrawerNavigator({ navigation }) {
           color: "white",
         },
         drawerType: "slide",
-        headerRight: ({ tintColor }) => (
-          resultStack && <IconButton
-            icon="add"
-            size={24}
-            color={tintColor}
-            onPress={() => {
-              navigation.navigate("ManageResult");
-            }}
-          />
+        headerLeft: () => (
+          <Pressable style={styles.avatarContainer} onPress={()=> navigation.dispatch(DrawerActions.toggleDrawer())}>
+           
+              <Avatar
+                size={32}
+                source={{
+                  uri: photoUrl
+                    ? photoUrl
+                    : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8vw6lSyyJyi4M87YNItzmpm9mMUni0dOJu1bJg-w5wRApCc60oOPwT4ZC2oFkQAl2qq8&usqp=CAU",
+                }}
+              />
+          
+          </Pressable>
         ),
+        headerRight: ({ tintColor }) =>
+          resultStack && (
+            <IconButton
+              icon="add"
+              size={24}
+              color={tintColor}
+              onPress={() => {
+                navigation.navigate("ManageResult");
+              }}
+            />
+          ),
       }}
     >
       <Drawer.Screen
@@ -95,7 +115,7 @@ export default function DrawerNavigator({ navigation }) {
           drawerInactiveBackgroundColor: GlobalStyles.colors.primary700,
         }}
       />
-       <Drawer.Screen
+      <Drawer.Screen
         name="UpdateProfileForm"
         navigation={navigation}
         component={UpdateProfileForm}
@@ -104,7 +124,7 @@ export default function DrawerNavigator({ navigation }) {
           drawerLabelStyle: { color: "white", fontWeight: "bold" },
           drawerActiveBackgroundColor: GlobalStyles.colors.minor,
           drawerInactiveBackgroundColor: GlobalStyles.colors.primary700,
-          drawerItemStyle: {display: 'none'}
+          drawerItemStyle: { display: "none" },
         }}
       />
       <Drawer.Screen
@@ -145,4 +165,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
   },
+  avatarContainer: {
+    paddingLeft: 16,
+    paddingTop: 16,
+  }
 });
