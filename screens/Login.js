@@ -1,9 +1,8 @@
 import React, { useState, useContext } from "react";
 import AuthContent from "../components/auth/AuthContent";
-import { Alert, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { GlobalStyles } from "../constants/styles";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
-import ErrorOverlay from "../components/UI/ErrorOverlay";
 import { LoginUser } from "../components/auth/CreateUser";
 import { AuthContext } from "../store/auth-context";
 import FetchUser from "../components/auth/FetchUser";
@@ -39,9 +38,8 @@ export default function Login() {
       resultsCtx.setResults(results);
       console.log("results in login", results);
     } catch (error) {
-      // setError(error.toString())
-      // setIsLoading(false)
-      // Alert.alert("blabla", "sdoij soidfjsod isdoi sdofij");
+      setIsLoading(false);
+      setError(error.toString())
     }
     setIsLoading(false);
   }
@@ -49,10 +47,7 @@ export default function Login() {
   if (isLoading) {
     return <LoadingOverlay />;
   }
-  // if (error && !isLoading) {
-  //     console.log(error)
-  //     return <ErrorOverlay message={error} />
-  // }
+
   return (
     <View style={styles.container}>
       <AuthContent isLogin onAuthenticate={loginHandler} />

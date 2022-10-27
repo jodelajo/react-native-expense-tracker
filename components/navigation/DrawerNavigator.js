@@ -21,13 +21,12 @@ const Drawer = createDrawerNavigator();
 export default function DrawerNavigator({ navigation }) {
   const [resultStack, setResultStack] = useState()
   function AppDrawerContent(props) {
-    console.log("props", props.state.index);
+    console.log("props", props);
 
     useEffect(()=> {
       setResultStack(props.state.index === 0)
     },[])
    
-   // resultStack = props.state.index === 1
     const authCtx = useContext(AuthContext);
     const resultsCtx = useContext(ResultsContext);
   
@@ -45,12 +44,6 @@ export default function DrawerNavigator({ navigation }) {
             }}
           />
         </View>
-        {/* <View>
-              <DrawerItem 
-              label="Overzicht resultaten"
-              onPress={()=>}
-              />
-          </View> */}
         <DrawerItemList {...props} style={{ borderWidth: 1 }} />
       </DrawerContentScrollView>
     );

@@ -8,6 +8,7 @@ import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
 import { AuthContext } from "../store/auth-context";
 import { ResultsContext } from "../store/results-context";
+import { errorMessages } from "../constants/errorMessages";
 
 export default function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
@@ -35,6 +36,7 @@ export default function SignUp() {
       // Alert.alert('jajaja', 'sdiof soidfjoi sdfoijoi')
       console.log(error)
       setError(error.toString());
+    
     }
     setIsLoading(false);
   }
