@@ -1,5 +1,6 @@
 ### REACT NATIVE APP
-![applicatie_example](assets/screenshot.png)
+<img src="assets/screenshot.png"  width="300px"/>
+
 ## Continuous deployment
 
 App lives [here](https://sashas-results-tracker.netlify.app/).
@@ -13,7 +14,7 @@ App lives [here](https://sashas-results-tracker.netlify.app/).
 - open login screen after reload/reopen app in stead of recent results
 
 ## To-do list
-- try catch, alert error everywhere
+- ✅ try catch, alert error everywhere
 - ✅ refactor getUser and local storage
 - maximize pic upload size
 - maximize device with css

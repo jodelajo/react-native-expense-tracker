@@ -1,6 +1,7 @@
 import axios from "axios";
 import envs from "../../config/env";
-
+// import { AuthContext } from "../../store/auth-context";
+// import { useContext } from "react";
 const { BACKEND_URL } = envs;
 const url = BACKEND_URL;
 const { API_KEY } = envs;
@@ -70,3 +71,13 @@ export async function getUser(token) {
   console.log("response getUser", response.data.users);
   return response.data.users;
 }
+
+// export async function tryCatch() {
+//   try {
+//     const data = await promise
+//     return [data, null]
+//   } catch (error) {
+//     console.error(error)
+//     return [null, error]
+//   }
+// }

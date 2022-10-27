@@ -116,5 +116,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     borderTopColor: GlobalStyles.colors.primary200,
     alignItems: "center",
+    zIndex: -1,
   },
 });
