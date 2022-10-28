@@ -17,7 +17,7 @@ App lives [here](https://sashas-results-tracker.netlify.app/).
 - ✅ try catch, alert error everywhere
 - ✅ refactor getUser and local storage
 - maximize pic upload size
-- maximize device with css
+- ✅ maximize device with css
 - Button choose
 - cleanup
 - courses inputs
