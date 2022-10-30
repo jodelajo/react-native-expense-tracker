@@ -5,8 +5,7 @@ import { GlobalStyles } from "../constants/styles";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import { LoginUser } from "../components/auth/CreateUser";
 import { AuthContext } from "../store/auth-context";
-import FetchUser from "../components/auth/FetchUser";
-import { fetchResults, getUser } from "../components/UI/http";
+import { fetchResults, getUser, fetchUser } from "../components/UI/http";
 import { ResultsContext } from "../store/results-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -20,23 +19,26 @@ export default function Login() {
   async function loginHandler({ email, password }) {
     setIsLoading(true);
     try {
-      const token = await LoginUser(email, password);
-      authCtx.authenticate(token);
-      const user = await FetchUser(email, token);
-      const userProfile = await getUser(token);
+      const response = await LoginUser(email, password);
+      // console.log('response', response.idToken)
+      authCtx.authenticate(response.idToken);
+      const userProfile = await getUser(response.idToken);
+      const user = await fetchUser(response.localId, response.idToken);
       
-      AsyncStorage.setItem("refreshToken", user[0][1].refreshToken);
-      const userId = user[0];
+      // console.log('user profile', userProfile)
+      // console.log('user', user)
+      AsyncStorage.setItem("refreshToken", response.refreshToken);
+      // const userId = user[0];
       authCtx.userHandler({
-        userId: userId[0],
+        userId: userProfile[0].localId,
         displayName: userProfile[0].displayName,
         photoUrl: userProfile[0].photoUrl,
-        refreshToken: user[0][1].refreshToken,
+        refreshToken: userProfile[0].refreshToken,
         email: userProfile[0].email,
       });
-      const results = await fetchResults(userId[0], token);
+      const results = await fetchResults(response.localId, response.idToken);
       resultsCtx.setResults(results);
-      console.log("results in login", results);
+      // console.log("results in login", results);
     } catch (error) {
       setIsLoading(false);
       setError(error.toString())

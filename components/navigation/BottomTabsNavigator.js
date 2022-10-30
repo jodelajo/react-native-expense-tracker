@@ -17,25 +17,6 @@ export default function BottomTabsNavigator() {
           headerTintColor: "white",
           tabBarStyle: { backgroundColor: GlobalStyles.colors.primary500 },
           tabBarActiveTintColor: GlobalStyles.colors.accent500,
-           // headerLeft: ({ tintColor }) => (
-          //   <IconButton
-          //     icon="settings"
-          //     size={24}
-          //     color={tintColor}
-          //     // onPress={() => authCtx.logout(resultsCtx.setResults)}
-          //     // onPress={() => navigation.navigate("UserProfile")}
-          //   />
-          // ),
-          // headerRight: ({ tintColor }) => (
-          //   <IconButton
-          //     icon="add"
-          //     size={24}
-          //     color={tintColor}
-          //     onPress={() => {
-          //       navigation.navigate("ManageResult");
-          //     }}
-          //   />
-          // ),
         })}
       >
         <BottomTabs.Screen
@@ -54,6 +35,7 @@ export default function BottomTabsNavigator() {
           component={AllResults}
           options={{
             title: "Alle resultaten",
+            headerShown: false,
             tabBarLabel: "Totaal",
             tabBarIcon: ({ color, size }) => (
               <Ionicons name="calendar" size={size} color={color} />

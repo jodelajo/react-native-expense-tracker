@@ -28,7 +28,7 @@ export default function AuthContextProvider({ children }) {
   }
 
   function userHandler(user) {
-    console.log('user in auth', user)
+    // console.log('user in auth', user)
     setUser(user);
   }
 

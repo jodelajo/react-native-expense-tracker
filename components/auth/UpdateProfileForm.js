@@ -148,6 +148,8 @@ export default function UpdateProfileForm() {
     }
     setUploading(false);
     navigation.navigate("UserProfile");
+    // console.log('name', authCtx.displayName)
+    console.log('name', authCtx.currentUser.displayName)
   }
 
   return (

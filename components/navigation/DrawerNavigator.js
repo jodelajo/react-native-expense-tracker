@@ -24,7 +24,7 @@ export default function DrawerNavigator({ navigation }) {
   const [resultStack, setResultStack] = useState();
   const [photoUrl, setPhotoUrl] = useState()
   function AppDrawerContent(props) {
-    console.log("props", props);
+    // console.log("props", props);
     const authCtx = useContext(AuthContext);
     const resultsCtx = useContext(ResultsContext);
 
