@@ -4,12 +4,9 @@ import AllResults from "../../screens/AllResults";
 import { GlobalStyles } from "../../constants/styles";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-
-
 const BottomTabs = createBottomTabNavigator();
 
 export default function BottomTabsNavigator() {
-  
     return (
       <BottomTabs.Navigator
         screenOptions={({ navigation }) => ({

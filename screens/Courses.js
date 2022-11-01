@@ -6,6 +6,5 @@ export default function Courses() {
             Courses
         </Text>
     </View>
-
     )
 }

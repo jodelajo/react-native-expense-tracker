@@ -17,9 +17,8 @@ export default async function Authenticate(mode, email, password) {
     });
 
     if (mode === "signUp") {
-      await storeUserId(response.data, response.data.idToken);
+      await storeUserId(response.data);
     }
-   
     return response.data;
   } catch (error) {
     const message = Object.fromEntries(

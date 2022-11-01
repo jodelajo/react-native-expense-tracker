@@ -1,8 +1,7 @@
 import axios from "axios";
 import envs from "../../config/env";
-const { BACKEND_URL } = envs;
+const { BACKEND_URL, API_KEY } = envs;
 const url = BACKEND_URL;
-const { API_KEY } = envs;
 
 export async function storeResult(resultData, userId, token) {
   const response = await axios.post(
@@ -19,7 +18,6 @@ export async function fetchResults(userId, token) {
   );
 
   const results = [];
-
   for (const key in response.data) {
     const resultObj = {
       id: key,
@@ -48,23 +46,15 @@ export function deleteResult(id, userId, token) {
   );
 }
 
-export async function storeUserId(resultData, token) {
-  console.log("result data", resultData);
+export async function storeUserId(resultData) {
+  // console.log("result data", resultData);
   const response = await axios.put(
-    url + `/users/${resultData.localId}.json?auth=` + token,
+    url + `/users/${resultData.localId}.json?auth=` + resultData.idToken,
     resultData
   );
 
   const id = response.data.name;
   return id;
-}
-
-
-export async function fetchUser(userId, token) {
-  const response = await axios.get(url + `/users/${userId}.json?auth=` + token);
-  console.log('fetch user', response.data)
-  
-  return response.data;
 }
 
 export async function getUser(token) {
@@ -76,3 +66,9 @@ export async function getUser(token) {
   return response.data.users;
 }
 
+export async function fetchUser(userId, token) {
+  const response = await axios.get(url + `/users/${userId}.json?auth=` + token);
+  console.log('fetch user', response.data)
+  
+  return response.data;
+}
