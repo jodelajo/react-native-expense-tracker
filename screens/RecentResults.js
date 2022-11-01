@@ -6,8 +6,11 @@ import { fetchResults } from "../components/UI/http";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
 import { AuthContext } from "../store/auth-context";
+import { useNavigation } from "@react-navigation/native";
 
 export default function RecentResults() {
+  const navigation = useNavigation();
+  const storage = getStorage();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
   const resultsCtx = useContext(ResultsContext);
@@ -28,6 +31,8 @@ export default function RecentResults() {
     }
     if (!!authCtx.currentUser){
       getResults();
+    } else {
+      navigation.navigate("Login");
     }
   
   }, [authCtx.currentUser, authCtx.token]);

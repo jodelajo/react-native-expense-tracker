@@ -11,13 +11,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('')
   const resultsCtx = useContext(ResultsContext);
   const authCtx = useContext(AuthContext);
 
   async function loginHandler({ email, password }) {
     setIsLoading(true);
     try {
-      const response = await LoginUser(email, password);
+      const response = await LoginUser(email, password, setIsLoading);
       authCtx.authenticate(response.idToken);
       AsyncStorage.setItem("email", email);
       AsyncStorage.setItem("refreshToken", response.refreshToken);
@@ -34,7 +35,7 @@ export default function Login() {
       const results = await fetchResults(response.localId, response.idToken);
       resultsCtx.setResults(results);
     } catch (error) {
-      setError(error.toString());
+      // setError(error.toString());
       setIsLoading(false);
     }
     setIsLoading(false);

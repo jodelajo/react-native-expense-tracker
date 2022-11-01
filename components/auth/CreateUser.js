@@ -6,7 +6,7 @@ import { errorMessages } from "../../constants/errorMessages";
 
 const { API_KEY } = envs;
 
-export default async function Authenticate(mode, email, password) {
+export default async function Authenticate(mode, email, password, setIsLoading) {
  
   const url = `https://identitytoolkit.googleapis.com/v1/accounts:${mode}?key=${API_KEY}`;
   try {
@@ -36,6 +36,7 @@ export default async function Authenticate(mode, email, password) {
     } else {
       Alert.alert(Object.values(message).toString());
     }
+    setIsLoading(false)
   }
 }
 
@@ -43,6 +44,6 @@ export function CreateUser(email, password) {
   return Authenticate("signUp", email, password);
 }
 
-export function LoginUser(email, password) {
-  return Authenticate("signInWithPassword", email, password);
+export function LoginUser(email, password, setIsLoading) {
+  return Authenticate("signInWithPassword", email, password, setIsLoading);
 }
