@@ -19,7 +19,7 @@ export default function SignUp() {
   async function signupHandler({ email, password }) {
     try {
       setIsLoading(true);
-      const token = await CreateUser(email, password);
+      const token = await CreateUser(email, password, setIsLoading);
       authCtx.authenticate(token);
       console.log('token in signup', token)
       if(token){

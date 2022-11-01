@@ -40,8 +40,8 @@ export default async function Authenticate(mode, email, password, setIsLoading) 
   }
 }
 
-export function CreateUser(email, password) {
-  return Authenticate("signUp", email, password);
+export function CreateUser(email, password, setIsLoading) {
+  return Authenticate("signUp", email, password, setIsLoading);
 }
 
 export function LoginUser(email, password, setIsLoading) {
