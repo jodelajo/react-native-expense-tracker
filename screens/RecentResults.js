@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function RecentResults() {
   const navigation = useNavigation();
-  const storage = getStorage();
+  // const storage = getStorage();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
   const resultsCtx = useContext(ResultsContext);
