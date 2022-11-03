@@ -45,6 +45,7 @@ export default function CoursesForm() {
       } else {
         Alert.alert("Dit vak bestaat al");
       }
+      setCourse("");
       return
     }
     if (course === "") {
@@ -53,6 +54,7 @@ export default function CoursesForm() {
       } else {
         Alert.alert("Je moet eerst een vak invullen");
       }
+      setCourse("");
       return
     } else {
       setCoursesList((currentCourse) => [...currentCourse, course]);
