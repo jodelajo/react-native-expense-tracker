@@ -13,6 +13,7 @@ export default function SearchBarDropdown(props) {
   const [showOptions, setShowOptions] = useState(false);
 
   const coursesCtx = useContext(ResultsContext);
+  console.log(coursesCtx.courses)
 
   const onSelectedItem = (item) => {
     setShowOptions(false);
@@ -43,7 +44,7 @@ export default function SearchBarDropdown(props) {
       </TouchableOpacity>
       {showOptions && (
         <View style={styles.dropdown}>
-          {coursesCtx.courses !== null && coursesCtx.courses !== "" ? (
+          {coursesCtx.courses !== null && coursesCtx.courses !== "" && coursesCtx.courses.length !== 0 ? (
             coursesCtx.courses.map((item) => {
               return (
                 <View key={item} style={styles.item}>
