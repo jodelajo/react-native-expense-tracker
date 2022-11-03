@@ -28,9 +28,11 @@ export default function CoursesForm() {
   const [coursesList, setCoursesList] = useState(
     coursesCtx.courses
       ? coursesCtx.courses
-      : ["Nederlands", "Wiskunde", "Engels"]
+      : []
   );
 
+
+    console.log('coursesCTX', coursesCtx.courses)
   function coursesHandler() {
     // console.log("course", course);
     // console.log("list", coursesList);
@@ -108,7 +110,6 @@ export default function CoursesForm() {
             />
           </Button>
         </View>
-
         <FlatList
           data={coursesList}
           renderItem={(itemData) => {
