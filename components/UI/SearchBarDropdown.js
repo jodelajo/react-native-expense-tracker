@@ -56,7 +56,7 @@ export default function SearchBarDropdown(props) {
             })
           ) : (
             <View style={styles.item}>
-              <Text>Zie je nog geen vakken? Ga dan naar je profiel en stel daar je vakkenpakket in.</Text>
+              <Text>Zie je nog geen vakken? Ga dan naar je account en stel daar je vakkenpakket in.</Text>
             </View>
           )}
         </View>
