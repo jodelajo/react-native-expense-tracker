@@ -16,10 +16,13 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { AuthContext } from "../../store/auth-context";
 import { ResultsContext } from "../../store/results-context";
 import LoadingOverlay from "../UI/LoadingOverlay";
+import { useNavigation } from "@react-navigation/native";
 
 export default function CoursesForm() {
+  const navigation = useNavigation();
   const authCtx = useContext(AuthContext);
   const coursesCtx = useContext(ResultsContext);
+
   const [course, setCourse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [coursesList, setCoursesList] = useState(
@@ -69,6 +72,7 @@ export default function CoursesForm() {
     } catch (error) {
       setIsLoading(false);
     }
+    navigation.navigate("RecentResults")
     setIsLoading(false);
   }
 
