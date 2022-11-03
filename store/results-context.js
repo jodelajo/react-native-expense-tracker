@@ -1,6 +1,7 @@
 import React, { createContext, useReducer, useState } from "react";
 
 export const ResultsContext = createContext({
+  courses: [],
   results: [],
   addResult: ({ course, confirmed, type, result, date, amount }) => {},
   setResults: (results) => {},
@@ -33,7 +34,8 @@ function resultsReducer(state, action) {
 export default function ResultsContextProvider({ children }) {
   const [resultsState, dispatch] = useReducer(resultsReducer, []);
   const [saldo, setSaldo] = useState();
-  const [userId, setUserId] = useState();
+  const [currentCourses, setCurrentCourses] = useState()
+  // const [userId, setUserId] = useState();
 
   function addResult(resultData) {
     dispatch({
@@ -54,13 +56,15 @@ export default function ResultsContextProvider({ children }) {
   function updateResult(id, resultData) {
     dispatch({ type: "UPDATE", payload: { id: id, data: resultData } });
   }
-  function userHandler(response) {
-    setUserId(response);
-  }
+  // function userHandler(response) {
+  //   setUserId(response);
+  // }
 
   const value = {
-    userId,
-    userHandler: userHandler,
+    // userId,
+    // userHandler: userHandler,
+    courses: currentCourses,
+    setCurrentCourses: setCurrentCourses,
     saldo: saldo,
     setSaldo: setSaldo,
     results: resultsState,

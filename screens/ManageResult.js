@@ -5,7 +5,7 @@ import { GlobalStyles } from "../constants/styles";
 import { ResultsContext } from "../store/results-context";
 import { AuthContext } from "../store/auth-context";
 import ResultForm from "../components/manageResult/ResultForm";
-import { deleteResult, updateResult, storeResult } from "../components/UI/http";
+import { deleteResult, updateResult, storeResult } from "../http/http";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
 

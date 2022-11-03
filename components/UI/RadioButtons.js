@@ -1,5 +1,5 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
-import { GlobalStyles } from "../constants/styles";
+import { GlobalStyles } from "../../constants/styles";
 import React, { useState, useEffect } from "react";
 
 export default function RadioButton({ onSelect, typeHandler, value }) {

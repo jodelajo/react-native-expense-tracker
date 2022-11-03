@@ -1,6 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import { GlobalStyles } from "../constants/styles";
-import Profile from "../components/auth/Profile";
+import Profile from "../components/profile/Profile"
 
 export default function UserProfile() {
   return (

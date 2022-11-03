@@ -3,13 +3,9 @@ import envs from "../../config/env";
 import axios from "axios";
 import React, { useState, useContext, useEffect } from "react";
 import {
-  // Button,
-  Image,
   Platform,
   View,
-  ActivityIndicator,
   StyleSheet,
-  Alert,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../../store/auth-context";
@@ -29,15 +25,12 @@ export default function UpdateProfileForm() {
 
   const authCtx = useContext(AuthContext);
   const [username, setUsername] = useState(authCtx.currentUser?.displayName || '');
-  const [image, setImage] = useState(authCtx.currentUser?.photoUrl || '');
+  const [image, setImage] = useState(authCtx.currentUser.photoUrl ? authCtx.currentUser.photoUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8vw6lSyyJyi4M87YNItzmpm9mMUni0dOJu1bJg-w5wRApCc60oOPwT4ZC2oFkQAl2qq8&usqp=CAU");
   const [uploading, setUploading] = useState(false);
 
   console.log('auth user', authCtx?.currentUser)
 
   useEffect(() => {
-    console.log("image", image);
-    console.log("avatar", authCtx.currentUser.photoUrl);
-    // console.log('photoUrl', photoUrl)
     async () => {
       if (Platform.OS !== "web") {
         const { status } =
@@ -63,14 +56,12 @@ export default function UpdateProfileForm() {
     }
   };
 
+
   const uploadImage = async () => {
-    console.log("localId", authCtx.currentUser.userId);
     const userId = authCtx.currentUser.userId;
-    console.log("image", image);
     if (image !== authCtx.currentUser.photoUrl) {
       const blob = await new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        console.log("xhr", xhr);
         xhr.onload = function () {
           resolve(xhr.response);
         };
@@ -82,12 +73,11 @@ export default function UpdateProfileForm() {
         xhr.open("GET", image, true);
         xhr.send(null);
       });
-      const fileRef = userId && ref(storage, `${userId}/avatar`);
+      const fileRef = userId && ref(storage, `${userId}/avatar.png`);
 
       try {
         setUploading(true);
         const result = await uploadBytes(fileRef, blob);
-        console.log("result", result);
       } catch (error) {
         console.log("error", error);
         setUploading(false);
@@ -99,7 +89,6 @@ export default function UpdateProfileForm() {
 
       getUrl(fileRef);
     } else {
-      console.log("geen blob");
       updateHandler(authCtx.currentUser.photoUrl)
     }
   };
@@ -112,13 +101,12 @@ export default function UpdateProfileForm() {
         authCtx.setUser({ ...authCtx.currentUser, photoUrl: downloadURL });
         AsyncStorage.setItem("photoUrl", downloadURL);
         updateHandler(downloadURL);
-        // console.log('response in getUrl', downloadURL)
       });
     } catch (error) {
       console.log("error", error);
       setUploading(false);
     }
-    // setUploading(false);
+    setUploading(false);
     
   };
 
@@ -142,12 +130,11 @@ export default function UpdateProfileForm() {
       });
       AsyncStorage.setItem("displayName", response.data.displayName);
       AsyncStorage.setItem("photoUrl", response.data.photoUrl);
-      // authCtx.setPhotoUrl(response.data.photoUrl)
     } catch (error) {
       console.log("error", error);
     }
-    setUploading(false);
     navigation.navigate("UserProfile");
+    setUploading(false);
   }
 
   return (
@@ -188,8 +175,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: GlobalStyles.colors.primary700,
-    // padding: 10,
-    // paddingHorizontal: 30,
   },
   formContainer: {
     marginTop: 64,
@@ -218,14 +203,4 @@ const styles = StyleSheet.create({
     backgroundColor: GlobalStyles.colors.major,
     borderRadius: 8,
   },
-  // avatar: {
-  //   borderRadius: 100,
-  //   borderWidth: 2,
-  //   borderColor: "white",
-  //   width: 200,
-  //   height: 200,
-  //   overflow: "hidden",
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  // },
 });

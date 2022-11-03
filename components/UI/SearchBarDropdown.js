@@ -1,35 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Text,
   View,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { GlobalStyles } from "../constants/styles";
+import { GlobalStyles } from "../../constants/styles";
+import { ResultsContext } from "../../store/results-context";
 
 export default function SearchBarDropdown(props) {
   const { onSelect = () => {}, courseHandler = () => {}, course, invalid } = props;
   const [showOptions, setShowOptions] = useState(false);
-  const [dataSource] = useState([
-    "Wiskunde",
-    "Engels",
-    "Frans",
-    "Duits",
-    "Nederlands",
-    "Geschiedenis",
-    "Aardrijkskunde",
-    "Biologie",
-    "Natuurkunde",
-    "Muziek",
-    "Gym",
-  ]);
 
-//   const [selectedCourse, setSelectedCourse] = useState(course)
-//   console.log("data source", dataSource);
-//   console.log("value in searchbar", value);
-//   console.log('course in searchbar', course)
-
-// const inputStyles = [styles.input]
+  const coursesCtx = useContext(ResultsContext)
 
   const onSelectedItem = (item) => {
     setShowOptions(false)
@@ -60,7 +43,7 @@ export default function SearchBarDropdown(props) {
       </TouchableOpacity>
       {showOptions && (
         <View style={styles.dropdown}>
-          {dataSource.map((item) => {
+          {coursesCtx.courses && coursesCtx.courses.map((item) => {
             return (
               <View key={item} style={styles.item}>
                 <TouchableOpacity onPress={()=> onSelectedItem(item)}>

@@ -15,7 +15,7 @@ import BottomTabsNavigator from "./BottomTabsNavigator";
 import UserProfile from "../../screens/UserProfile";
 import Courses from "../../screens/Courses";
 import Statistics from "../../screens/Statistics";
-import UpdateProfileForm from "../auth/UpdateProfileForm";
+import UpdateProfileForm from "../profile/UpdateProfileForm";
 import Avatar from "../UI/Avatar";
 
 const Drawer = createDrawerNavigator();
@@ -24,7 +24,7 @@ export default function DrawerNavigator({ navigation }) {
   const [resultStack, setResultStack] = useState();
   const [photoUrl, setPhotoUrl] = useState()
   function AppDrawerContent(props) {
-    console.log("props", props);
+    // console.log("props", props);
     const authCtx = useContext(AuthContext);
     const resultsCtx = useContext(ResultsContext);
 

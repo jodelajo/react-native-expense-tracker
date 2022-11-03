@@ -13,20 +13,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SplashScreen from "expo-splash-screen";
 import { View, StyleSheet } from "react-native";
 import { useMediaQuery } from "react-responsive";
-import envs from "./config/env";
-import axios from "axios";
 import DrawerNavigator from "./components/navigation/DrawerNavigator";
 import {getApps, initializeApp} from "firebase/app"
 import { firebaseConfig } from "./config/firebase";
 import { useResources } from "./util/useFonts";
 
 const Stack = createNativeStackNavigator();
-const { API_KEY } = envs;
-
 SplashScreen.preventAutoHideAsync();
-
-// const [isFontReady, setIsFontReady] = useState(false);
-
 
 function AuthStack() {
   return (
@@ -74,7 +67,7 @@ function AuthenticatedStack() {
 
 function Navigation() {
   const authCtx = useContext(AuthContext);
-
+  
   return (
     <NavigationContainer>
       {!authCtx.isAuthenticated ? <AuthStack /> : <AuthenticatedStack />}
@@ -151,7 +144,6 @@ export default function App() {
     initializeApp(firebaseConfig);
   }
   
-
   return (
     <>
       <StatusBar style="light" />
@@ -176,6 +168,8 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     minWidth: 350,
     maxWidth: 428,
+    // minHeight: 800,
+    // height: 833,
     maxHeight: 928,
     flex: 1,
     overflow: 'hidden'
