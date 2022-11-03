@@ -7,7 +7,7 @@ import {
   Platform,
   Keyboard,
 } from "react-native";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import Input from "../manageResult/Input";
 import { GlobalStyles } from "../../constants/styles";
 import Button from "../UI/Button";
@@ -15,10 +15,6 @@ import { storeCourse } from "../../http/http";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { AuthContext } from "../../store/auth-context";
 import { ResultsContext } from "../../store/results-context";
-import {
-  KeyboardAwareFlatList,
-  KeyboardAwareScrollView,
-} from "react-native-keyboard-aware-scroll-view";
 import LoadingOverlay from "../UI/LoadingOverlay";
 
 export default function CoursesForm() {
@@ -33,12 +29,12 @@ export default function CoursesForm() {
   );
 
   function coursesHandler() {
-    console.log("course", course);
-    console.log("list", coursesList);
+    // console.log("course", course);
+    // console.log("list", coursesList);
     const coursesCheck = coursesList.filter(
       (currCourse) => currCourse === course
     );
-    console.log("courses check", coursesCheck);
+    // console.log("courses check", coursesCheck);
     if (coursesCheck.length > 0) {
       if (Platform.OS === "web") {
         alert("Dit vak bestaat al");
@@ -46,7 +42,7 @@ export default function CoursesForm() {
         Alert.alert("Dit vak bestaat al");
       }
       setCourse("");
-      return
+      return;
     }
     if (course === "") {
       if (Platform.OS === "web") {
@@ -54,8 +50,8 @@ export default function CoursesForm() {
       } else {
         Alert.alert("Je moet eerst een vak invullen");
       }
-      setCourse("");
-      return
+      // setCourse("");
+      return;
     } else {
       setCoursesList((currentCourse) => [...currentCourse, course]);
     }
@@ -65,7 +61,7 @@ export default function CoursesForm() {
 
   // console.log('sort?', coursesList.sort((a, b)=> b - a))
   async function submitHandler() {
-    console.log("submit", coursesList);
+    // console.log("submit", coursesList);
     setIsLoading(true);
     try {
       await storeCourse(coursesList, authCtx.currentUser.userId, authCtx.token);
@@ -80,14 +76,13 @@ export default function CoursesForm() {
     setCoursesList((currentCourse) => {
       return currentCourse.filter((course) => course !== item);
     });
-    console.log("delete");
+    // console.log("delete");
   }
   if (isLoading) {
     return <LoadingOverlay />;
   }
 
   return (
-    // <KeyboardAwareScrollView>
     <View style={styles.container}>
       <View style={styles.formContainer}>
         <View style={styles.inputContainer}>
@@ -113,8 +108,6 @@ export default function CoursesForm() {
         <FlatList
           data={coursesList}
           renderItem={(itemData) => {
-            // console.log(coursesList);
-            //  console.log(itemData)
             return (
               <View style={styles.courseList}>
                 <Text style={styles.courseText}>{itemData.item}</Text>
@@ -127,16 +120,12 @@ export default function CoursesForm() {
           }}
         />
         <View>
-          {/* <Button onPress={coursesHandler} style={styles.button}>
-            Voeg toe
-          </Button> */}
           <Button onPress={submitHandler} style={styles.button}>
             Opslaan
           </Button>
         </View>
       </View>
     </View>
-    // </KeyboardAwareScrollView>
   );
 }
 
