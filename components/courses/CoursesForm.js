@@ -28,7 +28,7 @@ export default function CoursesForm() {
   const [coursesList, setCoursesList] = useState(
     coursesCtx.courses
       ? coursesCtx.courses
-      : []
+      : ["Nederlands", "Wiskunde", "Engels"]
   );
 
 
