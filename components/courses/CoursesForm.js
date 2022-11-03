@@ -45,6 +45,7 @@ export default function CoursesForm() {
       } else {
         Alert.alert("Dit vak bestaat al");
       }
+      return
     }
     if (course === "") {
       if (Platform.OS === "web") {
@@ -52,6 +53,7 @@ export default function CoursesForm() {
       } else {
         Alert.alert("Je moet eerst een vak invullen");
       }
+      return
     } else {
       setCoursesList((currentCourse) => [...currentCourse, course]);
     }
