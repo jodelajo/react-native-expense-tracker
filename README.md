@@ -21,7 +21,7 @@ App lives [here](https://sashas-results-tracker.netlify.app/).
 - ✅ maximize device with css
 - Button choose
 - cleanup
-- courses inputs
+- ✅ courses inputs
 - redirect from signup to loggedin with fetching userdata
 
 ## Wish List

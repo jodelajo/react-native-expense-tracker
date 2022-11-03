@@ -5,7 +5,7 @@ import { GlobalStyles } from "../constants/styles";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import { LoginUser } from "../components/auth/CreateUser";
 import { AuthContext } from "../store/auth-context";
-import { fetchResults, getUser } from "../components/UI/http";
+import { fetchResults, getUser, fetchCourses } from "../http/http";
 import { ResultsContext } from "../store/results-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -34,6 +34,9 @@ export default function Login() {
 
       const results = await fetchResults(response.localId, response.idToken);
       resultsCtx.setResults(results);
+      const courses = await fetchCourses(response.localId, response.idToken)
+      resultsCtx.setCurrentCourses(courses)
+      console.log('courses in login')
     } catch (error) {
       // setError(error.toString());
       setIsLoading(false);

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { storeUserId } from "../UI/http";
+import { storeUserId } from "../../http/http";
 import envs from "../../config/env";
 import { Alert, Platform } from "react-native";
 import { errorMessages } from "../../constants/errorMessages";

@@ -168,6 +168,8 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     minWidth: 350,
     maxWidth: 428,
+    // minHeight: 800,
+    // height: 833,
     maxHeight: 928,
     flex: 1,
     overflow: 'hidden'

@@ -4,8 +4,8 @@ import { GlobalStyles } from "../../constants/styles";
 import Input from "./Input";
 import Button from "../UI/Button";
 import { getFormattedDate } from "../../util/date";
-import SearchBarDropdown from "../SearchBarDropdown";
-import RadioButton from "../RadioButtons";
+import SearchBarDropdown from "../UI/SearchBarDropdown";
+import RadioButton from "../UI/RadioButtons";
 
 export default function ResultForm({
   onCancel,
@@ -260,7 +260,7 @@ export default function ResultForm({
           textInputConfig={{
             placeholder: "YYYY-MM-DD",
             maxLength: 10,
-            keyboardType: "number-pad",
+            keyboardType:  "numbers-and-punctuation",
             onChangeText: inputChangedHandler.bind(this, "date"),
             value: inputs.date.value,
           }}

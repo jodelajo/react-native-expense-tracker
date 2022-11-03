@@ -2,7 +2,7 @@ import ResultsOutput from "../components/ResultsOutput/ResultsOutput";
 import React,{ useContext, useEffect, useState } from "react";
 import { ResultsContext } from "../store/results-context";
 import { getDateMinusDays } from "../util/date";
-import { fetchResults } from "../components/UI/http";
+import { fetchResults } from "../http/http";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
 import { AuthContext } from "../store/auth-context";
@@ -22,6 +22,7 @@ export default function RecentResults() {
       try {
         const results = await fetchResults(authCtx.currentUser.userId, authCtx.token);
         resultsCtx.setResults(results);
+        console.log(authCtx.token)
       } catch (error) {
         setError(
           "Kan geen recente resultaten ophalen - Probeer later nog een keer!"
@@ -31,10 +32,10 @@ export default function RecentResults() {
     }
     if (!!authCtx.currentUser){
       getResults();
-    } else {
-      navigation.navigate("Login");
     }
-  
+    if (!authCtx.token){
+      navigation.navigate("Login")
+    }
   }, [authCtx.currentUser, authCtx.token]);
 
   if (error && !isLoading) {
