@@ -3,45 +3,35 @@ import AuthContent from "../components/auth/AuthContent";
 import { StyleSheet, View } from "react-native";
 import { GlobalStyles } from "../constants/styles";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
-import { LoginUser } from "../components/auth/CreateUser";
 import { AuthContext } from "../store/auth-context";
-import { fetchResults, getUser, fetchCourses } from "../http/http";
 import { ResultsContext } from "../store/results-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AuthHandler from "../components/auth/AuthHandler";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('')
+  const [error, setError] = useState();
   const resultsCtx = useContext(ResultsContext);
   const authCtx = useContext(AuthContext);
 
   async function loginHandler({ email, password }) {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const response = await LoginUser(email, password, setIsLoading);
-      authCtx.authenticate(response.idToken);
-      AsyncStorage.setItem("email", email);
-      AsyncStorage.setItem("refreshToken", response.refreshToken);
-      const userProfile = await getUser(response.idToken);
-
-      authCtx.userHandler({
-        userId: userProfile[0].localId,
-        displayName: userProfile[0].displayName,
-        photoUrl: userProfile[0].photoUrl,
-        refreshToken: userProfile[0].refreshToken,
-        email: userProfile[0].email,
-      });
-
-      const results = await fetchResults(response.localId, response.idToken);
-      resultsCtx.setResults(results);
-      const courses = await fetchCourses(response.localId, response.idToken)
-      resultsCtx.setCurrentCourses(courses)
-      console.log('courses in login')
+      
+      await AuthHandler(
+        setIsLoading,
+        email,
+        password,
+        authCtx,
+        resultsCtx,
+        AsyncStorage
+      );
+      
     } catch (error) {
-      // setError(error.toString());
-      setIsLoading(false);
+      setError(error.toString());
+      setIsLoading(false)
     }
-    setIsLoading(false);
+    setIsLoading(false)
   }
 
   if (isLoading) {
