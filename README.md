@@ -22,7 +22,7 @@ App lives [here](https://sashas-results-tracker.netlify.app/).
 - Button choose
 - cleanup
 - ✅ courses inputs
-- redirect from signup to loggedin with fetching userdata
+- ✅ redirect from signup to loggedin with fetching userdata
 
 ## Wish List
 - parent role

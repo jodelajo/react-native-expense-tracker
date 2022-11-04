@@ -24,7 +24,7 @@ export default function CoursesForm() {
   const coursesCtx = useContext(ResultsContext);
 
   const [course, setCourse] = useState("");
-  const [showMassage, setShowMessage] = useState(true)
+  const [showMessage, setShowMessage] = useState(true)
   const [isLoading, setIsLoading] = useState(false);
   const [coursesList, setCoursesList] = useState(
     coursesCtx.courses
@@ -32,12 +32,12 @@ export default function CoursesForm() {
       : ["Nederlands", "Wiskunde", "Engels"]
   );
 
-  console.log("context courses in coursesform", coursesCtx.courses);
+  // console.log("context courses in coursesform", coursesCtx.courses);
   function coursesHandler() {
     const coursesCheck = coursesList.filter(
       (currCourse) => currCourse === course
     );
-    console.log("courses check", coursesCheck);
+    // console.log("courses check", coursesCheck);
 
     if (coursesCheck.length > 0) {
       if (Platform.OS === "web") {
@@ -59,6 +59,7 @@ export default function CoursesForm() {
       setCoursesList((currentCourse) => [...currentCourse, course]);
     }
     Keyboard.dismiss();
+    setShowMessage(false)
     setCourse("");
   }
 
@@ -113,7 +114,7 @@ export default function CoursesForm() {
             />
           </Button>
         </View>
-        {!coursesCtx.courses && showMassage &&(
+        {!coursesCtx.courses && showMessage &&(
           <View style={styles.initialTextContainer}>
             <Button onPress={deleteMessage}> <Ionicons name="close" size={16} color={"white"} /></Button>
            <View style={styles.textContainer}>
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "flex-end",
     position: "relative",
-    marginBottom: 30,
+    marginBottom: 20,
   },
   input: {
     flex: 1,
@@ -185,7 +186,7 @@ const styles = StyleSheet.create({
     bottom: 2,
   },
   initialTextContainer: {
-    marginTop: -20,
+    marginTop: -10,
     marginBottom: 10,
     backgroundColor: GlobalStyles.colors.minor,
     paddingHorizontal: 2,
