@@ -25,14 +25,20 @@ export default function SignUp() {
       authCtx.authenticate(token);
       console.log("token in signup", token);
       if (token) {
-        await AuthHandler(
-          setIsLoading,
-          email,
-          password,
-          authCtx,
-          resultsCtx,
-          AsyncStorage
-        );
+        try {
+          await AuthHandler(
+            setIsLoading,
+            email,
+            password,
+            authCtx,
+            resultsCtx,
+            AsyncStorage
+          );
+        } catch (error) {
+          console.log(error);
+          setError(error.toString());
+        }
+       setIsLoading(false)
       }
     } catch (error) {
       // Alert.alert('jajaja', 'sdiof soidfjoi sdfoijoi')

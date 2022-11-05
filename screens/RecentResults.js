@@ -24,6 +24,7 @@ export default function RecentResults() {
         resultsCtx.setResults(results);
         console.log(authCtx.token)
       } catch (error) {
+        // console.log('error', error )
         setError(
           "Kan geen recente resultaten ophalen - Probeer later nog een keer!"
         );

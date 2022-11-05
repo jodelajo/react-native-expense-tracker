@@ -7,6 +7,7 @@ import { AuthContext } from "../store/auth-context";
 import { ResultsContext } from "../store/results-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AuthHandler from "../components/auth/AuthHandler";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 
 export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,7 +18,6 @@ export default function Login() {
   async function loginHandler({ email, password }) {
     setIsLoading(true)
     try {
-      
       await AuthHandler(
         setIsLoading,
         email,
@@ -36,6 +36,10 @@ export default function Login() {
 
   if (isLoading) {
     return <LoadingOverlay />;
+  }
+  if (error && !isLoading) {
+    console.log(error);
+    return <ErrorOverlay message={error} />;
   }
 
   return (
