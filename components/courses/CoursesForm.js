@@ -7,7 +7,7 @@ import {
   Platform,
   Keyboard,
 } from "react-native";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import Input from "../manageResult/Input";
 import { GlobalStyles } from "../../constants/styles";
 import Button from "../UI/Button";
@@ -15,16 +15,16 @@ import { storeCourse } from "../../http/http";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { AuthContext } from "../../store/auth-context";
 import { ResultsContext } from "../../store/results-context";
-import {
-  KeyboardAwareFlatList,
-  KeyboardAwareScrollView,
-} from "react-native-keyboard-aware-scroll-view";
 import LoadingOverlay from "../UI/LoadingOverlay";
+import { useNavigation } from "@react-navigation/native";
 
 export default function CoursesForm() {
+  const navigation = useNavigation();
   const authCtx = useContext(AuthContext);
   const coursesCtx = useContext(ResultsContext);
+
   const [course, setCourse] = useState("");
+  const [showMessage, setShowMessage] = useState(true)
   const [isLoading, setIsLoading] = useState(false);
   const [coursesList, setCoursesList] = useState(
     coursesCtx.courses
@@ -32,13 +32,13 @@ export default function CoursesForm() {
       : ["Nederlands", "Wiskunde", "Engels"]
   );
 
+  // console.log("context courses in coursesform", coursesCtx.courses);
   function coursesHandler() {
-    console.log("course", course);
-    console.log("list", coursesList);
     const coursesCheck = coursesList.filter(
       (currCourse) => currCourse === course
     );
-    console.log("courses check", coursesCheck);
+    // console.log("courses check", coursesCheck);
+
     if (coursesCheck.length > 0) {
       if (Platform.OS === "web") {
         alert("Dit vak bestaat al");
@@ -46,7 +46,7 @@ export default function CoursesForm() {
         Alert.alert("Dit vak bestaat al");
       }
       setCourse("");
-      return
+      return;
     }
     if (course === "") {
       if (Platform.OS === "web") {
@@ -54,18 +54,16 @@ export default function CoursesForm() {
       } else {
         Alert.alert("Je moet eerst een vak invullen");
       }
-      setCourse("");
-      return
+      return;
     } else {
       setCoursesList((currentCourse) => [...currentCourse, course]);
     }
     Keyboard.dismiss();
+    setShowMessage(false)
     setCourse("");
   }
 
-  // console.log('sort?', coursesList.sort((a, b)=> b - a))
   async function submitHandler() {
-    console.log("submit", coursesList);
     setIsLoading(true);
     try {
       await storeCourse(coursesList, authCtx.currentUser.userId, authCtx.token);
@@ -73,6 +71,7 @@ export default function CoursesForm() {
     } catch (error) {
       setIsLoading(false);
     }
+    navigation.navigate("RecentResults");
     setIsLoading(false);
   }
 
@@ -80,14 +79,21 @@ export default function CoursesForm() {
     setCoursesList((currentCourse) => {
       return currentCourse.filter((course) => course !== item);
     });
-    console.log("delete");
   }
   if (isLoading) {
     return <LoadingOverlay />;
   }
 
+  function newCourseHandler(currCourse) {
+    const trimmedCourse = currCourse.replace(/\s/g, "");
+    const capitalizedCourse =
+      trimmedCourse && trimmedCourse[0].toUpperCase() + trimmedCourse.slice(1);
+    setCourse(capitalizedCourse);
+  }
+  function deleteMessage(){
+    setShowMessage(false)
+  }
   return (
-    // <KeyboardAwareScrollView>
     <View style={styles.container}>
       <View style={styles.formContainer}>
         <View style={styles.inputContainer}>
@@ -95,8 +101,7 @@ export default function CoursesForm() {
             style={styles.input}
             label="Vak"
             textInputConfig={{
-              onChangeText: (newCourse) =>
-                setCourse(newCourse.replace(/^./, (str) => str.toUpperCase())),
+              onChangeText: (course) => newCourseHandler(course),
               value: course,
               // defaultValue: authCtx.currentUser.displayName,
             }}
@@ -109,12 +114,22 @@ export default function CoursesForm() {
             />
           </Button>
         </View>
-
+        {!coursesCtx.courses && showMessage &&(
+          <View style={styles.initialTextContainer}>
+            <Button onPress={deleteMessage}> <Ionicons name="close" size={16} color={"white"} /></Button>
+           <View style={styles.textContainer}>
+           <Text style={styles.initialText}>
+              Hier staan alvast wat vakken voor je klaar. Je kunt een vak toevoegen
+              en op plusje klikken. Je kunt ze weer verwijderen met het kruisje.
+            </Text>
+            <Text style={styles.bold}> Vergeet niet je vakken op te slaan.</Text>
+           </View>
+           
+          </View>
+        )}
         <FlatList
           data={coursesList}
           renderItem={(itemData) => {
-            // console.log(coursesList);
-            //  console.log(itemData)
             return (
               <View style={styles.courseList}>
                 <Text style={styles.courseText}>{itemData.item}</Text>
@@ -127,16 +142,12 @@ export default function CoursesForm() {
           }}
         />
         <View>
-          {/* <Button onPress={coursesHandler} style={styles.button}>
-            Voeg toe
-          </Button> */}
           <Button onPress={submitHandler} style={styles.button}>
             Opslaan
           </Button>
         </View>
       </View>
     </View>
-    // </KeyboardAwareScrollView>
   );
 }
 
@@ -164,7 +175,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "flex-end",
     position: "relative",
-    marginBottom: 30,
+    marginBottom: 20,
   },
   input: {
     flex: 1,
@@ -173,6 +184,31 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 4,
     bottom: 2,
+  },
+  initialTextContainer: {
+    marginTop: -10,
+    marginBottom: 10,
+    backgroundColor: GlobalStyles.colors.minor,
+    paddingHorizontal: 2,
+    paddingBottom: 8,
+    // textAlign: 'center',
+    borderRadius: 8,
+    // justifyContent: 'flex-end',
+    alignItems: 'flex-end'
+  },
+  textContainer: {
+    marginTop: -8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: 8,
+  },
+  initialText: {
+    textAlign: 'center',
+    color: "white",
+    // width: "100%",
+    marginHorizontal: 6,
+    
   },
   courseList: {
     marginHorizontal: 4,
@@ -188,6 +224,13 @@ const styles = StyleSheet.create({
   courseText: {
     color: "white",
   },
+  bold: {
+    fontWeight: 'bold',
+    marginTop: 6,
+    color: "white",
+    textAlign: 'center',
+    // width: "100%",
+  },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -197,7 +240,15 @@ const styles = StyleSheet.create({
     // marginTop: 30,
   },
   button: {
-    minWidth: 120,
-    marginHorizontal: 8,
+    marginTop: 10,
+    backgroundColor: GlobalStyles.colors.major,
+    borderRadius: 8,
+    minWidth: '90%'
   },
+  // buttonUpload: {
+  //   marginTop: 10,
+  //   backgroundColor: GlobalStyles.colors.major,
+  //   borderRadius: 8,
+  //   minWidth: '90%'
+  // }
 });

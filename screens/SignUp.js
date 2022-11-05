@@ -1,5 +1,5 @@
 import AuthContent from "../components/auth/AuthContent";
-import { Alert, StyleSheet, Platform } from "react-native";
+import { StyleSheet } from "react-native";
 import { GlobalStyles } from "../constants/styles";
 import { View } from "react-native";
 import { CreateUser } from "../components/auth/CreateUser";
@@ -9,6 +9,8 @@ import ErrorOverlay from "../components/UI/ErrorOverlay";
 import { AuthContext } from "../store/auth-context";
 import { ResultsContext } from "../store/results-context";
 import { errorMessages } from "../constants/errorMessages";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import AuthHandler from "../components/auth/AuthHandler";
 
 export default function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,22 +23,27 @@ export default function SignUp() {
       setIsLoading(true);
       const token = await CreateUser(email, password, setIsLoading);
       authCtx.authenticate(token);
-      console.log('token in signup', token)
-      if(token){
-        authCtx.logout(resultsCtx.setResults);
-        if(Platform.OS === 'web') {
-          alert("Joepie, je account is aangemaakt, log nu in met je emailadres en wachtwoord.")
-        } else {
-          Alert.alert("Joepie, je account is aangemaakt, log nu in met je emailadres en wachtwoord.")
+      console.log("token in signup", token);
+      if (token) {
+        try {
+          await AuthHandler(
+            setIsLoading,
+            email,
+            password,
+            authCtx,
+            resultsCtx,
+            AsyncStorage
+          );
+        } catch (error) {
+          console.log(error);
+          setError(error.toString());
         }
-      
-     }
-     
+       setIsLoading(false)
+      }
     } catch (error) {
       // Alert.alert('jajaja', 'sdiof soidfjoi sdfoijoi')
-      console.log(error)
+      console.log(error);
       setError(error.toString());
-    
     }
     setIsLoading(false);
   }
@@ -48,7 +55,6 @@ export default function SignUp() {
     console.log(error);
     return <ErrorOverlay message={error} />;
   }
-
 
   return (
     <View style={styles.container}>

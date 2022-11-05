@@ -1,29 +1,30 @@
 import React, { useState, useContext } from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { GlobalStyles } from "../../constants/styles";
 import { ResultsContext } from "../../store/results-context";
 
 export default function SearchBarDropdown(props) {
-  const { onSelect = () => {}, courseHandler = () => {}, course, invalid } = props;
+  const {
+    onSelect = () => {},
+    courseHandler = () => {},
+    course,
+    invalid,
+  } = props;
   const [showOptions, setShowOptions] = useState(false);
 
-  const coursesCtx = useContext(ResultsContext)
+  const coursesCtx = useContext(ResultsContext);
+  console.log(coursesCtx.courses)
 
   const onSelectedItem = (item) => {
-    setShowOptions(false)
-    onSelect(item)
-    courseHandler(item)
-  }
+    setShowOptions(false);
+    onSelect(item);
+    courseHandler(item);
+  };
 
   return (
     <View style={styles.dropdownContainer}>
       <TouchableOpacity
-        style={[styles.dropdownStyle, invalid && styles.invalidInput ]}
+        style={[styles.dropdownStyle, invalid && styles.invalidInput]}
         activeOpacity={0.8}
         onPress={() => setShowOptions(!showOptions)}
       >
@@ -43,15 +44,21 @@ export default function SearchBarDropdown(props) {
       </TouchableOpacity>
       {showOptions && (
         <View style={styles.dropdown}>
-          {coursesCtx.courses && coursesCtx.courses.map((item) => {
-            return (
-              <View key={item} style={styles.item}>
-                <TouchableOpacity onPress={()=> onSelectedItem(item)}>
-                  <Text>{item}</Text>
-                </TouchableOpacity>
-              </View>
-            );
-          })}
+          {coursesCtx.courses !== null && coursesCtx.courses !== "" && coursesCtx.courses.length !== 0 ? (
+            coursesCtx.courses.map((item) => {
+              return (
+                <View key={item} style={styles.item}>
+                  <TouchableOpacity onPress={() => onSelectedItem(item)}>
+                    <Text>{item}</Text>
+                  </TouchableOpacity>
+                </View>
+              );
+            })
+          ) : (
+            <View style={styles.item}>
+              <Text>Zie je nog geen vakken? Ga dan naar je account en stel daar je vakkenpakket in.</Text>
+            </View>
+          )}
         </View>
       )}
     </View>
@@ -59,11 +66,11 @@ export default function SearchBarDropdown(props) {
 }
 
 const styles = StyleSheet.create({
-    dropdownContainer: {
-        position: 'relative',
-        marginHorizontal: 4,
-        zIndex: 10,
-    },
+  dropdownContainer: {
+    position: "relative",
+    marginHorizontal: 4,
+    zIndex: 10,
+  },
   dropdownStyle: {
     marginVertical: 8,
     backgroundColor: GlobalStyles.colors.primary100,
@@ -85,17 +92,17 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     backgroundColor: GlobalStyles.colors.primary50,
-    position: 'absolute',
-    width: '100%',
+    position: "absolute",
+    width: "100%",
     top: 50,
     left: 0,
     borderRadius: 8,
     padding: 12,
   },
-item: {
+  item: {
     padding: 8,
-},
-invalidInput: {
-  backgroundColor: GlobalStyles.colors.error50
-}
+  },
+  invalidInput: {
+    backgroundColor: GlobalStyles.colors.error50,
+  },
 });
