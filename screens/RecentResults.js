@@ -22,7 +22,7 @@ export default function RecentResults() {
       try {
         const results = await fetchResults(authCtx.currentUser.userId, authCtx.token);
         resultsCtx.setResults(results);
-        console.log(authCtx.token)
+        // console.log(authCtx.token)
       } catch (error) {
         // console.log('error', error )
         setError(

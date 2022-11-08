@@ -13,7 +13,7 @@ export default function SearchBarDropdown(props) {
   const [showOptions, setShowOptions] = useState(false);
 
   const coursesCtx = useContext(ResultsContext);
-  console.log(coursesCtx.courses)
+  // console.log(coursesCtx.courses)
 
   const onSelectedItem = (item) => {
     setShowOptions(false);

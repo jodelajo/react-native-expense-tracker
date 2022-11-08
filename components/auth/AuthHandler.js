@@ -18,7 +18,7 @@ export default async function AuthHandler(
     AsyncStorage.setItem("refreshToken", response.refreshToken);
     // 
     const userProfile = await getUser(response.idToken);
-    console.log('userprofile in authhandler', userProfile )
+    // console.log('userprofile in authhandler', userProfile )
     authCtx.userHandler({
       userId: userProfile[0].localId,
       displayName: userProfile[0].displayName,

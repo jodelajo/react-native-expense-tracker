@@ -52,7 +52,7 @@ export default function ManageResult({ route, navigation }) {
     try {
       if (isEditing) {
         resultsCtx.updateResult(editedResultId, resultData);
-        console.log("result data in manage result", resultData);
+        // console.log("result data in manage result", resultData);
         await updateResult(
           editedResultId,
           resultData,

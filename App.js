@@ -88,19 +88,19 @@ function Root() {
 
   async function refreshToken() {
     const refreshedToken = await AsyncStorage.getItem("refreshToken");
-    console.log("refresh tokenin app.js", refreshedToken);
+    // console.log("refresh tokenin app.js", refreshedToken);
     const url = `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`;
     const response = await axios.post(
       url,
       "grant_type=refresh_token&refresh_token=" + refreshedToken
     );
-    console.log("response in refreshtoken in app.js", response.data);
-    console.log("refresh token in async storage", refreshedToken);
+    // console.log("response in refreshtoken in app.js", response.data);
+    // console.log("refresh token in async storage", refreshedToken);
   }
 
   setInterval(() => {
     refreshToken();
-    console.log("refreshhhh!");
+    // console.log("refreshhhh!");
   }, 1000 * 30 * 60);
 
   async function fetchToken() {
