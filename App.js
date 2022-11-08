@@ -86,22 +86,22 @@ function Root() {
   const {isFontReady} = useResources()
   // console.log("big screen", isBigScreen);
 
-  async function refreshToken() {
-    const refreshedToken = await AsyncStorage.getItem("refreshToken");
-    // console.log("refresh tokenin app.js", refreshedToken);
-    const url = `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`;
-    const response = await axios.post(
-      url,
-      "grant_type=refresh_token&refresh_token=" + refreshedToken
-    );
-    // console.log("response in refreshtoken in app.js", response.data);
-    // console.log("refresh token in async storage", refreshedToken);
-  }
+  // async function refreshToken() {
+  //   const refreshedToken = await AsyncStorage.getItem("refreshToken");
+  //   // console.log("refresh tokenin app.js", refreshedToken);
+  //   const url = `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`;
+  //   const response = await axios.post(
+  //     url,
+  //     "grant_type=refresh_token&refresh_token=" + refreshedToken
+  //   );
+  //   // console.log("response in refreshtoken in app.js", response.data);
+  //   // console.log("refresh token in async storage", refreshedToken);
+  // }
 
-  setInterval(() => {
-    refreshToken();
-    // console.log("refreshhhh!");
-  }, 1000 * 30 * 60);
+  // setInterval(() => {
+  //   refreshToken();
+  //   // console.log("refreshhhh!");
+  // }, 1000 * 30 * 60);
 
   async function fetchToken() {
     const storedToken = await AsyncStorage.getItem("token");

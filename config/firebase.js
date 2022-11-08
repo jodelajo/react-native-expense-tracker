@@ -25,4 +25,5 @@ export const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 export const storage = getStorage(app);
