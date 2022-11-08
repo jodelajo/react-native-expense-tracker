@@ -12,7 +12,7 @@ export default async function AuthHandler(
   setIsLoading(true);
   try {
     const response = await LoginUser(email, password, setIsLoading);
-    // console.log('response in authhandler', response )
+    console.log('response in authhandler', response )
     authCtx.authenticate(response.idToken);
     AsyncStorage.setItem("email", email);
     AsyncStorage.setItem("refreshToken", response.refreshToken);

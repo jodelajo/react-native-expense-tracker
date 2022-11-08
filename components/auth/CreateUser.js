@@ -3,6 +3,7 @@ import { storeUserId } from "../../http/http";
 import envs from "../../config/env";
 import { Alert, Platform } from "react-native";
 import { errorMessages } from "../../constants/errorMessages";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const { API_KEY } = envs;
 
@@ -16,6 +17,8 @@ export default async function Authenticate(mode, email, password, setIsLoading) 
       returnSecureToken: true,
     });
 
+    console.log('response in createuser', response)
+    AsyncStorage.setItem("userId", response.data.localId)
     if (mode === "signUp") {
       await storeUserId(response.data);
     }
