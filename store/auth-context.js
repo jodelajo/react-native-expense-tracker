@@ -23,7 +23,7 @@ async function setLocalStorage() {
  setAuthToken(token)
   const rToken = await AsyncStorage.getItem("refreshToken")
  setRefreshToken(rToken)
-  console.log('token', token)
+  console.log('token', rToken)
 }
 useEffect(() => {
 setLocalStorage()
@@ -32,7 +32,8 @@ setLocalStorage()
 console.log('current user', user)
 
   function authenticate(token) {
-    AsyncStorage.setItem("token", token);
+    console.log('token in auth context', token)
+    // AsyncStorage.setItem("token", token.idToken);
 
     setAuthToken(token);
   }

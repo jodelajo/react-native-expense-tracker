@@ -7,7 +7,7 @@ export default async function AuthHandler(
   password,
   authCtx,
   resultsCtx,
-  AsyncStorage
+  AsyncStorage,
 ) {
   setIsLoading(true);
   try {
@@ -16,7 +16,8 @@ export default async function AuthHandler(
     authCtx.authenticate(response.idToken);
     AsyncStorage.setItem("email", email);
     AsyncStorage.setItem("refreshToken", response.refreshToken);
-    // 
+    const token = await AsyncStorage.getItem('token')
+    console.log('token async in aithandler', token)
     const userProfile = await getUser(response.idToken);
     // console.log('userprofile in authhandler', userProfile )
     authCtx.userHandler({
@@ -27,7 +28,7 @@ export default async function AuthHandler(
       email: userProfile[0].email,
     });
 
-    const results = await fetchResults(response.localId, response.idToken);
+    const results = await fetchResults(response.localId, token);
     resultsCtx.setResults(results);
     const courses = await fetchCourses(response.localId, response.idToken);
     resultsCtx.setCurrentCourses(courses);

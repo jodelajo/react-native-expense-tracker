@@ -13,6 +13,8 @@ export async function storeResult(resultData, userId, token) {
 }
 
 export async function fetchResults(userId, token) {
+  console.log('token in fetch results', token)
+  console.log('userId in fetch results', userId)
   const response = await axios.get(
     url + `/users/${userId}/results.json?auth=` + token
   );
@@ -47,7 +49,7 @@ export function deleteResult(id, userId, token) {
 }
 
 export async function storeUserId(resultData) {
-  // console.log("result data", resultData);
+  console.log("result data", resultData);
   const response = await axios.put(
     url + `/users/${resultData.localId}.json?auth=` + resultData.idToken,
     resultData

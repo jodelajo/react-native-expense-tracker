@@ -19,6 +19,7 @@ export default async function Authenticate(mode, email, password, setIsLoading) 
 
     console.log('response in createuser', response)
     AsyncStorage.setItem("userId", response.data.localId)
+    AsyncStorage.setItem("token", response.data.idToken)
     if (mode === "signUp") {
       await storeUserId(response.data);
     }

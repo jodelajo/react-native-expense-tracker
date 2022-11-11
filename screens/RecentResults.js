@@ -22,13 +22,14 @@ export default function RecentResults() {
   async function getStoredUser() {
     // const userId = await AsyncStorage.getItem("userId")
       const token = await AsyncStorage.getItem("token")
+      const refreshToken = await AsyncStorage.getItem("refreshToken")
     const userProfile = await getUser(token);
     console.log('userprofile in authhandler', userProfile )
     authCtx.userHandler({
       userId: userProfile[0].localId,
       displayName: userProfile[0].displayName,
       photoUrl: userProfile[0].photoUrl,
-      refreshToken: userProfile[0].refreshToken,
+      refreshToken: refreshToken,
       email: userProfile[0].email,
     });
     const courses = await fetchCourses(userProfile[0].localId, token);
@@ -42,12 +43,12 @@ useEffect(() => {
   async function getResults() {
     setIsLoading(true);
     const userId = await AsyncStorage.getItem("userId")
-    //       const token = await AsyncStorage.getItem("token")
+          const token = await AsyncStorage.getItem("token")
     try {
-      const results = await fetchResults(userId, authCtx.token);
+      const results = await fetchResults(userId, token);
       resultsCtx.setResults(results);
-      console.log(authCtx.token)
-      console.log('useriD in recentresults', userId)
+      // console.log(authCtx.token)
+      console.log('useriD in recentresults', results)
     } catch (error) {
       // console.log('error', error )
       setError(
@@ -74,8 +75,12 @@ useEffect(() => {
   }
 
   const recentResults = resultsCtx.results.filter((item) => {
+    console.log('item', item.date)
     const today = new Date();
     const thisPeriod = getDateMinusDays(today, 30);
+    console.log('today', today)
+    console.log('thisPeriod', item.date >= thisPeriod && item.date <= today)
+    // console.log(thisPeriod + item.date)
     return item.date >= thisPeriod && item.date <= today;
   });
 
