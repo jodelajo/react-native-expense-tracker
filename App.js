@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler';
+import axios from 'axios';
 import { StatusBar } from "expo-status-bar";
 import React, { useContext, useEffect, useState, useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -17,9 +18,11 @@ import DrawerNavigator from "./components/navigation/DrawerNavigator";
 import {getApps, initializeApp} from "firebase/app"
 import { firebaseConfig } from "./config/firebase";
 import { useResources } from "./util/useFonts";
+import envs from './config/env'
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
+const { API_KEY } = envs;
 
 function AuthStack() {
   return (
@@ -97,8 +100,8 @@ function Root() {
 
   // setInterval(() => {
   //   refreshToken();
-  //   console.log("refreshhhh!");
-  // }, 1000 * 60 * 55);
+  //   // console.log("refreshhhh!");
+  // }, 1000 * 30 * 60);
 
   async function fetchToken() {
     const storedToken = await AsyncStorage.getItem("token");

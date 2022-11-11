@@ -151,7 +151,7 @@ export default function ResultForm({
       result: inputs.result.value,
       amount: inputs.amount.value,
     };
-    console.log('date', resultData.date.toString())
+    // console.log('date', resultData.date.toString())
 
     const courseIsValid = resultData.course.length > 0;
     const dateIsValid = (resultData.date.toString() !== "Invalid Date");

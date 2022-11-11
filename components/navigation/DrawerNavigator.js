@@ -17,6 +17,7 @@ import Courses from "../../screens/Courses";
 import Statistics from "../../screens/Statistics";
 import UpdateProfileForm from "../profile/UpdateProfileForm";
 import Avatar from "../UI/Avatar";
+import AmountInputs from "../../screens/AmountInputs";
 
 const Drawer = createDrawerNavigator();
 
@@ -137,6 +138,16 @@ export default function DrawerNavigator({ navigation }) {
           drawerInactiveBackgroundColor: GlobalStyles.colors.primary700,
         }}
       />
+      {/* <Drawer.Screen
+        name="Amount"
+        component={AmountInputs}
+        options={{
+          drawerLabel: "Jouw bedragen",
+          drawerLabelStyle: { color: "white", fontWeight: "bold" },
+          drawerActiveBackgroundColor: GlobalStyles.colors.minor,
+          drawerInactiveBackgroundColor: GlobalStyles.colors.primary700,
+        }}
+      /> */}
       <Drawer.Screen
         name="Statistics"
         component={Statistics}

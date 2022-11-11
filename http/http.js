@@ -78,7 +78,7 @@ export async function storeCourse(resultData, userId, token) {
     url + `/users/${userId}/courses.json?auth=` + token,
     resultData
   );
-  console.log('response in storecourse', response)
+  // console.log('response in storecourse', response)
   
   return response.data;
 }
@@ -88,7 +88,7 @@ export async function fetchCourses(userId, token) {
     url + `/users/${userId}/courses.json?auth=` + token
   );
     const courses = response.data
-    console.log('courses in fetchCourses', courses)
+    // console.log('courses in fetchCourses', courses)
   // const results = [];
   // for (const key in response.data) {
   //   const resultObj = {
