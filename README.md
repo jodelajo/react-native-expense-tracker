@@ -12,6 +12,7 @@ App lives [here](https://sashas-results-tracker.netlify.app/).
 - ✅ firebase rules setup - realtime db
 - ✅ firebase rules setup - storage
 - stay loggedin with refresh token
+- ✅ stay loggedin with AsyncStorage
 - open login screen after reload/reopen app in stead of recent results
 
 ## To-do list

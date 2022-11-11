@@ -2,7 +2,7 @@ import ResultsOutput from "../components/ResultsOutput/ResultsOutput";
 import React, { useContext, useEffect, useState } from "react";
 import { ResultsContext } from "../store/results-context";
 import { getDateMinusDays } from "../util/date";
-import { fetchResults, getUser } from "../http/http";
+import { fetchResults, getUser, fetchCourses } from "../http/http";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
 import { AuthContext } from "../store/auth-context";
@@ -31,7 +31,11 @@ export default function RecentResults() {
       refreshToken: userProfile[0].refreshToken,
       email: userProfile[0].email,
     });
+    const courses = await fetchCourses(userProfile[0].localId, token);
+   resultsCtx.setCurrentCourses(courses);
   }
+
+
 
 useEffect(() => {
 
