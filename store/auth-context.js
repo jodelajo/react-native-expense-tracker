@@ -12,14 +12,17 @@ export const AuthContext = createContext({
 export default function AuthContextProvider({ children }) {
   const [authToken, setAuthToken] = useState();
   const [user, setUser] = useState();
+  const [refreshToken, setRefreshToken] = useState()
 
 async function setLocalStorage() {
   const userId = await AsyncStorage.getItem("userId")
-  {userId && setUser(userId)}
+  setUser(userId)
   console.log('userId', userId)
   console.log('user', user)
   const token = await AsyncStorage.getItem("token")
-  {authToken && setAuthToken(token)}
+ setAuthToken(token)
+  const rToken = await AsyncStorage.getItem("refreshToken")
+ setRefreshToken(rToken)
   console.log('token', token)
 }
 useEffect(() => {
@@ -53,6 +56,7 @@ console.log('current user', user)
   }
 
   const value = {
+    refreshToken,
     currentUser: user,
     userHandler: userHandler,
     setUser: setUser,

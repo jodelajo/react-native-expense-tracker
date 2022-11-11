@@ -16,18 +16,13 @@ export default function RecentResults() {
   // const storage = getStorage();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
+
   // const [userId, setUserId] =useState()
 
-  useEffect(() => {
-    async function getResults() {
-      console.log("recent results", authCtx.currentUser);
-      console.log("asyncstorage", await AsyncStorage.getItem("userId"));
-      const userId = await AsyncStorage.getItem("userId")
+  async function getStoredUser() {
+    // const userId = await AsyncStorage.getItem("userId")
       const token = await AsyncStorage.getItem("token")
-      setIsLoading(true);
-
-      try {
-        const userProfile = await getUser(token);
+    const userProfile = await getUser(token);
     console.log('userprofile in authhandler', userProfile )
     authCtx.userHandler({
       userId: userProfile[0].localId,
@@ -36,29 +31,36 @@ export default function RecentResults() {
       refreshToken: userProfile[0].refreshToken,
       email: userProfile[0].email,
     });
-        const results = await fetchResults(
-          authCtx.currentUser.userId
-            ? authCtx.currentUser.userId
-            : userId,
-          authCtx.token ? authCtx.token : AsyncStorage.getItem("token")
-        );
-        resultsCtx.setResults(results);
-        // console.log(authCtx.token)
-      } catch (error) {
-        // console.log('error', error )
-        setError(
-          "Kan geen recente resultaten ophalen - Probeer later nog een keer!"
-        );
-      }
-      setIsLoading(false);
+  }
+
+useEffect(() => {
+
+  async function getResults() {
+    setIsLoading(true);
+    const userId = await AsyncStorage.getItem("userId")
+    //       const token = await AsyncStorage.getItem("token")
+    try {
+      const results = await fetchResults(userId, authCtx.token);
+      resultsCtx.setResults(results);
+      console.log(authCtx.token)
+      console.log('useriD in recentresults', userId)
+    } catch (error) {
+      // console.log('error', error )
+      setError(
+        "Kan geen recente resultaten ophalen - Probeer later nog een keer!"
+      );
     }
-    if (!!authCtx.currentUser) {
-      getResults();
-    }
-    if (!authCtx.token) {
-      navigation.navigate("Login");
-    }
-  }, []);
+    setIsLoading(false);
+  }
+  if (!!authCtx.currentUser){
+   console.log('authctx currentuser', authCtx.currentUser)
+    getStoredUser()
+  }
+  if (!authCtx.token){
+    navigation.navigate("Login")
+  }
+  getResults();
+}, []);
 
   if (error && !isLoading) {
     return <ErrorOverlay message={error.toString()} />;
