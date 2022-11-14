@@ -7,7 +7,7 @@ import ResultsSummary from "./ResultsSummary";
 
 export default function ResultsOutput({results, resultPeriod, fallbackText}) {
     let content = <Text style={styles.infoText}>{fallbackText}</Text>
-    if (results.length > 0) {
+    if (results && results.length > 0) {
         content = <ResultsList results={results} />
     }
 

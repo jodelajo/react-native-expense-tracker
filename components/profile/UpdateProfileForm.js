@@ -16,6 +16,7 @@ import { GlobalStyles } from "../../constants/styles";
 import Avatar from "../UI/Avatar";
 import Button from "../UI/Button";
 import LoadingOverlay from "../UI/LoadingOverlay";
+import { onAuthStateChanged, getAuth} from "firebase/auth/react-native";
 
 const { API_KEY } = envs;
 
@@ -29,6 +30,16 @@ export default function UpdateProfileForm() {
   const [uploading, setUploading] = useState(false);
 
   console.log('auth user', authCtx?.currentUser)
+
+  const auth = getAuth()
+  onAuthStateChanged(auth, (response) => {
+    if (response) {
+      console.log(response)
+      response.getIdToken().then(function(data) {
+        console.log('data', data)
+      });
+    }
+  })
 
   useEffect(() => {
     async () => {
@@ -114,7 +125,7 @@ export default function UpdateProfileForm() {
     const url = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${API_KEY}`;
     try {
       const response = await axios.post(url, {
-        idToken: authCtx.token,
+        idToken: authCtx.token.accessToken,
         displayName: username,
         photoUrl: downloadURL,
         returnSecureToken: true,

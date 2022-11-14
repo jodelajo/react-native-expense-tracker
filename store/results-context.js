@@ -34,18 +34,17 @@ function resultsReducer(state, action) {
 export default function ResultsContextProvider({ children }) {
   const [resultsState, dispatch] = useReducer(resultsReducer, []);
   const [saldo, setSaldo] = useState();
-  const [currentCourses, setCurrentCourses] = useState()
-  // const [userId, setUserId] = useState();
+  const [currentCourses, setCurrentCourses] = useState();
 
   function addResult(resultData) {
     dispatch({
       type: "ADD",
       payload: resultData,
     });
-    // console.log("data in context", resultData);
   }
 
   function setResults(results) {
+    console.log('results in context', results)
     dispatch({ type: "SET", payload: results });
   }
 
@@ -56,13 +55,8 @@ export default function ResultsContextProvider({ children }) {
   function updateResult(id, resultData) {
     dispatch({ type: "UPDATE", payload: { id: id, data: resultData } });
   }
-  // function userHandler(response) {
-  //   setUserId(response);
-  // }
 
   const value = {
-    // userId,
-    // userHandler: userHandler,
     courses: currentCourses,
     setCurrentCourses: setCurrentCourses,
     saldo: saldo,

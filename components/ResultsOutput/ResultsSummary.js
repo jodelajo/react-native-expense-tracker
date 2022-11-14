@@ -5,7 +5,7 @@ import { ResultsContext } from "../../store/results-context"
 
 export default function ResultsSummary({results, periodName}) {
     const { setSaldo } = useContext(ResultsContext)
-    const resultsSum = results.reduce((sum, result) => {
+    const resultsSum = results && results.reduce((sum, result) => {
         return sum + result.amount
     }, 0)
 
@@ -16,7 +16,7 @@ export default function ResultsSummary({results, periodName}) {
 
     return <View style={styles.container}>
         <Text style={styles.period}>{periodName}</Text>
-        <Text style={styles.sum}>€ {resultsSum.toFixed(2)}</Text>
+        <Text style={styles.sum}>€ {resultsSum && resultsSum.toFixed(2)}</Text>
     </View>
 }
 

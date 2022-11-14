@@ -41,7 +41,7 @@ export default function DrawerNavigator({ navigation }) {
         <View style={styles.logoutButton}>
           <DrawerItem
             label="Uitloggen"
-            onPress={() => authCtx.logout(resultsCtx.setResults)}
+            onPress={() => authCtx.logout(resultsCtx.setResults, resultsCtx.setCurrentCourses)}
             labelStyle={{
               color: "white",
               fontSize: 18,

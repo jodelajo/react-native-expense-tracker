@@ -2,51 +2,55 @@ import AuthContent from "../components/auth/AuthContent";
 import { StyleSheet } from "react-native";
 import { GlobalStyles } from "../constants/styles";
 import { View } from "react-native";
-import { CreateUser } from "../components/auth/CreateUser";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
 import { AuthContext } from "../store/auth-context";
-import { ResultsContext } from "../store/results-context";
-import { errorMessages } from "../constants/errorMessages";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import AuthHandler from "../components/auth/AuthHandler";
+import { storeUserId, getUser } from "../http/http";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+} from "firebase/auth/react-native";
 
 export default function SignUp() {
+  const authCtx = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const authCtx = useContext(AuthContext);
-  const resultsCtx = useContext(ResultsContext);
+  const [user, setUser] = useState();
 
   async function signupHandler({ email, password }) {
-    try {
-      setIsLoading(true);
-      const token = await CreateUser(email, password, setIsLoading);
-      authCtx.authenticate(token);
-      console.log("token in signup", token);
-      if (token) {
-        try {
-          await AuthHandler(
-            setIsLoading,
-            email,
-            password,
-            authCtx,
-            resultsCtx,
-            AsyncStorage
-          );
-        } catch (error) {
-          console.log(error);
-          setError(error.toString());
-        }
-       setIsLoading(false)
-      }
-    } catch (error) {
-      // Alert.alert('jajaja', 'sdiof soidfjoi sdfoijoi')
-      console.log(error);
-      setError(error.toString());
-    }
-    setIsLoading(false);
+    const auth = getAuth();
+    const { currentUser } = auth;
+    setIsLoading(true);
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        const user = userCredential.user;
+        setUser(user);
+        authCtx.userHandler({
+          userId: user.uid,
+          displayName: user.displayName,
+          photoUrl: user.photoURL,
+          email: user.email,
+        });
+        authCtx.authenticate(user);
+        await storeUserId(user);
+      })
+      .catch((error) => {
+        setError(error.toString());
+        setIsLoading(false);
+      });
+    return currentUser;
   }
+
+  useEffect(() => {
+    async function userHandler() {
+      if (user) {
+        console.log("user", user);
+        await getUser(user && user.accessToken);
+      }
+    }
+    userHandler();
+  }, [user]);
 
   if (isLoading) {
     return <LoadingOverlay />;
