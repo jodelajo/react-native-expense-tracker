@@ -13,30 +13,30 @@ export const AuthContext = createContext({
 export default function AuthContextProvider({ children }) {
   const [authToken, setAuthToken] = useState();
   const [user, setUser] = useState();
-  const [refreshToken, setRefreshToken] = useState();
-  const [userName, setUserName] = useState();
 
-  async function setLocalStorage() {
-    const userId = await AsyncStorage.getItem("userId");
-    setUser(userId);
-    console.log("userId", userId);
-    console.log("user", user);
+  async function setAuthLocalStorage() {
     const token = await AsyncStorage.getItem("token");
     setAuthToken(token);
-    const rToken = await AsyncStorage.getItem("refreshToken");
-    setRefreshToken(rToken);
-    console.log("token", rToken);
+    const displayName = await AsyncStorage.getItem("displayName");
+    const photoUrl = await AsyncStorage.getItem("photoUrl");
+    const uid = await AsyncStorage.getItem("uid");
+    setUser({
+      displayName: displayName,
+      photoUrl: photoUrl,
+      uid: uid,
+      idToken: token,
+    });
   }
+
   useEffect(() => {
-    setLocalStorage();
+    if (user === undefined) {
+      setAuthLocalStorage();
+    }
   }, []);
 
   console.log("current user", user);
 
-  function authenticate(token) {
-    console.log("token in auth context", token);
-    // AsyncStorage.setItem("token", token.idToken);
-
+  async function authenticate(token) {
     setAuthToken(token);
   }
 
@@ -50,17 +50,19 @@ export default function AuthContextProvider({ children }) {
     try {
       const result = await signOut(auth);
       console.log("result sign out", result);
-      setAuthToken(null);
-      setResults([]);
-      setUser(null);
-      setCurrentCourses(null);
-      AsyncStorage.removeItem("userId");
-      AsyncStorage.removeItem("token");
-      AsyncStorage.removeItem("refreshToken");
-      AsyncStorage.removeItem("displayName");
-      AsyncStorage.removeItem("photoUrl");
-      AsyncStorage.removeItem("email");
-      AsyncStorage.removeItem("localId");
+      setAuthToken();
+      setResults();
+      setUser();
+      setCurrentCourses();
+      AsyncStorage.multiRemove([
+        "displayName",
+        "photoUrl",
+        "token",
+        "courses",
+        "results",
+        "uid",
+        "recentResults",
+      ]);
     } catch (error) {
       console.log(error);
     }
@@ -68,7 +70,6 @@ export default function AuthContextProvider({ children }) {
   }
 
   const value = {
-    refreshToken,
     currentUser: user,
     userHandler: userHandler,
     setUser: setUser,

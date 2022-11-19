@@ -1,4 +1,5 @@
-import React, { createContext, useReducer, useState } from "react";
+import React, { createContext, useReducer, useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const ResultsContext = createContext({
   courses: [],
@@ -10,6 +11,7 @@ export const ResultsContext = createContext({
 });
 
 function resultsReducer(state, action) {
+  console.log('state', state)
   switch (action.type) {
     case "ADD":
       return [action.payload, ...state];
@@ -43,9 +45,10 @@ export default function ResultsContextProvider({ children }) {
     });
   }
 
-  function setResults(results) {
-    console.log('results in context', results)
+  async function setResults(results) {
+    console.log('resulst state', resultsState)
     dispatch({ type: "SET", payload: results });
+    // await AsyncStorage.setItem("results", JSON.stringify(results))
   }
 
   function deleteResult(id) {
@@ -55,6 +58,26 @@ export default function ResultsContextProvider({ children }) {
   function updateResult(id, resultData) {
     dispatch({ type: "UPDATE", payload: { id: id, data: resultData } });
   }
+
+
+  const getResults = async () => {
+    try {
+      const results = JSON.parse(await AsyncStorage.getItem("results"))
+      return results ? results : {}
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+const fetchResults = async() => {
+  const results = await getResults()
+  console.log('results in fethc results', results)
+  dispatch({type: "ADD", payload: results})
+}
+
+useEffect(() => {
+  fetchResults()
+},[])
 
   const value = {
     courses: currentCourses,

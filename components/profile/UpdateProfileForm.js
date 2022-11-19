@@ -2,11 +2,7 @@ import Input from "../manageResult/Input";
 import envs from "../../config/env";
 import axios from "axios";
 import React, { useState, useContext, useEffect } from "react";
-import {
-  Platform,
-  View,
-  StyleSheet,
-} from "react-native";
+import { Platform, View, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext } from "../../store/auth-context";
 import * as ImagePicker from "expo-image-picker";
@@ -16,7 +12,7 @@ import { GlobalStyles } from "../../constants/styles";
 import Avatar from "../UI/Avatar";
 import Button from "../UI/Button";
 import LoadingOverlay from "../UI/LoadingOverlay";
-import { onAuthStateChanged, getAuth} from "firebase/auth/react-native";
+import { onAuthStateChanged, getAuth } from "firebase/auth/react-native";
 
 const { API_KEY } = envs;
 
@@ -25,21 +21,31 @@ export default function UpdateProfileForm() {
   const storage = getStorage();
 
   const authCtx = useContext(AuthContext);
-  const [username, setUsername] = useState(authCtx.currentUser?.displayName || '');
-  const [image, setImage] = useState(authCtx.currentUser.photoUrl ? authCtx.currentUser.photoUrl : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8vw6lSyyJyi4M87YNItzmpm9mMUni0dOJu1bJg-w5wRApCc60oOPwT4ZC2oFkQAl2qq8&usqp=CAU");
+  const [username, setUsername] = useState(
+    authCtx.currentUser?.displayName || ""
+  );
+  const [image, setImage] = useState(
+    authCtx.currentUser.photoUrl
+      ? authCtx.currentUser.photoUrl
+      : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8vw6lSyyJyi4M87YNItzmpm9mMUni0dOJu1bJg-w5wRApCc60oOPwT4ZC2oFkQAl2qq8&usqp=CAU"
+  );
   const [uploading, setUploading] = useState(false);
 
-  console.log('auth user', authCtx?.currentUser)
+  const token = authCtx.currentUser?.idToken
+  const currentUser = authCtx?.currentUser
+  const uid = authCtx.currentUser?.uid
 
-  const auth = getAuth()
+  console.log("currUser", currentUser);
+
+  const auth = getAuth();
   onAuthStateChanged(auth, (response) => {
     if (response) {
-      console.log(response)
-      response.getIdToken().then(function(data) {
-        console.log('data', data)
+      console.log(response);
+      response.getIdToken().then(function (data) {
+        console.log("data", data);
       });
     }
-  })
+  });
 
   useEffect(() => {
     async () => {
@@ -54,6 +60,7 @@ export default function UpdateProfileForm() {
   }, []);
 
   const pickImage = async () => {
+    setUploading(true);
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -61,16 +68,16 @@ export default function UpdateProfileForm() {
       quality: 1,
     });
     console.log("result in pickImage", result.uri);
-
     if (!result.cancelled) {
       setImage(result.uri);
     }
+    setUploading(false);
   };
 
-
   const uploadImage = async () => {
-    const userId = authCtx.currentUser.userId;
-    if (image !== authCtx.currentUser.photoUrl) {
+    setUploading(true);
+    // console.log('hoi', currentUser.uid);
+    if (image !== currentUser.photoUrl) {
       const blob = await new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -84,48 +91,43 @@ export default function UpdateProfileForm() {
         xhr.open("GET", image, true);
         xhr.send(null);
       });
-      const fileRef = userId && ref(storage, `${userId}/avatar.png`);
-
+     
       try {
-        setUploading(true);
-        const result = await uploadBytes(fileRef, blob);
+        const fileRef =
+        uid && ref(storage, `${uid}/avatar.png`);
+        await uploadBytes(fileRef, blob);
+        if (fileRef) {
+          getUrl(fileRef);
+        }
+        if (Platform.OS !== "web") {
+          blob.close();
+        }
       } catch (error) {
         console.log("error", error);
-        setUploading(false);
       }
-      setUploading(false);
-      if (Platform.OS !== "web") {
-        blob.close();
-      }
-
-      getUrl(fileRef);
     } else {
-      updateHandler(authCtx.currentUser.photoUrl)
+      updateHandler(authCtx.currentUser.photoUrl);
     }
   };
 
   const getUrl = async (fileRef) => {
-    console.log('fileRef', fileRef)
+    setUploading(true);
     try {
-      setUploading(true);
       await getDownloadURL(fileRef).then((downloadURL) => {
-        authCtx.setUser({ ...authCtx.currentUser, photoUrl: downloadURL });
-        AsyncStorage.setItem("photoUrl", downloadURL);
+        authCtx.setUser({ ...currentUser, photoUrl: downloadURL });
         updateHandler(downloadURL);
       });
     } catch (error) {
       console.log("error", error);
-      setUploading(false);
     }
-    setUploading(false);
-    
   };
 
   async function updateHandler(downloadURL) {
+    setUploading(true);
     const url = `https://identitytoolkit.googleapis.com/v1/accounts:update?key=${API_KEY}`;
     try {
       const response = await axios.post(url, {
-        idToken: authCtx.token.accessToken,
+        idToken: token,
         displayName: username,
         photoUrl: downloadURL,
         returnSecureToken: true,
@@ -139,8 +141,8 @@ export default function UpdateProfileForm() {
         displayName: response.data.displayName,
         photoUrl: response.data.photoUrl,
       });
-      AsyncStorage.setItem("displayName", response.data.displayName);
-      AsyncStorage.setItem("photoUrl", response.data.photoUrl);
+      await AsyncStorage.setItem("displayName", response.data.displayName);
+      await AsyncStorage.setItem("photoUrl", response.data.photoUrl);
     } catch (error) {
       console.log("error", error);
     }

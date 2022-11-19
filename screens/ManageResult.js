@@ -13,6 +13,7 @@ import { onAuthStateChanged, getAuth} from "firebase/auth/react-native";
 export default function ManageResult({ route, navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+  const [token, setToken] = useState()
   const resultsCtx = useContext(ResultsContext);
   const authCtx = useContext(AuthContext);
 
@@ -21,11 +22,13 @@ export default function ManageResult({ route, navigation }) {
     if (response) {
       console.log(response)
       response.getIdToken().then(function(data) {
+        setToken(data)
         console.log('data', data)
       });
     }
   })
 
+  console.log( authCtx.token.accessToken)
   const editedResultId = route.params?.resultId;
   const isEditing = !!editedResultId;
 
@@ -47,7 +50,7 @@ export default function ManageResult({ route, navigation }) {
       await deleteResult(
         editedResultId,
         authCtx.currentUser.userId,
-        authCtx.token.accessToken
+        token
       );
     } catch (error) {
       setError("Kon resultaat niet verwijderen - Probeer later nog een keer!");
@@ -64,18 +67,17 @@ export default function ManageResult({ route, navigation }) {
     try {
       if (isEditing) {
         resultsCtx.updateResult(editedResultId, resultData);
-        // console.log("result data in manage result", resultData);
         await updateResult(
           editedResultId,
           resultData,
           authCtx.currentUser.userId,
-          authCtx.token.accessToken
+          token
         );
       } else {
         const id = await storeResult(
           resultData,
           authCtx.currentUser.userId,
-          authCtx.token.accessToken
+          token
         );
         resultsCtx.addResult({ ...resultData, id: id });
       }

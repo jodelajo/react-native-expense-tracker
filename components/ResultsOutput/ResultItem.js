@@ -16,6 +16,7 @@ export default function ResultItem({
   const navigation = useNavigation();
   const resultOutput = result;
   const [typeStyles, setTypeStyles] = useState({});
+  // console.log('date', date)
 
   function typeHandler() {
     if (type === "MO") {
