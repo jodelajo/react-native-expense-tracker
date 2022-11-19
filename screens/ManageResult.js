@@ -32,7 +32,7 @@ export default function ManageResult({ route, navigation }) {
   const editedResultId = route.params?.resultId;
   const isEditing = !!editedResultId;
 
-  const selectedResult = resultsCtx.results.find(
+  const selectedResult = resultsCtx?.results.find(
     (result) => result.id === editedResultId
   );
   console.log('selected result', selectedResult)
@@ -49,7 +49,7 @@ export default function ManageResult({ route, navigation }) {
       resultsCtx.deleteResult(editedResultId);
       await deleteResult(
         editedResultId,
-        authCtx.currentUser.userId,
+        authCtx.currentUser.uid,
         token
       );
     } catch (error) {
@@ -70,13 +70,13 @@ export default function ManageResult({ route, navigation }) {
         await updateResult(
           editedResultId,
           resultData,
-          authCtx.currentUser.userId,
+          authCtx.currentUser.uid,
           token
         );
       } else {
         const id = await storeResult(
           resultData,
-          authCtx.currentUser.userId,
+          authCtx.currentUser.uid,
           token
         );
         resultsCtx.addResult({ ...resultData, id: id });

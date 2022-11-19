@@ -14,7 +14,6 @@ export async function storeResult(resultData, userId, token) {
 }
 
 export async function fetchResults(userId, token) {
- 
   const response = await axios.get(
     url + `/users/${userId}/results.json?auth=` + token
   );
@@ -52,7 +51,6 @@ export async function storeUserId(resultData) {
     url + `/users/${resultData.uid}.json?auth=` + resultData.accessToken,
     resultData
   );
-
   const id = response.data.uid;
   return id;
 }
@@ -62,13 +60,11 @@ export async function getUser(token) {
     `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${API_KEY}`,
     { idToken: token }
   );
-
   return response.data.users;
 }
 
 export async function fetchUser(userId, token) {
   const response = await axios.get(url + `/users/${userId}.json?auth=` + token);
-  
   return response.data;
 }
 
@@ -77,16 +73,13 @@ export async function storeCourse(resultData, userId, token) {
     url + `/users/${userId}/courses.json?auth=` + token,
     resultData
   );
-  
   return response.data;
 }
 
 export async function fetchCourses(userId, token) {
-  
   const response = await axios.get(
     url + `/users/${userId}/courses.json?auth=` + token
   );
     const courses = response.data
-  
   return courses;
 }
