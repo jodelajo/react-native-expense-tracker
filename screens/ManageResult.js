@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useContext, useState } from "react";
+import React, { useLayoutEffect, useContext, useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../constants/styles";
@@ -17,22 +17,27 @@ export default function ManageResult({ route, navigation }) {
   const resultsCtx = useContext(ResultsContext);
   const authCtx = useContext(AuthContext);
 
-  const auth = getAuth()
-  onAuthStateChanged(auth, (response) => {
-    if (response) {
-      console.log(response)
-      response.getIdToken().then(function(data) {
-        setToken(data)
-        console.log('data', data)
-      });
-    }
-  })
 
-  console.log( authCtx.token.accessToken)
+
+  useEffect(()=>{
+    const auth = getAuth()
+    onAuthStateChanged(auth, (response) => {
+      if (response) {
+        console.log(response)
+        response.getIdToken().then(function(data) {
+          // console.log(response.getIdToken(true))
+          setToken(data)
+          console.log('data', data)
+        });
+      }
+    })
+  },[])
+
+  // console.log( authCtx.token.accessToken)
   const editedResultId = route.params?.resultId;
   const isEditing = !!editedResultId;
 
-  const selectedResult = resultsCtx?.results.find(
+  const selectedResult = resultsCtx?.results?.find(
     (result) => result.id === editedResultId
   );
   console.log('selected result', selectedResult)

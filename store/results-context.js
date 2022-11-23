@@ -1,5 +1,6 @@
 import React, { createContext, useReducer, useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getDateMinusDays } from "../util/date";
 
 export const ResultsContext = createContext({
   courses: [],
@@ -11,7 +12,6 @@ export const ResultsContext = createContext({
 });
 
 function resultsReducer(state, action) {
-  console.log('state', state)
   switch (action.type) {
     case "ADD":
       return [action.payload, ...state];
@@ -46,9 +46,8 @@ export default function ResultsContextProvider({ children }) {
   }
 
   async function setResults(results) {
-    console.log('resulst state', resultsState)
     dispatch({ type: "SET", payload: results });
-    // await AsyncStorage.setItem("results", JSON.stringify(results))
+    addRecentResults(results);
   }
 
   function deleteResult(id) {
@@ -59,25 +58,37 @@ export default function ResultsContextProvider({ children }) {
     dispatch({ type: "UPDATE", payload: { id: id, data: resultData } });
   }
 
-
   const getResults = async () => {
     try {
-      const results = JSON.parse(await AsyncStorage.getItem("results"))
-      return results ? results : {}
+      const results = JSON.parse(await AsyncStorage.getItem("results"));
+      dispatch({ type: "SET", payload: results });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
-const fetchResults = async() => {
-  const results = await getResults()
-  console.log('results in fethc results', results)
-  dispatch({type: "ADD", payload: results})
-}
+  useEffect(() => {
+    getResults();
+  }, []);
 
-useEffect(() => {
-  fetchResults()
-},[])
+  const addRecentResults = async (results) => {
+    const recentResults = results?.filter((item) => {
+      const today = new Date();
+      const thisPeriod = getDateMinusDays(today, 30);
+      if (item.date >= thisPeriod && item.date <= today) {
+        return item;
+      }
+    });
+    try {
+      await AsyncStorage.setItem(
+        "recentResults",
+        JSON.stringify(recentResults)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log("resulst state", resultsState);
 
   const value = {
     courses: currentCourses,
@@ -90,7 +101,6 @@ useEffect(() => {
     deleteResult: deleteResult,
     updateResult: updateResult,
   };
-
   return (
     <ResultsContext.Provider value={value}>{children}</ResultsContext.Provider>
   );

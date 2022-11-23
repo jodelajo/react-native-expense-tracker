@@ -31,6 +31,7 @@ export default function SignUp() {
           displayName: user.displayName,
           photoUrl: user.photoURL,
           email: user.email,
+          idToken: user.accessToken
         });
         authCtx.authenticate(user);
         await storeUserId(user);

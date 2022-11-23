@@ -131,7 +131,7 @@ export default function Login() {
           const results = await fetchResults(user.uid, user.accessToken);
           resultsCtx.setResults(results);
           addResults(results);
-          console.log(results);
+          console.log('?????', results);
         } catch (error) {
           console.log(error);
           setError(error.toString());

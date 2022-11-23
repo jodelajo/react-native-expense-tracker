@@ -30,24 +30,30 @@ export default function UpdateProfileForm() {
       : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8vw6lSyyJyi4M87YNItzmpm9mMUni0dOJu1bJg-w5wRApCc60oOPwT4ZC2oFkQAl2qq8&usqp=CAU"
   );
   const [uploading, setUploading] = useState(false);
+  const [token, setToken] = useState(authCtx.currentUser?.idToken)
 
-  const token = authCtx.currentUser?.idToken
+  
   const currentUser = authCtx?.currentUser
   const uid = authCtx.currentUser?.uid
 
   console.log("currUser", currentUser);
+  console.log('token', token)
 
   const auth = getAuth();
   onAuthStateChanged(auth, (response) => {
+    console.log('hiii')
     if (response) {
       console.log(response);
       response.getIdToken().then(function (data) {
         console.log("data", data);
+        setToken(data)
       });
     }
-  });
 
-  useEffect(() => {
+  // useEffect(() => {
+   
+  //   });
+
     async () => {
       if (Platform.OS !== "web") {
         const { status } =

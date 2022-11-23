@@ -1,5 +1,4 @@
 import 'react-native-gesture-handler';
-import axios from 'axios';
 import { StatusBar } from "expo-status-bar";
 import React, { useContext, useEffect, useState, useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -18,11 +17,9 @@ import DrawerNavigator from "./components/navigation/DrawerNavigator";
 import {getApps, initializeApp} from "firebase/app"
 import { firebaseConfig } from "./config/firebase";
 import { useResources } from "./util/useFonts";
-import envs from './config/env'
 
 const Stack = createNativeStackNavigator();
 SplashScreen.preventAutoHideAsync();
-const { API_KEY } = envs;
 
 function AuthStack() {
   return (
@@ -84,28 +81,10 @@ function Root() {
   const authCtx = useContext(AuthContext);
   const isBigScreen = useMediaQuery({ minDeviceWidth: 450 });
   const {isFontReady} = useResources()
-  // console.log("big screen", isBigScreen);
 
-  // async function refreshToken() {
-  //   const refreshedToken = await AsyncStorage.getItem("refreshToken");
-  //   // console.log("refresh tokenin app.js", refreshedToken);
-  //   const url = `https://securetoken.googleapis.com/v1/token?key=${API_KEY}`;
-  //   const response = await axios.post(
-  //     url,
-  //     "grant_type=refresh_token&refresh_token=" + refreshedToken
-  //   );
-  //   // console.log("response in refreshtoken in app.js", response.data);
-  //   // console.log("refresh token in async storage", refreshedToken);
-  // }
-
-  // setInterval(() => {
-  //   refreshToken();
-  //   // console.log("refreshhhh!");
-  // }, 1000 * 30 * 60);
 
   async function fetchToken() {
     const storedToken = await AsyncStorage.getItem("token");
-    // console.log("storedToken", storedToken);
     if (storedToken) {
       authCtx.authenticate(storedToken);
     }
@@ -143,10 +122,9 @@ function Root() {
 }
 
 export default function App() {
-  console.log(getApps())
-  // if (!getApps().length) {
-  //   initializeApp(firebaseConfig);
-  // }
+  if (!getApps().length) {
+    initializeApp(firebaseConfig);
+  }
   
   return (
     <>
@@ -172,8 +150,6 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     minWidth: 350,
     maxWidth: 428,
-    // minHeight: 800,
-    // height: 833,
     maxHeight: 928,
     flex: 1,
     overflow: 'hidden'

@@ -1,6 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
 import envs from "../config/env";
+// import { getAuth } from "firebase/auth/react-native";
+// import { browserLocalPersistence, setPersistence, initializeAuth } from "firebase/auth"
 
 const {
   API_KEY,
@@ -25,5 +27,11 @@ export const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+// const auth = initializeAuth(app, {
+//   persistence: browserLocalPersistence
+// })
+
+// setPersistence(auth, browserLocalPersistence)
+// console.log(auth)
 
 export const storage = getStorage(app);
