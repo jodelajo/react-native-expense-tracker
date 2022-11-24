@@ -4,7 +4,6 @@ import {GlobalStyles} from "../../constants/styles"
 import { ResultsContext } from "../../store/results-context"
 
 export default function ResultsSummary({results, periodName}) {
-    console.log('results', results)
     const { setSaldo } = useContext(ResultsContext)
     const resultsSum = results && results.reduce((sum, result) => {
         return sum + result.amount

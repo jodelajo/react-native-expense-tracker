@@ -7,7 +7,6 @@ import { AuthContext } from "../store/auth-context";
 import { ResultsContext } from "../store/results-context";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
 import { fetchCourses, fetchResults, getUser } from "../http/http";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -20,58 +19,6 @@ export default function Login() {
   const resultsCtx = useContext(ResultsContext);
   const authCtx = useContext(AuthContext);
 
-  const addToken = async (token) => {
-    try {
-      await AsyncStorage.setItem("token", token);
-      console.log("doet iets", token);
-      if (token === undefined) {
-        // await AsyncStorage.removeItem("token")
-        authCtx.logout(resultsCtx.setResults, resultsCtx.setCurrentCourses);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const addName = async (displayName) => {
-    try {
-      await AsyncStorage.setItem("displayName", displayName);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const addProfilePicture = async (pic) => {
-    try {
-      await AsyncStorage.setItem("photoUrl", pic);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const addUid = async (uid) => {
-    try {
-      await AsyncStorage.setItem("uid", uid);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const addCourses = async (courses) => {
-    try {
-      await AsyncStorage.setItem("courses", JSON.stringify(courses));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const addResults = async (results) => {
-    try {
-      await AsyncStorage.setItem("results", JSON.stringify(results));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   function loginHandler({ email, password }) {
     const auth = getAuth();
     const { currentUser } = auth;
@@ -82,18 +29,13 @@ export default function Login() {
         console.log("user in login", user);
         setUser(user);
         authCtx.userHandler({
-          uid: user.uid,
+          userId: user.uid,
           displayName: user.displayName,
           photoUrl: user.photoURL,
           email: user.email,
-          idToken: user.accessToken,
         });
         authCtx.authenticate(user);
-        addToken(user.accessToken);
-        addName(user.displayName);
-        addProfilePicture(user.photoURL);
-        addUid(user.uid);
-        authCtx.setAuthLocalStorage();
+        // await storeUserId(user);
       })
       .catch((error) => {
         setError(error.toString());
@@ -101,6 +43,16 @@ export default function Login() {
       });
     return currentUser?.accessToken;
   }
+
+  // useEffect(() => {
+  //   async function userHandler() {
+  //     if (user) {
+  //       console.log("user", user);
+  //       await getUser(user && user.accessToken);
+  //     }
+  //   }
+  //   userHandler();
+  // }, [user]);
 
   useEffect(() => {
     async function userHandler() {
@@ -115,7 +67,6 @@ export default function Login() {
         try {
           const courses = await fetchCourses(user.uid, user.accessToken);
           resultsCtx.setCurrentCourses(courses);
-          addCourses(courses);
         } catch (error) {
           console.log(error);
           setError(error.toString());
@@ -124,14 +75,13 @@ export default function Login() {
       }
     }
     async function resultsHandler() {
-      console.log("user", user);
+      console.log('user', user)
       if (user !== undefined) {
         setIsLoading(true);
         try {
           const results = await fetchResults(user.uid, user.accessToken);
           resultsCtx.setResults(results);
-          addResults(results);
-          console.log('?????', results);
+          console.log(results);
         } catch (error) {
           console.log(error);
           setError(error.toString());

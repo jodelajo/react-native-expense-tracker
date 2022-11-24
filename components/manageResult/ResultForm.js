@@ -3,10 +3,9 @@ import { View, Switch, Text, StyleSheet, TextInput, Alert } from "react-native";
 import { GlobalStyles } from "../../constants/styles";
 import Input from "./Input";
 import Button from "../UI/Button";
-import { getFormattedDate, dateInputHandler } from "../../util/date";
+import { getFormattedDate } from "../../util/date";
 import SearchBarDropdown from "../UI/SearchBarDropdown";
 import RadioButton from "../UI/RadioButtons";
-
 
 export default function ResultForm({
   onCancel,

@@ -1,6 +1,4 @@
-import React, { createContext, useReducer, useState, useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getDateMinusDays } from "../util/date";
+import React, { createContext, useReducer, useState } from "react";
 
 export const ResultsContext = createContext({
   courses: [],
@@ -45,9 +43,9 @@ export default function ResultsContextProvider({ children }) {
     });
   }
 
-  async function setResults(results) {
+  function setResults(results) {
+    console.log('results in context', results)
     dispatch({ type: "SET", payload: results });
-    addRecentResults(results);
   }
 
   function deleteResult(id) {
@@ -57,38 +55,6 @@ export default function ResultsContextProvider({ children }) {
   function updateResult(id, resultData) {
     dispatch({ type: "UPDATE", payload: { id: id, data: resultData } });
   }
-
-  const getResults = async () => {
-    try {
-      const results = JSON.parse(await AsyncStorage.getItem("results"));
-      dispatch({ type: "SET", payload: results });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getResults();
-  }, []);
-
-  const addRecentResults = async (results) => {
-    const recentResults = results?.filter((item) => {
-      const today = new Date();
-      const thisPeriod = getDateMinusDays(today, 30);
-      if (item.date >= thisPeriod && item.date <= today) {
-        return item;
-      }
-    });
-    try {
-      await AsyncStorage.setItem(
-        "recentResults",
-        JSON.stringify(recentResults)
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  console.log("resulst state", resultsState);
 
   const value = {
     courses: currentCourses,
@@ -101,6 +67,7 @@ export default function ResultsContextProvider({ children }) {
     deleteResult: deleteResult,
     updateResult: updateResult,
   };
+
   return (
     <ResultsContext.Provider value={value}>{children}</ResultsContext.Provider>
   );

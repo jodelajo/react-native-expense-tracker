@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useContext, useState, useEffect } from "react";
+import React, { useLayoutEffect, useContext, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../constants/styles";
@@ -13,31 +13,23 @@ import { onAuthStateChanged, getAuth} from "firebase/auth/react-native";
 export default function ManageResult({ route, navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const [token, setToken] = useState()
   const resultsCtx = useContext(ResultsContext);
   const authCtx = useContext(AuthContext);
 
+  const auth = getAuth()
+  onAuthStateChanged(auth, (response) => {
+    if (response) {
+      console.log(response)
+      response.getIdToken().then(function(data) {
+        console.log('data', data)
+      });
+    }
+  })
 
-
-  useEffect(()=>{
-    const auth = getAuth()
-    onAuthStateChanged(auth, (response) => {
-      if (response) {
-        console.log(response)
-        response.getIdToken().then(function(data) {
-          // console.log(response.getIdToken(true))
-          setToken(data)
-          console.log('data', data)
-        });
-      }
-    })
-  },[])
-
-  // console.log( authCtx.token.accessToken)
   const editedResultId = route.params?.resultId;
   const isEditing = !!editedResultId;
 
-  const selectedResult = resultsCtx?.results?.find(
+  const selectedResult = resultsCtx.results.find(
     (result) => result.id === editedResultId
   );
   console.log('selected result', selectedResult)
@@ -54,8 +46,8 @@ export default function ManageResult({ route, navigation }) {
       resultsCtx.deleteResult(editedResultId);
       await deleteResult(
         editedResultId,
-        authCtx.currentUser.uid,
-        token
+        authCtx.currentUser.userId,
+        authCtx.token.accessToken
       );
     } catch (error) {
       setError("Kon resultaat niet verwijderen - Probeer later nog een keer!");
@@ -72,17 +64,18 @@ export default function ManageResult({ route, navigation }) {
     try {
       if (isEditing) {
         resultsCtx.updateResult(editedResultId, resultData);
+        // console.log("result data in manage result", resultData);
         await updateResult(
           editedResultId,
           resultData,
-          authCtx.currentUser.uid,
-          token
+          authCtx.currentUser.userId,
+          authCtx.token.accessToken
         );
       } else {
         const id = await storeResult(
           resultData,
-          authCtx.currentUser.uid,
-          token
+          authCtx.currentUser.userId,
+          authCtx.token.accessToken
         );
         resultsCtx.addResult({ ...resultData, id: id });
       }
