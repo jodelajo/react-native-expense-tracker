@@ -44,7 +44,7 @@ export default function SearchBarDropdown(props) {
       </TouchableOpacity>
       {showOptions && (
         <View style={styles.dropdown}>
-          {coursesCtx.courses !== null && coursesCtx.courses !== "" && coursesCtx.courses.length !== 0 ? (
+          {coursesCtx.courses !== null && coursesCtx.courses !== "" && coursesCtx.courses !== undefined && coursesCtx.courses.length !== 0 ? (
             coursesCtx.courses.map((item) => {
               return (
                 <View key={item} style={styles.item}>

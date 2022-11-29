@@ -1,40 +1,59 @@
-import { LoginUser } from "./CreateUser";
-import { getUser, fetchResults, fetchCourses } from "../../http/http";
+// import { LoginUser } from "./CreateUser";
+// import { fetchCourses } from "../../http/http";
+// // import { auth } from "../../config/firebase";
+// import { onAuthStateChanged, getAuth, getIdToken } from "firebase/auth/react-native";
 
-export default async function AuthHandler(
-  setIsLoading,
-  email,
-  password,
-  authCtx,
-  resultsCtx,
-  AsyncStorage
-) {
-  setIsLoading(true);
-  try {
-    const response = await LoginUser(email, password, setIsLoading);
-    console.log('response in authhandler', response )
-    authCtx.authenticate(response.idToken);
-    AsyncStorage.setItem("email", email);
-    AsyncStorage.setItem("refreshToken", response.refreshToken);
-    // 
-    const userProfile = await getUser(response.idToken);
-    // console.log('userprofile in authhandler', userProfile )
-    authCtx.userHandler({
-      userId: userProfile[0].localId,
-      displayName: userProfile[0].displayName,
-      photoUrl: userProfile[0].photoUrl,
-      refreshToken: userProfile[0].refreshToken,
-      email: userProfile[0].email,
-    });
+// export default async function AuthHandler(
+//   setIsLoading,
+//   email,
+//   password,
+//   data,
+//   authCtx,
+//   resultsCtx,
+//   AsyncStorage
+// ) {
+//   // setIsLoading(true);
+//   try {
+//     // const response = await LoginUser(email, password, setIsLoading);
+//     // console.log("response in authhandler", response);
+//     // const auth = getAuth()
+//     // onAuthStateChanged(auth, (response) => {
+//     //   if (response) {
+//     //     console.log(response)
+//     //     response.getIdToken().then(function(data) {
+//     //       console.log('data', data)
+//     //     });
+//     //   }
+//     // })
+  
+//     // const auth = getAuth()
+//     // console.log('auth', auth.currentUser)
+//     console.log('response', data)
+//     authCtx.authenticate(data);
 
-    const results = await fetchResults(response.localId, response.idToken);
-    resultsCtx.setResults(results);
-    const courses = await fetchCourses(response.localId, response.idToken);
-    resultsCtx.setCurrentCourses(courses);
-    // console.log("courses in login", courses);
-  } catch (error) {
-    setError(error.toString());
-    setIsLoading(false);
-  }
-  setIsLoading(false);
-}
+//     AsyncStorage.setItem("email", email);
+//     // AsyncStorage.setItem("refreshToken", response.refreshToken);
+//     AsyncStorage.setItem("displayName", response.displayName);
+//     AsyncStorage.setItem("photoUrl", response.photoURL);
+//     AsyncStorage.setItem("localId", response.uid);
+
+//     authCtx.userHandler({
+//       userId: response.uid,
+//       displayName: response.displayName,
+//       photoUrl: response.photoURL,
+//       // refreshToken: response.refreshToken,
+//       email: response.email
+//     });
+
+//     // const results = await fetchResults(response.localId, token);
+//     // resultsCtx.setResults(results);
+//     const courses = await fetchCourses(response.uid, response.accessToken);
+//     resultsCtx.setCurrentCourses(courses);
+//     console.log("courses in login", courses);
+//   } catch (error) {
+//     // setError(error.toString());
+//     // setIsLoading(false);
+//     console.log(error)
+//   }
+//   // setIsLoading(false);
+// }

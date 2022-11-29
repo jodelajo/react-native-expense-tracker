@@ -8,6 +8,7 @@ import ResultForm from "../components/manageResult/ResultForm";
 import { deleteResult, updateResult, storeResult } from "../http/http";
 import LoadingOverlay from "../components/UI/LoadingOverlay";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
+import { onAuthStateChanged, getAuth} from "firebase/auth/react-native";
 
 export default function ManageResult({ route, navigation }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,12 +16,23 @@ export default function ManageResult({ route, navigation }) {
   const resultsCtx = useContext(ResultsContext);
   const authCtx = useContext(AuthContext);
 
+  const auth = getAuth()
+  onAuthStateChanged(auth, (response) => {
+    if (response) {
+      console.log(response)
+      response.getIdToken().then(function(data) {
+        console.log('data', data)
+      });
+    }
+  })
+
   const editedResultId = route.params?.resultId;
   const isEditing = !!editedResultId;
 
   const selectedResult = resultsCtx.results.find(
     (result) => result.id === editedResultId
   );
+  console.log('selected result', selectedResult)
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -35,7 +47,7 @@ export default function ManageResult({ route, navigation }) {
       await deleteResult(
         editedResultId,
         authCtx.currentUser.userId,
-        authCtx.token
+        authCtx.token.accessToken
       );
     } catch (error) {
       setError("Kon resultaat niet verwijderen - Probeer later nog een keer!");
@@ -57,13 +69,13 @@ export default function ManageResult({ route, navigation }) {
           editedResultId,
           resultData,
           authCtx.currentUser.userId,
-          authCtx.token
+          authCtx.token.accessToken
         );
       } else {
         const id = await storeResult(
           resultData,
           authCtx.currentUser.userId,
-          authCtx.token
+          authCtx.token.accessToken
         );
         resultsCtx.addResult({ ...resultData, id: id });
       }

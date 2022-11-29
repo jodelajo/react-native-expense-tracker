@@ -17,12 +17,12 @@ import { AuthContext } from "../../store/auth-context";
 import { ResultsContext } from "../../store/results-context";
 import LoadingOverlay from "../UI/LoadingOverlay";
 import { useNavigation } from "@react-navigation/native";
+import { onAuthStateChanged, getAuth} from "firebase/auth/react-native";
 
 export default function CoursesForm() {
   const navigation = useNavigation();
   const authCtx = useContext(AuthContext);
   const coursesCtx = useContext(ResultsContext);
-
   const [course, setCourse] = useState("");
   const [showMessage, setShowMessage] = useState(true)
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +32,17 @@ export default function CoursesForm() {
       : ["Nederlands", "Wiskunde", "Engels"]
   );
 
-  // console.log("context courses in coursesform", coursesCtx.courses);
+
+  const auth = getAuth()
+  onAuthStateChanged(auth, (response) => {
+    if (response) {
+      console.log(response)
+      response.getIdToken().then(function(data) {
+        console.log('data', data)
+      });
+    }
+  })
+
   function coursesHandler() {
     const coursesCheck = coursesList.filter(
       (currCourse) => currCourse === course
@@ -65,8 +75,11 @@ export default function CoursesForm() {
 
   async function submitHandler() {
     setIsLoading(true);
+    console.log('course list', coursesList)
+    console.log('auth cur user', authCtx.currentUser)
+    console.log('auth cur user', authCtx.token)
     try {
-      await storeCourse(coursesList, authCtx.currentUser.userId, authCtx.token);
+      await storeCourse(coursesList, authCtx.currentUser.userId, authCtx.token.accessToken);
       coursesCtx.setCurrentCourses(coursesList);
     } catch (error) {
       setIsLoading(false);

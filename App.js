@@ -143,9 +143,10 @@ function Root() {
 }
 
 export default function App() {
-  if (!getApps().length) {
-    initializeApp(firebaseConfig);
-  }
+  console.log(getApps())
+  // if (!getApps().length) {
+  //   initializeApp(firebaseConfig);
+  // }
   
   return (
     <>
