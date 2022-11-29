@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getAuth, signOut } from "firebase/auth/react-native";
+import { authPersistence } from "../config/firebase";
 
 export const AuthContext = createContext({
   token: "",
@@ -11,25 +12,27 @@ export const AuthContext = createContext({
   logout: (setResults) => {},
 });
 export default function AuthContextProvider({ children }) {
+    // const storedUser = authPersistence.currentUser;
+
   const [authToken, setAuthToken] = useState();
   const [user, setUser] = useState();
   const [refreshToken, setRefreshToken] = useState();
   const [userName, setUserName] = useState();
 
-  async function setLocalStorage() {
-    const userId = await AsyncStorage.getItem("userId");
-    setUser(userId);
-    console.log("userId", userId);
-    console.log("user", user);
-    const token = await AsyncStorage.getItem("token");
-    setAuthToken(token);
-    const rToken = await AsyncStorage.getItem("refreshToken");
-    setRefreshToken(rToken);
-    console.log("token", rToken);
-  }
-  useEffect(() => {
-    setLocalStorage();
-  }, []);
+  // async function setLocalStorage() {
+  //   const userId = await AsyncStorage.getItem("userId");
+  //   setUser(userId);
+  //   console.log("userId", userId);
+  //   console.log("user", user);
+  //   const token = await AsyncStorage.getItem("token");
+  //   setAuthToken(token);
+  //   const rToken = await AsyncStorage.getItem("refreshToken");
+  //   setRefreshToken(rToken);
+  //   console.log("token", rToken);
+  // }
+  // useEffect(() => {
+  //   setLocalStorage();
+  // }, []);
 
   console.log("current user", user);
 
@@ -54,13 +57,13 @@ export default function AuthContextProvider({ children }) {
       setResults([]);
       setUser(null);
       setCurrentCourses(null);
-      AsyncStorage.removeItem("userId");
-      AsyncStorage.removeItem("token");
-      AsyncStorage.removeItem("refreshToken");
-      AsyncStorage.removeItem("displayName");
-      AsyncStorage.removeItem("photoUrl");
-      AsyncStorage.removeItem("email");
-      AsyncStorage.removeItem("localId");
+      // AsyncStorage.removeItem("userId");
+      // AsyncStorage.removeItem("token");
+      // AsyncStorage.removeItem("refreshToken");
+      // AsyncStorage.removeItem("displayName");
+      // AsyncStorage.removeItem("photoUrl");
+      // AsyncStorage.removeItem("email");
+      // AsyncStorage.removeItem("localId");
     } catch (error) {
       console.log(error);
     }

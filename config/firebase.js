@@ -1,8 +1,9 @@
 import { initializeApp, getApps,  } from "firebase/app";
-import { initializeAuth, getReactNativePersistence, getAuth, onAuthStateChanged} from "firebase/auth/react-native"
+// import { initializeAuth, getReactNativePersistence, getAuth, onAuthStateChanged} from "firebase/auth/react-native"
 import { getStorage } from "firebase/storage";
+import { getFirestore } from "firebase/firestore"
 import envs from "../config/env";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const {
   API_KEY,
@@ -28,27 +29,9 @@ export const firebaseConfig = {
 console.log('getapps', getApps())
 const app = initializeApp(firebaseConfig);
 
-// initializeAuth(app, {
+// export const authPersistence = initializeAuth(app, {
 //   persistence: getReactNativePersistence(AsyncStorage)
 // })
 
-// export const auth = getAuth(app)
-
-// onAuthStateChanged(auth, (user) => {
-//   if (user) {
-//     user.getIdToken().then(function(data) {
-//       console.log('data', data)
-//     });
-//   }
-// })
-
-// auth().onAuthStateChanged(function(user) {
-//   if (user) {
-//     user.getIdToken().then(function(data) {
-//       console.log(data)
-//     });
-//   }
-// });
-
-// app.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+export const db = getFirestore(app)
 export const storage = getStorage(app);
