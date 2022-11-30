@@ -74,9 +74,9 @@ export default function StartDate() {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <Input
-        label="Start datum huidige periode"
+        label="Startdatum huidige periode"
         invalid={!isValid}
         textInputConfig={{
           placeholder: "YYYY-MM-DD",
@@ -86,7 +86,7 @@ export default function StartDate() {
           defaultValue: storedStartDate,
         }}
       />
-      <Button style={styles.button} onPress={submitHandler}>
+      <Button style={!isValid ? styles.disabled : styles.button} onPress={submitHandler} disabled={!isValid}>
         Opslaan
       </Button>
     </View>
@@ -94,10 +94,32 @@ export default function StartDate() {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        marginTop: 64,
+        marginHorizontal: 32,
+        padding: 16,
+        borderRadius: 8,
+        backgroundColor: GlobalStyles.colors.primary500,
+        elevation: 2,
+        shadowColor: 'black',
+        shadowOffset: { width: 1, height: 1 },
+        shadowOpacity: 0.35,
+        shadowRadius: 4,
+      },
   button: {
     marginTop: 10,
     backgroundColor: GlobalStyles.colors.major,
     borderRadius: 8,
     minWidth: "90%",
+  },
+  disabled: {
+    marginTop: 10,
+    backgroundColor: GlobalStyles.colors.primary500,
+    borderWidth: 1,
+    borderColor: GlobalStyles.colors.primary700,
+    borderRadius: 8,
+    minWidth: "90%",
+    cursor: "default",
+    color: GlobalStyles.colors.primary500
   },
 });
