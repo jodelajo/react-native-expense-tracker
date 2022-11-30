@@ -12,21 +12,27 @@ export default function RecentResults() {
   const [error, setError] = useState();
 
   const results = resultsCtx.results;
+  const startDate = resultsCtx?.startDate
 
-  function resultsHandler(results) {
+  // console.log('start', startDate)
+
+  function resultsHandler(results, curDate) {
     const today = new Date();
-    console.log('today', today)
-    const startDate = new Date(2022, 10, 25)
-    // console.log('cur per', curPeriod)
-    // const thisPeriod = getDateMinusDays(today, 30);
+    const curStartDdate = new Date(curDate)
+    // console.log('date', date)
+  
     const curRecentResults = results.filter((item) => {
-      return item.date >= startDate && item.date <= today;
+      return item.date >= curStartDdate && item.date <= today;
     });
     setRecentResults(curRecentResults);
   }
   useEffect(() => {
-    resultsHandler(results);
-  }, [results]);
+    // console.log('!!', startDate)
+    if (startDate !== undefined) {
+      resultsHandler(results, startDate);
+    }
+   
+  }, [results, startDate]);
 
   if (error && !isLoading) {
     return <ErrorOverlay message={error.toString()} />;
