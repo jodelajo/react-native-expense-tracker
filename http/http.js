@@ -1,5 +1,6 @@
 import axios from "axios";
 import envs from "../config/env";
+import {  getFormattedDate } from "../util/date"
 const { BACKEND_URL, API_KEY } = envs;
 const url = BACKEND_URL;
 
@@ -101,4 +102,32 @@ export async function fetchCourses(userId, token) {
     // console.log('courses in fetchCourses', courses)
   
   return courses;
+}
+
+export async function storeStartDate(resultData, userId, token) {
+  console.log('userId', userId)
+  console.log('token', token)
+  console.log('data', resultData)
+  const response = await axios.put(
+    url + `/users/${userId}/startDate.json?auth=` + token,
+    {startDate: resultData}
+  );
+  // console.log('response in storecourse', response)
+  
+  return response.data;
+}
+
+export async function fetchStartDate(userId, token) {
+  console.log(userId)
+  console.log(token)
+  const response = await axios.get(
+    url + `/users/${userId}/startDate.json?auth=` + token
+  );
+    const startDate = response.data
+    console.log('start date', startDate)
+  if (startDate !== null) {
+    // console.log('form date', getFormattedDate(startDate.startDate))
+    return startDate.startDate
+  }
+ 
 }

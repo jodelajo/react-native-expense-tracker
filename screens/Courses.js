@@ -5,6 +5,7 @@ import { GlobalStyles } from "../constants/styles";
 export default function Courses() {
     return ( <View style={styles.container}>
         <CoursesForm />
+      
     </View>
     )
 }

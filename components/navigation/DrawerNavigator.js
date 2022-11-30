@@ -15,6 +15,7 @@ import BottomTabsNavigator from "./BottomTabsNavigator";
 import UserProfile from "../../screens/UserProfile";
 import Courses from "../../screens/Courses";
 import Statistics from "../../screens/Statistics";
+import StartDateScreen from "../../screens/StartDateScreen";
 import UpdateProfileForm from "../profile/UpdateProfileForm";
 import Avatar from "../UI/Avatar";
 import AmountInputs from "../../screens/AmountInputs";
@@ -133,6 +134,16 @@ export default function DrawerNavigator({ navigation }) {
         component={Courses}
         options={{
           drawerLabel: "Jouw vakken",
+          drawerLabelStyle: { color: "white", fontWeight: "bold" },
+          drawerActiveBackgroundColor: GlobalStyles.colors.minor,
+          drawerInactiveBackgroundColor: GlobalStyles.colors.primary700,
+        }}
+      />
+       <Drawer.Screen
+        name="StartDate"
+        component={StartDateScreen}
+        options={{
+          drawerLabel: "Ingangsdatum deze periode",
           drawerLabelStyle: { color: "white", fontWeight: "bold" },
           drawerActiveBackgroundColor: GlobalStyles.colors.minor,
           drawerInactiveBackgroundColor: GlobalStyles.colors.primary700,

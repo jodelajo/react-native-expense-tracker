@@ -7,17 +7,18 @@ import {
   Platform,
   Keyboard,
 } from "react-native";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import Input from "../manageResult/Input";
 import { GlobalStyles } from "../../constants/styles";
 import Button from "../UI/Button";
-import { storeCourse } from "../../http/http";
+import { storeCourse, storeStartDate } from "../../http/http";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { AuthContext } from "../../store/auth-context";
 import { ResultsContext } from "../../store/results-context";
 import LoadingOverlay from "../UI/LoadingOverlay";
 import { useNavigation } from "@react-navigation/native";
 import { onAuthStateChanged, getAuth} from "firebase/auth/react-native";
+// import StartDate from "./StartDate";
 
 export default function CoursesForm() {
   const navigation = useNavigation();
@@ -31,7 +32,7 @@ export default function CoursesForm() {
       ? coursesCtx.courses
       : ["Nederlands", "Wiskunde", "Engels"]
   );
-
+  // const [date, setDate] = useState("")
 
   const auth = getAuth()
   onAuthStateChanged(auth, (response) => {
@@ -42,6 +43,15 @@ export default function CoursesForm() {
       });
     }
   })
+  // function dateHandler() {
+  //   console.log('date in handler', date)
+  // }
+// useEffect(()=> {
+//   if(date.date !== "") {
+//     dateHandler()
+//   }
+
+// },[date])
 
   function coursesHandler() {
     const coursesCheck = coursesList.filter(
@@ -78,9 +88,11 @@ export default function CoursesForm() {
     console.log('course list', coursesList)
     console.log('auth cur user', authCtx.currentUser)
     console.log('auth cur user', authCtx.token)
+    // console.log('date', date)
     try {
       await storeCourse(coursesList, authCtx.currentUser.userId, authCtx.token.accessToken);
       coursesCtx.setCurrentCourses(coursesList);
+      // coursesCtx.setStartDate(date.date)
     } catch (error) {
       setIsLoading(false);
     }
@@ -109,6 +121,7 @@ export default function CoursesForm() {
   return (
     <View style={styles.container}>
       <View style={styles.formContainer}>
+      {/* <StartDate date={date} setDate={setDate} /> */}
         <View style={styles.inputContainer}>
           <Input
             style={styles.input}
@@ -160,6 +173,7 @@ export default function CoursesForm() {
           </Button>
         </View>
       </View>
+     
     </View>
   );
 }

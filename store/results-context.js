@@ -35,6 +35,7 @@ export default function ResultsContextProvider({ children }) {
   const [resultsState, dispatch] = useReducer(resultsReducer, []);
   const [saldo, setSaldo] = useState();
   const [currentCourses, setCurrentCourses] = useState();
+  const [startDate, setStartDate] = useState()
 
   function addResult(resultData) {
     dispatch({
@@ -57,6 +58,8 @@ export default function ResultsContextProvider({ children }) {
   }
 
   const value = {
+    startDate,
+    setStartDate,
     courses: currentCourses,
     setCurrentCourses: setCurrentCourses,
     saldo: saldo,

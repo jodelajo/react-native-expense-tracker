@@ -6,7 +6,7 @@ import LoadingOverlay from "../components/UI/LoadingOverlay";
 import { AuthContext } from "../store/auth-context";
 import { ResultsContext } from "../store/results-context";
 import ErrorOverlay from "../components/UI/ErrorOverlay";
-import { fetchCourses, fetchResults, getUser } from "../http/http";
+import { fetchCourses, fetchResults, getUser, fetchStartDate } from "../http/http";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -34,7 +34,7 @@ export default function Login() {
           photoUrl: user.photoURL,
           email: user.email,
         });
-        authCtx.authenticate(user);
+        // authCtx.authenticate(user);
         // await storeUserId(user);
       })
       .catch((error) => {
@@ -74,6 +74,24 @@ export default function Login() {
         setIsLoading(false);
       }
     }
+    async function startDateHandler() {
+      if (user !== undefined) {
+        setIsLoading(true);
+        try {
+          const startDate = await fetchStartDate(user.uid, user.accessToken);
+          if (startDate !== null || startDate !== undefined) {
+            console.log('start date', startDate)
+            // date.toISOString().slice(0, 10)
+            resultsCtx?.setStartDate(startDate?.toString().slice(0,10));
+          }
+          
+        } catch (error) {
+          console.log(error);
+          setError(error.toString());
+        }
+        setIsLoading(false);
+      }
+    }
     async function resultsHandler() {
       console.log('user', user)
       if (user !== undefined) {
@@ -92,6 +110,7 @@ export default function Login() {
     userHandler();
     resultsHandler();
     courseHandler();
+    startDateHandler()
     authCtx.authenticate(user);
   }, [user]);
 
