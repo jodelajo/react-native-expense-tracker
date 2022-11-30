@@ -7,57 +7,46 @@ import { AuthContext } from "../../store/auth-context";
 import Button from "../UI/Button";
 import { GlobalStyles } from "../../constants/styles";
 import { storeStartDate } from "../../http/http";
+import LoadingOverlay from "../UI/LoadingOverlay";
 import { getFormattedDate } from "../../util/date";
 
 export default function StartDate() {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
   const resultsCtx = useContext(ResultsContext);
   const authCtx = useContext(AuthContext);
-  const storedStartDate = resultsCtx.startDate;
-  const [date, setDate] = useState(storedStartDate || "Nog geen datum ingesteld.");
+  const storedStartDate = resultsCtx?.startDate;
+  const [date, setDate] = useState(
+    storedStartDate || "Nog geen datum ingesteld."
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [isValid, setIsValid] = useState(false);
-  
-  // console.log('date', date)
-  // const dateIsValid = (resultData.date.toString() !== "Invalid Date");
-  // console.log(resultsCtx.startDate)
- 
-  console.log("stored", storedStartDate);
- 
 
-  const dateIsValid = date.toString() !== "Invalid Date";
+  console.log("stored", storedStartDate);
 
   function dateHandler(value) {
     console.log("value", value);
-    setIsValid(false)
+    setIsValid(false);
     if (value.length === 10) {
-        setDate(new Date(value));
-        // setIsValid(true)
+      setDate(value);
     }
-  
   }
 
-  useEffect(()=> {
-    // console.log('date to string', date.toString())
-    // console.log('date length', date.length)
+  useEffect(() => {
     function dateValidator() {
-
-        if(date.toString() !== "Invalid Date") {
-         setIsValid(true)
-        } else {
-            setDate(date)
-            setIsValid(false)
-        }
-       }
-       dateValidator()
-  },[date])
-
+      if (date.toString() !== "Invalid Date") {
+        setIsValid(true);
+      } else {
+        setDate(date);
+        setIsValid(false);
+      }
+    }
+    dateValidator();
+  }, [date]);
 
   const submitHandler = async () => {
     console.log("date???", date);
-    console.log("sttate valid", isValid)
-    // console.log('formatted date', getFormattedDate(date))
-    console.log("valid?", dateIsValid);
+   
+    console.log("sttate valid", isValid);
     setIsLoading(true);
     try {
       await storeStartDate(
@@ -65,13 +54,16 @@ export default function StartDate() {
         authCtx.currentUser.userId,
         authCtx.token.accessToken
       );
-      resultsCtx.setStartDate(date);
+      resultsCtx.setStartDate(date.toString().slice(0,10));
     } catch (error) {
       console.log(error);
     }
     navigation.navigate("RecentResults");
     setIsLoading(false);
   };
+  if (isLoading) {
+    return <LoadingOverlay />;
+  }
 
   return (
     <View style={styles.container}>
@@ -83,10 +75,14 @@ export default function StartDate() {
           maxLength: 10,
           keyboardType: "numbers-and-punctuation",
           onChangeText: (value) => dateHandler(value),
-          defaultValue: storedStartDate,
+          defaultValue: storedStartDate
         }}
       />
-      <Button style={!isValid ? styles.disabled : styles.button} onPress={submitHandler} disabled={!isValid}>
+      <Button
+        style={!isValid ? styles.disabled : styles.button}
+        onPress={submitHandler}
+        disabled={!isValid}
+      >
         Opslaan
       </Button>
     </View>
@@ -94,18 +90,18 @@ export default function StartDate() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        marginTop: 64,
-        marginHorizontal: 32,
-        padding: 16,
-        borderRadius: 8,
-        backgroundColor: GlobalStyles.colors.primary500,
-        elevation: 2,
-        shadowColor: 'black',
-        shadowOffset: { width: 1, height: 1 },
-        shadowOpacity: 0.35,
-        shadowRadius: 4,
-      },
+  container: {
+    marginTop: 64,
+    marginHorizontal: 32,
+    padding: 16,
+    borderRadius: 8,
+    backgroundColor: GlobalStyles.colors.primary500,
+    elevation: 2,
+    shadowColor: "black",
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.35,
+    shadowRadius: 4,
+  },
   button: {
     marginTop: 10,
     backgroundColor: GlobalStyles.colors.major,
@@ -120,6 +116,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     minWidth: "90%",
     cursor: "default",
-    color: GlobalStyles.colors.primary500
+    color: GlobalStyles.colors.primary500,
   },
 });

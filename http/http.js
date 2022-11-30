@@ -126,6 +126,7 @@ export async function fetchStartDate(userId, token) {
     const startDate = response.data
     console.log('start date', startDate)
   if (startDate !== null) {
+    // console.log('form date', getFormattedDate(startDate.startDate))
     return startDate.startDate
   }
  
