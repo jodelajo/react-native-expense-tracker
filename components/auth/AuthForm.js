@@ -13,7 +13,6 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
   const [isStudent, setIsStudent] = useState(true);
   // const [isEnabled, setIsEnabled] = useState(false);
 
-
   const {
     email: emailIsInvalid,
     confirmEmail: emailsDontMatch,
@@ -21,16 +20,18 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
     confirmPassword: passwordsDontMatch,
   } = credentialsInvalid;
 
-  function updateInputValueHandler(inputType, enteredValue) {
+  async function updateInputValueHandler(inputType, enteredValue) {
     switch (inputType) {
       case "email":
         setEnteredEmail(enteredValue);
+        await AsyncStorage.setItem("email", enteredValue);
         break;
       case "confirmEmail":
         setEnteredConfirmEmail(enteredValue);
         break;
       case "password":
         setEnteredPassword(enteredValue);
+        await AsyncStorage.setItem("password", enteredValue);
         break;
       case "confirmPassword":
         setEnteredConfirmPassword(enteredValue);
@@ -39,8 +40,6 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
       //   setIsStudent(enteredValue);
     }
   }
-
-
 
   function submitHandler() {
     onSubmit({
@@ -62,7 +61,6 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
           value={enteredEmail}
           keyboardType="email-address"
           isInvalid={emailIsInvalid}
-          // defaultValue={AsyncStorage.getItem('email') ? AsyncStorage.getItem('email') : ''}
         />
         {!isLogin && (
           <Input
@@ -71,6 +69,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
             value={enteredConfirmEmail}
             keyboardType="email-address"
             isInvalid={emailsDontMatch}
+            defaultValue={async () => await AsyncStorage.getItem("email")}
           />
         )}
         <Input
@@ -90,6 +89,7 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
             secure
             value={enteredConfirmPassword}
             isInvalid={passwordsDontMatch}
+            defaultValue={async () => await AsyncStorage.getItem("password")}
           />
         )}
         {/* <View style={styles.switchContainer}>

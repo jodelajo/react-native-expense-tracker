@@ -23,7 +23,9 @@ App lives [here](https://sashas-results-tracker.netlify.app/).
 - Button choose
 - cleanup
 - ✅ courses inputs
+- ✅ start period date inputs
 - ✅ redirect from signup to loggedin with fetching userdata
+- improve errorhandling and validation
 
 ## Wish List
 - parent role
@@ -33,6 +35,8 @@ App lives [here](https://sashas-results-tracker.netlify.app/).
 - splashscreen
 - statistics
 - amount inputs
+- migration to firestore
+- redux?
 
 ## Dependencies issues
 - react-native-reanimated": "^2.5.0" <= important for happy 'web' and 'ios' versions

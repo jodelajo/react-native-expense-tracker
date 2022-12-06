@@ -14,7 +14,7 @@ import { GlobalStyles } from "../../constants/styles";
 import BottomTabsNavigator from "./BottomTabsNavigator";
 import UserProfile from "../../screens/UserProfile";
 import Courses from "../../screens/Courses";
-import Statistics from "../../screens/Statistics";
+import StatisticsScreen from "../../screens/StatisticsScreen";
 import StartDateScreen from "../../screens/StartDateScreen";
 import UpdateProfileForm from "../profile/UpdateProfileForm";
 import Avatar from "../UI/Avatar";
@@ -161,7 +161,7 @@ export default function DrawerNavigator({ navigation }) {
       /> */}
       <Drawer.Screen
         name="Statistics"
-        component={Statistics}
+        component={StatisticsScreen}
         options={{
           drawerLabel: "Statistieken",
           drawerLabelStyle: { color: "white", fontWeight: "bold" },
